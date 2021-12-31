@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://cxf.apache.org/core
+		http://cxf.apache.org/schemas/core.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://cxf.apache.org/jaxws
+		http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+
+	<bean id="IRIDE" class="it.maggioli.eldasoft.bl.iride.IrideManager" />
+	<bean id="JIRIDE" class="it.maggioli.eldasoft.bl.jiride.JirideManager" />
+	<bean id="PALEO" class="it.maggioli.eldasoft.bl.paleo.PaleoManager" />
+	<!--  bean id="PALEO" class="it.maggioli.eldasoft.bl.paleo.PaleoManagerLegacy" /-->
+	<bean id="ENGINEERING" class="it.maggioli.eldasoft.bl.engineering.EngineeringManager" />
+	<bean id="ENGINEERINGDOC" class="it.maggioli.eldasoft.bl.engineeringdoc.EngineeringDocManager" />
+	<bean id="ARCHIFLOW" class="it.maggioli.eldasoft.bl.archiflow.ArchiflowManager" />
+	<bean id="ARCHIFLOWFA" class="it.maggioli.eldasoft.bl.archiflowfa93.ArchiflowFaManager" />
+	<!-- bean id="ARCHIFLOWFA" class="it.maggioli.eldasoft.bl.archiflowfa96.ArchiflowFaManager" /-->
+	<bean id="TITULUS" class="it.maggioli.eldasoft.bl.titulus.TitulusManager" />
+	<bean id="SMAT" class="it.maggioli.eldasoft.bl.smat.SmatManager" />
+	<bean id="FOLIUM" class="it.maggioli.eldasoft.bl.folium.FoliumManager" />
+	<bean id="SISPI" class="it.maggioli.eldasoft.bl.sispi.SispiManager" />
+	<bean id="PROTOCOLLO" class="it.maggioli.eldasoft.bl.WSDMManager" />
+	<bean id="EASYDOC" class="it.maggioli.eldasoft.bl.easydoc.EasyDocManager" />
+	<bean id="PRISMA" class="it.maggioli.eldasoft.bl.prisma.PrismaManager" />
+    <bean id="INFOR" class="it.maggioli.eldasoft.bl.infor.InforManager" />
+    <bean id="URBI" class="it.maggioli.eldasoft.bl.urbi.UrbiManager" />
+    <bean id="PROTSERVICE" class="it.maggioli.eldasoft.bl.protservice.ProtServiceManager" />
+    <bean id="JPROTOCOL" class="it.maggioli.eldasoft.bl.jprotocol.JProtocolManager" />
+    <bean id="ITALPROT" class="it.maggioli.eldasoft.bl.italprot.ItalprotManager" />
+    <bean id="JDOC" class="it.maggioli.eldasoft.bl.jdoc.JDocManager" />
+
+
+	<bean id="WSDMConfigurazione" class="it.maggioli.eldasoft.ws.conf.WSDMConfigurazioneImpl" />
+	<jaxws:endpoint id="endpointWSDMConfigurazione" implementor="#WSDMConfigurazione" address="/WSDMConfigurazione">
+	</jaxws:endpoint>
+
+	<bean id="WSDM" class="it.maggioli.eldasoft.ws.dm.WSDMImpl">
+		<property name="wsdmManager" ref="#{T(javax.naming.InitialContext).doLookup('java:comp/env/REMOTEWSDM')}" />
+	</bean>
+	
+	<bean id="wsdmPasswordCallback" class="it.maggioli.eldasoft.ws.dm.WSDMPasswordCallback" />
+	
+	<jaxws:endpoint id="endpointWSDM" implementor="#WSDM" address="/WSDM">
+		<jaxws:properties>
+			<entry key="ws-security.validate.token" value="false" />
+		</jaxws:properties>
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>
+						<entry key="action" value="UsernameToken" />
+						<entry key="passwordType" value="PasswordText" />
+						<entry key="passwordCallbackRef">
+							<ref bean="wsdmPasswordCallback" />
+						</entry>
+					</map>
+				</constructor-arg>
+			</bean>
+		</jaxws:inInterceptors>
+	</jaxws:endpoint>
+	
+	
+    <bean id="abstractLoggingInterceptor" abstract="true">
+        <property name="prettyLogging" value="true" />
+        <constructor-arg name="lim" value="-1"/>
+    </bean>
+
+    <bean id="loggingInInterceptor"
+        class="org.apache.cxf.interceptor.LoggingInInterceptor"
+        parent="abstractLoggingInterceptor">
+    </bean>
+    <bean id="loggingOutInterceptor"
+        class="org.apache.cxf.interceptor.LoggingOutInterceptor"
+        parent="abstractLoggingInterceptor">
+    </bean>
+
+    <cxf:bus>
+    	<cxf:properties>
+			<entry key="set-jaxb-validation-event-handler" value="false" />
+		</cxf:properties>
+        <cxf:inInterceptors>
+            <ref bean="loggingInInterceptor" />
+        </cxf:inInterceptors>
+        <cxf:inFaultInterceptors>
+            <ref bean="loggingInInterceptor" />
+        </cxf:inFaultInterceptors>
+        <cxf:outInterceptors>
+            <ref bean="loggingOutInterceptor" />
+        </cxf:outInterceptors>
+        <cxf:outFaultInterceptors>
+            <ref bean="loggingOutInterceptor" />
+        </cxf:outFaultInterceptors>
+    </cxf:bus>
+
+	
+</beans>

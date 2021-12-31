@@ -1,0 +1,45 @@
+Manifest-Version: 1.0
+Class-Path: cxf-rt-core-2.7.10.jar cxf-api-2.7.10.jar woodstox-core-as
+ l-4.2.0.jar stax2-api-3.1.1.jar xmlschema-core-2.1.0.jar geronimo-jav
+ amail_1.4_spec-1.7.1.jar wsdl4j-1.6.3.jar jaxb-impl-2.1.13.jar cxf-rt
+ -frontend-jaxws-2.7.10.jar xml-resolver-1.2.jar asm-3.3.1.jar cxf-rt-
+ bindings-soap-2.7.10.jar cxf-rt-databinding-jaxb-2.7.10.jar cxf-rt-bi
+ ndings-xml-2.7.10.jar cxf-rt-frontend-simple-2.7.10.jar cxf-rt-ws-add
+ r-2.7.10.jar cxf-rt-ws-policy-2.7.10.jar neethi-3.0.3.jar cxf-rt-tran
+ sports-http-2.7.10.jar cxf-rt-ws-security-2.7.10.jar ehcache-core-2.5
+ .1.jar slf4j-api-1.7.10.jar wss4j-1.6.14.jar commons-logging-1.1.1.ja
+ r xmlsec-1.5.6.jar opensaml-2.5.1-1.jar openws-1.4.2-1.jar xmltooling
+ -1.3.2-1.jar joda-time-1.6.2.jar cxf-codegen-plugin-2.7.10.jar maven-
+ artifact-resolver-1.0.jar plexus-utils-2.0.5.jar plexus-archiver-1.2.
+ jar plexus-container-default-1.0-alpha-9-stable-1.jar junit-3.8.1.jar
+  classworlds-1.1-alpha-2.jar plexus-io-1.0.1.jar cxf-tools-common-2.7
+ .10.jar velocity-1.7.jar commons-collections-3.2.1.jar commons-lang-2
+ .4.jar jaxb-xjc-2.1.13.jar cxf-tools-wsdlto-core-2.7.10.jar cxf-tools
+ -validator-2.7.10.jar cxf-tools-wsdlto-databinding-jaxb-2.7.10.jar cx
+ f-tools-wsdlto-frontend-jaxws-2.7.10.jar cxf-tools-wsdlto-frontend-ja
+ vascript-2.7.10.jar cxf-rt-javascript-2.7.10.jar ant-1.8.4.jar ant-la
+ uncher-1.8.4.jar ant-nodeps-1.8.1.jar spring-web-4.0.1.RELEASE.jar sp
+ ring-aop-4.0.1.RELEASE.jar aopalliance-1.0.jar spring-beans-4.0.1.REL
+ EASE.jar spring-core-4.0.1.RELEASE.jar spring-context-4.0.1.RELEASE.j
+ ar spring-expression-4.0.1.RELEASE.jar log4j-1.2.14.jar commons-io-1.
+ 3.2.jar commons-codec-1.2.jar jstl-1.2.jar slf4j-simple-1.7.10.jar xm
+ lbeans-2.5.0.jar stax-api-1.0.1.jar iride-datatypes-2.0.0.jar axis-1.
+ 4.jar commons-discovery-0.2.jar jaxrpc-api-1.1.jar xercesImpl-2.8.0.j
+ ar xml-apis-1.3.03.jar dom4j-1.6.1.jar jaxen-1.1.6.jar jersey-contain
+ er-servlet-2.5.1.jar jersey-container-servlet-core-2.5.1.jar javax.in
+ ject-2.2.0-b21.jar jersey-server-2.5.1.jar jersey-common-2.5.1.jar ja
+ vax.ws.rs-api-2.0.1.jar javax.annotation-api-1.2-b03.jar guava-14.0.1
+ .jar hk2-api-2.2.0-b21.jar hk2-utils-2.2.0-b21.jar hk2-locator-2.2.0-
+ b21.jar asm-all-repackaged-2.2.0-b21.jar cglib-2.2.0-b21.jar osgi-res
+ ource-locator-1.0.1.jar jersey-client-2.5.1.jar validation-api-1.1.0.
+ Final.jar resteasy-client-3.0.2.Final.jar resteasy-jaxrs-3.0.2.Final.
+ jar jaxrs-api-3.0.2.Final.jar scannotation-1.0.3.jar javassist-3.12.1
+ .GA.jar jsr250-api-1.0.jar activation-1.1.jar httpclient-4.2.1.jar ht
+ tpcore-4.2.1.jar jcip-annotations-1.0.jar jersey-media-moxy-2.5.1.jar
+  jersey-entity-filtering-2.5.1.jar org.eclipse.persistence.moxy-2.5.0
+ .jar org.eclipse.persistence.core-2.5.0.jar org.eclipse.persistence.a
+ sm-2.5.0.jar org.eclipse.persistence.antlr-2.5.0.jar jaxb-api-2.2.12.
+ jar jaxws-api-2.2.9.jar javax.xml.soap-api-1.3.5.jar jsr181-api-1.0-M
+ R1.jar saaj-impl-1.3.25.jar mimepull-1.9.jar stax-ex-1.7.7.jar stax-a
+ pi-1.0-2.jar json-20201115.jar
+
