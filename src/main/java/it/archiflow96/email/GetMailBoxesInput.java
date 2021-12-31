@@ -1,0 +1,148 @@
+
+package it.archiflow96.email;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
+
+/**
+ * <p>Java class for GetMailBoxesInput complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType name="GetMailBoxesInput">
+ *   &lt;complexContent>
+ *     &lt;extension base="{http://schemas.datacontract.org/2004/07/SIAV.Archiflow.Entities}BaseInput">
+ *       &lt;sequence>
+ *         &lt;element name="GetOnlyPEC" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="GetProcessInfo" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="GetShared" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="GetUser" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *       &lt;/sequence>
+ *     &lt;/extension>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "GetMailBoxesInput", propOrder = {
+    "getOnlyPEC",
+    "getProcessInfo",
+    "getShared",
+    "getUser"
+})
+public class GetMailBoxesInput
+    extends BaseInput
+{
+
+    @XmlElement(name = "GetOnlyPEC")
+    protected Boolean getOnlyPEC;
+    @XmlElement(name = "GetProcessInfo")
+    protected Boolean getProcessInfo;
+    @XmlElement(name = "GetShared")
+    protected Boolean getShared;
+    @XmlElement(name = "GetUser")
+    protected Boolean getUser;
+
+    /**
+     * Gets the value of the getOnlyPEC property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isGetOnlyPEC() {
+        return getOnlyPEC;
+    }
+
+    /**
+     * Sets the value of the getOnlyPEC property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setGetOnlyPEC(Boolean value) {
+        this.getOnlyPEC = value;
+    }
+
+    /**
+     * Gets the value of the getProcessInfo property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isGetProcessInfo() {
+        return getProcessInfo;
+    }
+
+    /**
+     * Sets the value of the getProcessInfo property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setGetProcessInfo(Boolean value) {
+        this.getProcessInfo = value;
+    }
+
+    /**
+     * Gets the value of the getShared property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isGetShared() {
+        return getShared;
+    }
+
+    /**
+     * Sets the value of the getShared property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setGetShared(Boolean value) {
+        this.getShared = value;
+    }
+
+    /**
+     * Gets the value of the getUser property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isGetUser() {
+        return getUser;
+    }
+
+    /**
+     * Sets the value of the getUser property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setGetUser(Boolean value) {
+        this.getUser = value;
+    }
+
+}

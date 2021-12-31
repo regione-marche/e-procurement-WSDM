@@ -1,0 +1,232 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context path="/EldasoftWSDM" docBase="./EldasoftWSDM" reloadable="true" copyXML="true">
+
+	<!-- Tipologia di sistema remoto -->
+	<!-- Sistemi disponibili (IRIDE, JIRIDE, PALEO, ENGINEERING, ENGINEERINGDOC, ARCHIFLOW, TITULUS, SMAT, FOLIUM, ARCHIFLOWFA, EASYDOC, SISPI, PRISMA, INFOR, URBI, PROTSERVICE, JPROTOCOL, ITALPROT, JDOC) -->
+	<!-- Scrivere il sistema in maiuscolo -->
+	<Environment description="Sistema di protocollazione" name="REMOTEWSDM" value="JIRIDE" type="java.lang.String" override="false" />
+	
+	<!-- Configurazioni dei servizi remoti -->
+	<!-- Protocollo/documentale IRIDE -->
+	<Environment description="IRIDE: indirizzo servizio fascicoli" name="IRIDE_WSFASCICOLO" value="" type="java.lang.String" override="false" />
+	<Environment description="IRIDE: indirizzo servizio protocolli" name="IRIDE_WSPROTOCOLLO" value="" type="java.lang.String" override="false" />
+	<Environment description="IRIDE: indirizzo servizio atti" name="IRIDE_WSATTO" value="" type="java.lang.String" override="false" />	
+	<Environment description="IRIDE: codice amministrazione" name="IRIDE_CODICEAMMINISTRAZIONE" value="" type="java.lang.String" override="false" />
+	<Environment description="IRIDE: codice AOO (Area Organizzativa Omogenea)" name="IRIDE_CODICEAOO" value="" type="java.lang.String" override="false" />
+
+	<!-- Protocollo/documentale JIRIDE -->
+	<Environment description="JIRIDE: indirizzo servizio fascicoli" name="JIRIDE_WSFASCICOLO" value="" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: indirizzo servizio protocolli" name="JIRIDE_WSPROTOCOLLO" value="" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: indirizzo servizio atti" name="JIRIDE_WSATTO" value="" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: indirizzo servizio posta" name="JIRIDE_WSPOSTA" value="" type="java.lang.String" override="false" />	
+	<Environment description="JIRIDE: codice amministrazione" name="JIRIDE_CODICEAMMINISTRAZIONE" value="" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: codice AOO (Area Organizzativa Omogenea)" name="JIRIDE_CODICEAOO" value="" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: flag AggiornaAnagrafiche" name="JIRIDE_AGGIORNAANAGRAFICHE" value="N" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: indirizzo servizio utenti e ruoli" name="JIRIDE_UTRWSSGATEWAY_WS" value="" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: alias di accesso al servizio utenti e ruoli" name="JIRIDE_UTRWSSGATEWAY_ALIAS" value="" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: indirizzo servizio lettura tabelle" name="JIRIDE_WSTABELLE" value="" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: aggiungi allegati senza log" name="JIRIDE_SENZALOG" value="N" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: aggiungi allegati motivazione" name="JIRIDE_MOTIVAZIONE" value="AGGIUNTA ALLEGATI ALL'APERTURA BUSTA GARA" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: aggiungi allegati estremi provvedimento" name="JIRIDE_ESTREMIPROVVAUT" value="AUTOMATIZZATO DA SW GARE" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: indirizzo servizio lettura lista account email" name="JIRIDE_ACCOUNT_EMAIL_WS" value="" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: ticket" name="JIRIDE_TICKET" value="" type="java.lang.String" override="false" />
+
+
+
+	<!-- Protocollo/documentale PALEO -->
+	<Environment description="PALEO: indirizzo servizio fascicolo/protocollo" name="PALEO_WS" value="" type="java.lang.String" override="false" />
+	<Environment description="PALEO: indirizzo servizio fascicolo/protocollo WSSec" name="PALEO_WSSEC" value="" type="java.lang.String" override="false" />
+	<Environment description="PALEO: codice amministrazione" name="PALEO_CODICEAMMINISTRAZIONE" value="R_MARCHE" type="java.lang.String" override="false" />
+	<Environment description="PALEO: documento privato (true: documento privato, false: documento pubblico)" name="PALEO_DOCUMENTOPRIVATO" value="true" type="java.lang.String" ovveride="false" />
+	<Environment description="PALEO: trasmissione automatica (true: trasmette automaticamente all'operatore indicato sotto, false: non trasmette a nessun operatore)" name="PALEO_TA" value="false" type="java.lang.String" ovveride="false" />
+	<Environment description="PALEO: trasmissione automatica, operatore, ruolo" name="PALEO_TA_OP_RUOLO" value="" type="java.lang.String" ovveride="false" />
+	<Environment description="PALEO: trasmissione automatica, operatore, nome" name="PALEO_TA_OP_NOME" value="" type="java.lang.String" ovveride="false" />
+	<Environment description="PALEO: trasmissione automatica, operatore, cognome" name="PALEO_TA_OP_COGNOME" value="" type="java.lang.String" ovveride="false" />
+	<Environment description="PALEO: trasmissione automatica, operatore, codiceUO" name="PALEO_TA_OP_CODICEUO" value="" type="java.lang.String" ovveride="false" />
+	<Environment description="PALEO: trasmissione automatica, tipo trasmissione" name="PALEO_TA_TIPO" value="" type="java.lang.String" ovveride="false" />	
+
+	<!-- Protocollo ENGINEERING -->
+	<Environment description="ENGINEERING: protocollo, indirizzo servizio inserimento fascicolo" name="ENGINEERING_WSINSERIMENTOFASC" value="" type="java.lang.String" override="false" />
+	<Environment description="ENGINEERING: protocollo, indirizzo servizio inserimento protocollo" name="ENGINEERING_WSPROTOCOLLAZIONE" value="" type="java.lang.String" override="false" />
+	<Environment description="ENGINEERING: protocollo, indirizzo servizio ricerca fascicolo" name="ENGINEERING_WSRICERCAFASCICOLO" value="" type="java.lang.String" override="false" />
+	<Environment description="ENGINEERING: protocollo, indirizzo servizio ricerca protocollo" name="ENGINEERING_WSRICERCAPROTOCOLLO" value="" type="java.lang.String" override="false" />
+	<Environment description="ENGINEERING: protocollo, codice ente" name="ENGINEERING_CODICEENTE" value="" type="java.lang.String" override="false" />
+	
+	<!-- Documentale ENGINEERINGDOCUMENTALE -->
+	<Environment description="ENGINEERING: gestione documentale, indirizzo servizio di inserimento di una unita' documentaria" name="ENGINEERINGDOC_WSADDUD" value="" type="java.lang.String" override="false" />	
+	<Environment description="ENGINEERING: gestione documentale, indirizzo servizio di estrazione dei metadati di una unita' documentaria" name="ENGINEERINGDOC_WSGETMETADATAUD" value="" type="java.lang.String" override="false" />
+	<Environment description="ENGINEERING: gestione documentale, indirizzo servizio di estrazione di tutti i file relativi ad una unita' documentaria" name="ENGINEERINGDOC_WSEXTRACTMULTI" value="" type="java.lang.String"	override="false" />	
+	<Environment description="ENGINEERING: gestione documentale, indirizzo servizio di creazione di un nuovo folder" name="ENGINEERINGDOC_WSADDFOLDER" value="" type="java.lang.String" override="false" />			
+	<Environment description="ENGINEERING: gestione documentale, indirizzo servizio di estrazione dei metadati di un folder" name="ENGINEERINGDOC_WSGETMETADATAFOLDER" value="" type="java.lang.String" override="false" />			
+	<Environment description="ENGINEERING: gestione documentale, indirizzo servizio di ricerca sul repository documentale" name="ENGINEERINGDOC_WSTROVADOCFOLDER" value="" type="java.lang.String" override="false" />	
+	<Environment description="ENGINEERING: gestione documentale, codice applicazione" name="ENGINEERINGDOC_CODICEAPPLICAZIONE" value="AURIGA" type="java.lang.String" override="false" />
+	<Environment description="ENGINEERING: gestione documentale, istanza applicazione" name="ENGINEERINGDOC_ISTANZAAPPLICAZIONE" value="" type="java.lang.String" override="false" />
+	
+	<!-- Protocollo ARCHIFLOW -->
+	<Environment description="ARCHIFLOW_LOGIN: indirizzo servizio login" name="ARCHIFLOW_WS_LOGIN" value="" type="java.lang.String" override="false" />
+	<Environment description="ARCHIFLOW_LOGIN_DOMAIN: indirizzo servizio login" name="ARCHIFLOW_WS_LOGIN_DOMAIN" value="Archiflow" type="java.lang.String" override="false" />
+	<Environment description="ARCHIFLOW_CARD: indirizzo servizio protocollo" name="ARCHIFLOW_WS_CARD" value="" type="java.lang.String" override="false" />
+	<Environment description="ARCHIFLOW_FOLDER: indirizzo servizio fascicolo" name="ARCHIFLOW_WS_FOLDER" value="" type="java.lang.String" override="false" />
+	<Environment description="ARCHIFLOW_POSTING: indirizzo servizio mail" name="ARCHIFLOW_WS_POSTING" value="" type="java.lang.String" override="false" />
+
+	<!-- Protocollo ARCHIFLOWFA -->
+	<Environment description="ARCHIFLOWFA_WS_LOGIN: indirizzo servizio login (login.svc)" name="ARCHIFLOWFA_WS_LOGIN" value="" type="java.lang.String" override="false" />
+	<Environment description="ARCHIFLOWFA_WS_LOGIN_DOMAIN: dominio (workflow)" name="ARCHIFLOWFA_WS_LOGIN_DOMAIN" value="" type="java.lang.String" override="false" />
+	<Environment description="ARCHIFLOWFA_WS_CARD: indirizzo servizio protocollo (card.svc)" name="ARCHIFLOWFA_WS_CARD" value="" type="java.lang.String" override="false" />
+	<Environment description="ARCHIFLOWFA_WS_FOLDER: indirizzo servizio fascicolo (classification.svc))" name="ARCHIFLOWFA_WS_FOLDER" value="" type="java.lang.String" override="false" />
+	<Environment description="ARCHIFLOWFA_WS_FOLDER_UTENTE_ID: indirizzo servizio fascicolo" name="ARCHIFLOWFA_WS_FOLDER_UTENTE_ID" value="" type="java.lang.String" override="false" />
+	<Environment description="ARCHIFLOWFA_WS_POSTING: indirizzo servizio mail (postingservice.svc o email.svc)" name="ARCHIFLOWFA_WS_POSTING" value="" type="java.lang.String" override="false" />
+	<Environment description="ARCHIFLOWFA_MODO_INVIO_PEC: nome del servizio di inoltro PEC (POSTING, EMAIL, CARD)" name="ARCHIFLOWFA_MODO_INVIO_PEC" value="" type="java.lang.String" override="false" />	
+
+	<!-- Protocollo/documentale TITULUS -->
+	<Environment description="TITULUS: indirizzo servizio protocollo" name="TITULUS4UGOV_WS" value="" type="java.lang.String" override="false" />
+	<Environment description="TITULUS: indirizzo servizio depository" name="TITULUS4DEPOSITORY_WS" value="" type="java.lang.String" override="false" />
+	<Environment description="TITULUS: indirizzo servizio acl4" name="TITULUSACL4_WS" value="" type="java.lang.String" override="false" />
+	
+	<!-- Protocollo/documentale SMAT -->
+	<Environment description="SMAT: indirizzo servizio protocollo" name="SMAT_WS" value="" type="java.lang.String" override="false" />
+	
+	<!-- Protocollo FOLIUM -->
+	<Environment description="FOLIUM: indirizzo servizio protocollo" name="FOLIUM_PROTOCOLLA_WS" value="" type="java.lang.String" override="false" />
+	<Environment description="FOLIUM: indirizzo servizio salva documento" name="FOLIUM_SALVA_DOCUMENTO_WS" value="" type="java.lang.String" override="false" />
+	<Environment description="FOLIUM: esegui salva documento" name="FOLIUM_ESEGUI_SALVA_DOCUMENTO" value="SI" type="java.lang.String" override="false" />
+
+	<!-- Protocollo/documentale SISPI -->
+	<Environment description="SISPI: indirizzo servizio protocollo" name="SISPI_PROTOCOLLO" value="" type="java.lang.String" override="false" />
+	<Environment description="SISPI: identificativo del client (CLIENTID)" name="SISPI_CLIENTID" value="" type="java.lang.String" override="false" />
+	
+     <!-- Protocollo/documentale EASYDOC -->
+	<Environment description="EASYDOC: indirizzo servizio protocolmanagerservice" name="EASYDOC_SOAP_WS" value="" type="java.lang.String" override="false" />
+	<Environment description="EASYDOC: indirizzo servizio protocoladminservice" name="EASYDOC_SOAP_ADMIN_WS" value="" type="java.lang.String" override="false" />
+	<Environment description="EASYDOC: indirizzo servizio mailmanagerservice" name="EASYDOC_SOAP_MAIL_WS" value="" type="java.lang.String" override="false" />
+	<Environment description="EASYDOC: indirizzo servizio protocollo rest" name="EASYDOC_REST_WS" value="" type="java.lang.String" override="false" />
+	<Environment description="EASYDOC: username servizio protocollo rest" name="EASYDOC_REST_USERNAME" value="" type="java.lang.String" override="false" />
+	<Environment description="EASYDOC: password servizio protocollo rest" name="EASYDOC_REST_PASSWORD" value="" type="java.lang.String" override="false" />
+    <Environment description="EASYDOC: codice dell'Area Organizzativa Omogenea" name="EASYDOC_PARAMETRI_AOO" value="" type="java.lang.String" override="false" />
+    <Environment description="EASYDOC: codice azienda" name="EASYDOC_PARAMETRI_COMPANYCODE" value="" type="java.lang.String" override="false" />
+    <Environment description="EASYDOC: additionalassignees" name="EASYDOC_PARAMETRI_ADDITIONALASSIGNEES" value="" type="java.lang.String" override="false" />
+    <Environment description="EASYDOC: codice dominio" name="EASYDOC_PARAMETRI_DOMAINCODE" value="" type="java.lang.String" override="false" />
+	<Environment description="EASYDOC: competenza/conoscenza externalsender" name="EASYDOC_EXTERNALSENDER_TYPE" value="" type="java.lang.String" override="false" />
+    <Environment description="EASYDOC: competenza/conoscenza internalsender" name="EASYDOC_INTERNALSENDER_TYPE" value="" type="java.lang.String" override="false" />
+    <Environment description="EASYDOC: MAILCONFIGURATIONCODE PROVVISORIO" name="EASYDOC_MAILCFGCODE_PROVVISORIO" value="" type="java.lang.String" override="false" /> 
+    
+     <!-- Protocollo/documentale PRISMA -->
+    <Environment description="PRISMA: indirizzo servizio protocollo (DOCAreaProto)" name="PRISMA_DOCAREAPROTO" value="" type="java.lang.String" override="false" />
+    <Environment description="PRISMA: indirizzo servizio esteso protocollo (DocAreaExtended)" name="PRISMA_DOCAREAEXTENDED" value="" type="java.lang.String" override="false" />
+    <Environment description="PRISMA: indirizzo servizio PEC (DUCD services)" name="PRISMA_DUCDSERVICES" value="" type="java.lang.String" override="false" />    
+    <Environment description="PRISMA: indirizzo servizio di download degli allegati (DMServerWSCXF AttachServicePort)" name="PRISMA_DMS_ATTACH" value="" type="java.lang.String" override="false" />
+    <Environment description="PRISMA: denominazione amministrazione" name="PRISMA_DENOMINAZIONE_AMMINISTRAZIONE" value="" type="java.lang.String" override="false" />
+    <Environment description="PRISMA: codice amministrazione" name="PRISMA_CODICE_AMMINISTRAZIONE" value="" type="java.lang.String" override="false" />
+    <Environment description="PRISMA: email amministrazione" name="PRISMA_EMAIL_AMMINISTRAZIONE" value="" type="java.lang.String" override="false" />
+    <Environment description="PRISMA: codice AOO" name="PRISMA_CODICE_AOO" value="" type="java.lang.String" override="false" />
+    <Environment description="PRISMA: nome applicativo protocollo" name="PRISMA_NOME_APPLICATIVO" value="AGSPR" type="java.lang.String" override="false" />
+    <Environment description="PRISMA: tipo smistamento (CONOSCENZA o COMPETENZA)" name="PRISMA_TIPO_SMISTAMENTO" value="CONOSCENZA" type="java.lang.String" override="false" />
+    <Environment description="PRISMA: tipo documento per registro" name="PRISMA_TIPO_DOCUMENTO_PER_REGISTRO" value="" type="java.lang.String" override="false" />
+    <Environment description="PRISMA: tipo registro" name="PRISMA_TIPO_REGISTRO" value="" type="java.lang.String" override="false" />
+    <Environment description="PRISMA: ricerca documenti nel fascicolo, profondita' in giorni" name="PRISMA_RICERCA_DOCUMENTI_FASCICOLO_GIORNI" value="30" type="java.lang.String" override="false" />
+    <Environment description="PRISMA: ricerca documenti nel fascicolo, numero massimo di documenti per i quali leggere i dettagli" name="PRISMA_RICERCA_DOCUMENTI_NUMERO_MASSIMO" value="50" type="java.lang.String" override="false" />
+
+    <!-- Protocollo/documentale INFOR -->
+    <Environment description="INFOR: indirizzo servizio JPROTOCOLLO" name="INFOR_JPROTOCOLLO_ENDPOINT" value="" type="java.lang.String" override="false" />
+    <Environment description="INFOR: indirizzo servizio JPROTOCOLLOGEN" name="INFOR_JPROTOCOLLOGEN_ENDPOINT" value="" type="java.lang.String" override="false" />
+       
+    <!-- Protocollo URBI -->
+    <Environment description="URBI: indirizzo servizio protocollo" name="URBI_PROTOCOLLO_URL" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: identificativo AOO" name="URBI_IDAOO" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: utente registratore" name="URBI_UTENTE_REGISTRATORE" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: tipo mezzo per le comunicazioni in partenza" name="URBI_PARTENZA_TIPO_MEZZO" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: tipo mezzo per le comunicazioni in arrivo" name="URBI_ARRIVO_TIPO_MEZZO" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: ufficio mittente" name="URBI_PARTENZA_UFFICIO_MITTENTE" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: ufficio mittente originale" name="URBI_PARTENZA_UFFICIO_MITTENTE_ORIGINALE" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: ufficio mittente utente mittente" name="URBI_PARTENZA_UFFICIO_MITTENTE_UTENTE_MITTENTE" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: invio immediato PEC" name="URBI_PARTENZA_INVIO_IMMEDIATO_PEC" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: classificazione per i documenti in partenza" name="URBI_PARTENZA_CLASSIFICAZIONE" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: ufficio destinatario" name="URBI_ARRIVO_UFFICIO_DESTINATARIO" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: ufficio destinatario originale" name="URBI_ARRIVO_UFFICIO_DESTINATARIO_ORIGINALE" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: ufficio destinatario utente CO automatici" name="URBI_ARRIVO_UFFICIO_DESTINATARIO_UTENTE_CO_AUTOMATICI" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: ufficio destinatario assegnazione" name="URBI_ARRIVO_UFFICIO_DESTINATARIO_ASSEGNAZIONE" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: ufficio destinatario utente" name="URBI_ARRIVO_UFFICIO_DESTINATARIO_UTENTE" value="" type="java.lang.String" override="false" />
+	<Environment description="URBI: classificazione per i documenti in arrivo" name="URBI_ARRIVO_CLASSIFICAZIONE" value="" type="java.lang.String" override="false" />
+        
+    <!-- Protocollo/documentale PROTSERVICE -->
+    <Environment description="PROTSERVICE: indirizzo servizio PROTSERVICE" name="PROTSERVICE_ENDPOINT" value="" type="java.lang.String" override="false" />
+    <Environment description="PROTSERVICE: riservato" name="PROTSERVICE_RISERVATO" value="" type="java.lang.String" override="false" />
+    <Environment description="PROTSERVICE: registro" name="PROTSERVICE_REGISTRO" value="" type="java.lang.String" override="false" />
+    
+    <!-- Protocollo/documentale JPROTOCOL -->
+    <Environment description="JPROTOCOL: indirizzo servizio protocollazione" name="JPROTOCOL_WSPROTOCOLLASILENTE" value="" type="java.lang.String" override="false" />
+    <Environment description="JPROTOCOL: indirizzo servizio elenco documento" name="JPROTOCOL_WSELENCODOCUMENTI" value="" type="java.lang.String" override="false" />
+    <Environment description="JPROTOCOL: indirizzo servizio mail" name="JPROTOCOL_WSSENDMAIL" value="" type="java.lang.String" override="false" />
+    <Environment description="JPROTOCOL: indirizzo servizio fascicolo" name="JPROTOCOL_WSFASCICOLI" value="" type="java.lang.String" override="false" />
+    <Environment description="JPROTOCOL: token" name="JPROTOCOL_TOKEN" value="" type="java.lang.String" override="false" />
+    <Environment description="JPROTOCOL: protocollatore entrata" name="JPROTOCOL_PROTOCOLLATORE_ENTRATA" value="" type="java.lang.String" override="false" />
+	<Environment description="JPROTOCOL: protocollatore uscita" name="JPROTOCOL_PROTOCOLLATORE_USCITA" value="" type="java.lang.String" override="false" />
+    <Environment description="JPROTOCOL: protocollatore interno" name="JPROTOCOL_PROTOCOLLATORE_INTERNO" value="" type="java.lang.String" override="false" />
+    <Environment description="JPROTOCOL: codice ufficio mittente interno" name="JPROTOCOL_CODUFFMITTINTERNO" value="" type="java.lang.String" override="false" />
+    <Environment description="JPROTOCOL: mezzo di trasmissione (TIPOLOGIADOC)" name="JPROTOCOL_TIPOLOGIADOC" value="" type="java.lang.String" override="false" />    
+    <Environment description="JPROTOCOL: categoria del documento (CATDOC)" name="JPROTOCOL_CATDOC" value="" type="java.lang.String" override="false" />    
+    <Environment description="JPROTOCOL: ID del server di mail" name="JPROTOCOL_CODICEMAILSERVER" value="" type="java.lang.String" override="false" />
+    <Environment description="JPROTOCOL: grado di riservatezza della comunicazioni" name="JPROTOCOL_GRADO_RISERVATEZZA" value="3" type="java.lang.String" override="false" />
+    <Environment description="JPROTOCOL: tipologia di anagrafica" name="JPROTOCOL_MITTDEST_TIPOLOGIA" value="4" type="java.lang.String" override="false" />
+
+
+    <!-- Protocollo/documentale ITALPROT -->
+    <Environment description="ITALPROT: indirizzo servizio protocollo" name="ITALPROT_PROWSPROTOCOLLO" value="" type="java.lang.String" override="false" />
+    <Environment description="ITALPROT: codice dell'ente per l'accesso al servizio protocollo" name="ITALPROT_CODICEENTE" value="" type="java.lang.String" override="false" />  
+	<Environment description="ITALPROT: codice ufficio operatore (partenza)" name="ITALPROT_PARTENZA_CODICE_UFFICIO_OPERATORE" value="" type="java.lang.String" override="false" />
+    <Environment description="ITALPROT: codice ufficio operatore (arrivo)" name="ITALPROT_ARRIVO_CODICE_UFFICIO_OPERATORE" value="" type="java.lang.String" override="false" />
+    <Environment description="ITALPROT: codice ufficio operatore (interno)" name="ITALPROT_INTERNO_CODICE_UFFICIO_OPERATORE" value="" type="java.lang.String" override="false" />
+	<Environment description="ITALPROT: codice firmatario (partenza)" name="ITALPROT_PARTENZA_CODICE_FIRMATARIO" value="" type="java.lang.String" override="false" />
+	<Environment description="ITALPROT: codice firmatario (arrivo)" name="ITALPROT_ARRIVO_CODICE_FIRMATARIO" value="" type="java.lang.String" override="false" />
+	<Environment description="ITALPROT: codice firmatario (interno)" name="ITALPROT_INTERNO_CODICE_FIRMATARIO" value="" type="java.lang.String" override="false" />
+	<Environment description="ITALPROT: codice ufficio firmatario (partenza)" name="ITALPROT_PARTENZA_UFFICIO_FIRMATARIO" value="" type="java.lang.String" override="false" />
+	<Environment description="ITALPROT: codice ufficio firmatario (arrivo)" name="ITALPROT_ARRIVO_UFFICIO_FIRMATARIO" value="" type="java.lang.String" override="false" />
+	<Environment description="ITALPROT: codice ufficio firmatario (interno)" name="ITALPROT_INTERNO_UFFICIO_FIRMATARIO" value="" type="java.lang.String" override="false" />
+       
+    <!-- Protocollo/documentale JDOC -->  
+    <Environment description="JDOC: indirizzo servizio protocollo" name="JDOC_WS_OPERAZIONI" value="" type="java.lang.String" override="false" />
+	<Environment description="JDOC: tipo documento (ingresso/entrata)" name="JDOC_DOCTYPE_ENTRATA" value="" type="java.lang.String" override="false" />
+	<Environment description="JDOC: tipo documento (fascicolo)" name="JDOC_DOCTYPE_FASCICOLO" value="" type="java.lang.String" override="false" />
+	<Environment description="JDOC: testo dell'allegato di creazione fascicolo" name="JDOC_FASCICOLO_TESTO_ALLEGATO" value="Allegato di creazione fascicolo" type="java.lang.String" override="false" />
+	<Environment description="JDOC: utente che sta archiviando" name="JDOC_USER" value="" type="java.lang.String" override="false" />
+	<Environment description="JDOC: azienda" name="JDOC_COMPANY" value="" type="java.lang.String" override="false" />    
+	<Environment description="JDOC: protocollo parametro C11" name="JDOC_PROTOCOLLO_C11" value="NON DEFINITO" type="java.lang.String" override="false" />       
+	<Environment description="JDOC: protocollo parametro C01" name="JDOC_PROTOCOLLO_C01" value="PPC" type="java.lang.String" override="false" />    
+	<Environment description="JDOC: fascicolo parametro C01" name="JDOC_FASCICOLO_C01" value="ACQ" type="java.lang.String" override="false" />    
+        
+	<!-- TABELLATI -->
+	<!-- IRIDE/JIRIDE - Codice della classifica -->
+	<Environment name="tab/JIRIDE/classifica/NDEF" value="Non definita" type="java.lang.String" override="false" />
+	
+	<!-- IRIDE/JIRIDE - Tipo documento -->
+	<Environment name="tab/JIRIDE/tipodocumento/NDEF" value="Non definito" type="java.lang.String" override="false" />
+	
+	<!-- IRIDE/JIRIDE - Ruolo dell'utente di collegamento -->
+	<Environment name="tab/JIRIDE/ruolo/NDEF" value="Non definito" type="java.lang.String" override="false" />
+	
+	<!-- IRIDE/JIRIDE - Codice dell'unità operativa -->
+	<Environment name="tab/JIRIDE/mittenteinterno/NDEF" value="Non definito" type="java.lang.String" override="false" />
+	
+	<!-- IRIDE/JIRIDE - Codice della classifica del fascicolo -->
+	<Environment name="tab/JIRIDE/classificafascicolo/NDEF" value="Non definito" type="java.lang.String" override="false" />
+	
+	<!-- IRIDE/JIRIDE - Tipo atto -->
+	<Environment name="tab/JIRIDE/tipoatto/DL" value="Delibera" type="java.lang.String" override="false" />
+	<Environment name="tab/JIRIDE/tipoatto/DET" value="Determina" type="java.lang.String" override="false" />
+	<Environment name="tab/JIRIDE/tipoatto/PR" value="Proposta" type="java.lang.String" override="false" />
+	
+	<!-- IRIDE/JIRIDE - Organo -->
+	<Environment name="tab/JIRIDE/organo/2" value="Giunta" type="java.lang.String" override="false" />
+	<Environment name="tab/JIRIDE/organo/1" value="Consiglio" type="java.lang.String" override="false" />
+	
+	<!-- IRIDE/JIRIDE - Indirizzo mail mittente -->
+	<Environment name="tab/JIRIDE/indirizzomittente/NDEF" value="Non definito" type="java.lang.String" override="false" />
+	
+	<!-- IRIDE/JIRIDE - Mezzo usato per la spedizione -->
+	<Environment name="tab/JIRIDE/mezzo/NDEF" value="Non definito" type="java.lang.String" override="false" />
+	
+	<!-- JIRIDE - Tipo di collegamento -->
+	<Environment name="tab/JIRIDE/tipocollegamento/NDEF" value="Non definito" type="java.lang.String" override="false" />
+
+</Context>
+
