@@ -22,11 +22,17 @@ public class MittenteDestinatario  implements java.io.Serializable {
 
     private java.lang.String email;
 
+    private java.lang.String CC;
+
     private java.lang.String ufficio;
 
     private java.lang.String codiceFiscale;
 
     private it.italprot.prowsprotocollo.Notifica[] notificheMail;
+
+    private java.lang.String tipoSoggetto;
+
+    private java.lang.String codiceIPASoggetto;
 
     public MittenteDestinatario() {
     }
@@ -39,9 +45,12 @@ public class MittenteDestinatario  implements java.io.Serializable {
            java.lang.String citta,
            java.lang.String prov,
            java.lang.String email,
+           java.lang.String CC,
            java.lang.String ufficio,
            java.lang.String codiceFiscale,
-           it.italprot.prowsprotocollo.Notifica[] notificheMail) {
+           it.italprot.prowsprotocollo.Notifica[] notificheMail,
+           java.lang.String tipoSoggetto,
+           java.lang.String codiceIPASoggetto) {
            this.codice = codice;
            this.denominazione = denominazione;
            this.indirizzo = indirizzo;
@@ -49,9 +58,12 @@ public class MittenteDestinatario  implements java.io.Serializable {
            this.citta = citta;
            this.prov = prov;
            this.email = email;
+           this.CC = CC;
            this.ufficio = ufficio;
            this.codiceFiscale = codiceFiscale;
            this.notificheMail = notificheMail;
+           this.tipoSoggetto = tipoSoggetto;
+           this.codiceIPASoggetto = codiceIPASoggetto;
     }
 
 
@@ -196,6 +208,26 @@ public class MittenteDestinatario  implements java.io.Serializable {
 
 
     /**
+     * Gets the CC value for this MittenteDestinatario.
+     * 
+     * @return CC
+     */
+    public java.lang.String getCC() {
+        return CC;
+    }
+
+
+    /**
+     * Sets the CC value for this MittenteDestinatario.
+     * 
+     * @param CC
+     */
+    public void setCC(java.lang.String CC) {
+        this.CC = CC;
+    }
+
+
+    /**
      * Gets the ufficio value for this MittenteDestinatario.
      * 
      * @return ufficio
@@ -254,6 +286,46 @@ public class MittenteDestinatario  implements java.io.Serializable {
         this.notificheMail = notificheMail;
     }
 
+
+    /**
+     * Gets the tipoSoggetto value for this MittenteDestinatario.
+     * 
+     * @return tipoSoggetto
+     */
+    public java.lang.String getTipoSoggetto() {
+        return tipoSoggetto;
+    }
+
+
+    /**
+     * Sets the tipoSoggetto value for this MittenteDestinatario.
+     * 
+     * @param tipoSoggetto
+     */
+    public void setTipoSoggetto(java.lang.String tipoSoggetto) {
+        this.tipoSoggetto = tipoSoggetto;
+    }
+
+
+    /**
+     * Gets the codiceIPASoggetto value for this MittenteDestinatario.
+     * 
+     * @return codiceIPASoggetto
+     */
+    public java.lang.String getCodiceIPASoggetto() {
+        return codiceIPASoggetto;
+    }
+
+
+    /**
+     * Sets the codiceIPASoggetto value for this MittenteDestinatario.
+     * 
+     * @param codiceIPASoggetto
+     */
+    public void setCodiceIPASoggetto(java.lang.String codiceIPASoggetto) {
+        this.codiceIPASoggetto = codiceIPASoggetto;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof MittenteDestinatario)) return false;
@@ -287,6 +359,9 @@ public class MittenteDestinatario  implements java.io.Serializable {
             ((this.email==null && other.getEmail()==null) || 
              (this.email!=null &&
               this.email.equals(other.getEmail()))) &&
+            ((this.CC==null && other.getCC()==null) || 
+             (this.CC!=null &&
+              this.CC.equals(other.getCC()))) &&
             ((this.ufficio==null && other.getUfficio()==null) || 
              (this.ufficio!=null &&
               this.ufficio.equals(other.getUfficio()))) &&
@@ -295,7 +370,13 @@ public class MittenteDestinatario  implements java.io.Serializable {
               this.codiceFiscale.equals(other.getCodiceFiscale()))) &&
             ((this.notificheMail==null && other.getNotificheMail()==null) || 
              (this.notificheMail!=null &&
-              java.util.Arrays.equals(this.notificheMail, other.getNotificheMail())));
+              java.util.Arrays.equals(this.notificheMail, other.getNotificheMail()))) &&
+            ((this.tipoSoggetto==null && other.getTipoSoggetto()==null) || 
+             (this.tipoSoggetto!=null &&
+              this.tipoSoggetto.equals(other.getTipoSoggetto()))) &&
+            ((this.codiceIPASoggetto==null && other.getCodiceIPASoggetto()==null) || 
+             (this.codiceIPASoggetto!=null &&
+              this.codiceIPASoggetto.equals(other.getCodiceIPASoggetto())));
         __equalsCalc = null;
         return _equals;
     }
@@ -328,6 +409,9 @@ public class MittenteDestinatario  implements java.io.Serializable {
         if (getEmail() != null) {
             _hashCode += getEmail().hashCode();
         }
+        if (getCC() != null) {
+            _hashCode += getCC().hashCode();
+        }
         if (getUfficio() != null) {
             _hashCode += getUfficio().hashCode();
         }
@@ -344,6 +428,12 @@ public class MittenteDestinatario  implements java.io.Serializable {
                     _hashCode += obj.hashCode();
                 }
             }
+        }
+        if (getTipoSoggetto() != null) {
+            _hashCode += getTipoSoggetto().hashCode();
+        }
+        if (getCodiceIPASoggetto() != null) {
+            _hashCode += getCodiceIPASoggetto().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -404,6 +494,13 @@ public class MittenteDestinatario  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("CC");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "CC"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("ufficio");
         elemField.setXmlName(new javax.xml.namespace.QName("", "ufficio"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -421,6 +518,20 @@ public class MittenteDestinatario  implements java.io.Serializable {
         elemField.setFieldName("notificheMail");
         elemField.setXmlName(new javax.xml.namespace.QName("", "notificheMail"));
         elemField.setXmlType(new javax.xml.namespace.QName("urn:proWsProtocollo", "notifica"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("tipoSoggetto");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "tipoSoggetto"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("codiceIPASoggetto");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "codiceIPASoggetto"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

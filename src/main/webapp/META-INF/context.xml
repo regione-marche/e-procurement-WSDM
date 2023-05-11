@@ -2,7 +2,7 @@
 <Context path="/EldasoftWSDM" docBase="./EldasoftWSDM" reloadable="true" copyXML="true">
 
 	<!-- Tipologia di sistema remoto -->
-	<!-- Sistemi disponibili (IRIDE, JIRIDE, PALEO, ENGINEERING, ENGINEERINGDOC, ARCHIFLOW, TITULUS, SMAT, FOLIUM, ARCHIFLOWFA, EASYDOC, SISPI, PRISMA, INFOR, URBI, PROTSERVICE, JPROTOCOL, ITALPROT, JDOC) -->
+	<!-- Sistemi disponibili (IRIDE, JIRIDE, PALEO, ENGINEERING, ENGINEERINGDOC, ARCHIFLOW, TITULUS, SMAT, FOLIUM, ARCHIFLOWFA, EASYDOC, SISPI, PRISMA, INFOR, URBI, PROTSERVICE, JPROTOCOL, ITALPROT, JDOC, FOLIUMAGORA, DOCER, NUMIX, GENERIC01, DATAGRAPH, DATAGRAPH.PRISMA restituito ai client come PRISMA, FOLIUM2, FOLIUM2.FOLIUM restituito ai client come FOLIUM, INFOR2, INFOR2.INFOR restituito ai client come INFOR, LAPISOPERA) -->
 	<!-- Scrivere il sistema in maiuscolo -->
 	<Environment description="Sistema di protocollazione" name="REMOTEWSDM" value="JIRIDE" type="java.lang.String" override="false" />
 	
@@ -30,8 +30,10 @@
 	<Environment description="JIRIDE: aggiungi allegati estremi provvedimento" name="JIRIDE_ESTREMIPROVVAUT" value="AUTOMATIZZATO DA SW GARE" type="java.lang.String" override="false" />
 	<Environment description="JIRIDE: indirizzo servizio lettura lista account email" name="JIRIDE_ACCOUNT_EMAIL_WS" value="" type="java.lang.String" override="false" />
 	<Environment description="JIRIDE: ticket" name="JIRIDE_TICKET" value="" type="java.lang.String" override="false" />
-
-
+	<Environment description="JIRIDE: download allegati mediante servizio REPWSSGATEWAY (S/N)" name="JIRIDE_DOWNLOAD_ALLEGATI_REPWSSGATEWAY" value="S" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: indirizzo servizio RESWSSGATEWAY" name="JIRIDE_REPWSSGATEWAY_WS" value="" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: alias di accesso al servizio RESWSSGATEWAY" name="JIRIDE_REPWSSGATEWAY_ALIAS" value="" type="java.lang.String" override="false" />
+	<Environment description="JIRIDE: modalita' di fascicolazione del protocollo/documento (DIRETTA, INDIRETTA)" name="JIRIDE_PROTOCOLLO_MODO_FASCICOLAZIONE" value="DIRETTA" type="java.lang.String" override="false" />
 
 	<!-- Protocollo/documentale PALEO -->
 	<Environment description="PALEO: indirizzo servizio fascicolo/protocollo" name="PALEO_WS" value="" type="java.lang.String" override="false" />
@@ -59,8 +61,12 @@
 	<Environment description="ENGINEERING: gestione documentale, indirizzo servizio di creazione di un nuovo folder" name="ENGINEERINGDOC_WSADDFOLDER" value="" type="java.lang.String" override="false" />			
 	<Environment description="ENGINEERING: gestione documentale, indirizzo servizio di estrazione dei metadati di un folder" name="ENGINEERINGDOC_WSGETMETADATAFOLDER" value="" type="java.lang.String" override="false" />			
 	<Environment description="ENGINEERING: gestione documentale, indirizzo servizio di ricerca sul repository documentale" name="ENGINEERINGDOC_WSTROVADOCFOLDER" value="" type="java.lang.String" override="false" />	
+	<Environment description="ENGINEERING: gestione documentale, indirizzo servizio di ricerca organigramma" name="ENGINEERINGDOC_WSTROVAINORGANIGRAMMA" value="" type="java.lang.String" override="false" />	
 	<Environment description="ENGINEERING: gestione documentale, codice applicazione" name="ENGINEERINGDOC_CODICEAPPLICAZIONE" value="AURIGA" type="java.lang.String" override="false" />
 	<Environment description="ENGINEERING: gestione documentale, istanza applicazione" name="ENGINEERINGDOC_ISTANZAAPPLICAZIONE" value="" type="java.lang.String" override="false" />
+	<Environment description="ENGINEERING: gestione documentale, autenticazione con BEARER OAUTH2" name="ENGINEERINGDOC_BEARER_OAUTH2" value="" type="java.lang.String" override="false" />
+	<Environment description="ENGINEERING: gestione documentale, inserimento fascicolo, tipo di dettaglio del fascicolo, da settare opzionalmente se e' definita una tipologia di fascicolo censita in AURIGA" name="ENGINEERINGDOC_ADDFOLDER_GENERICS12" value="" type="java.lang.String" override="false" />
+	<Environment description="ENGINEERING: gestione documentale, inserimento fascicolo, default 'InCaricoA/Struttura'" name="ENGINEERINGDOC_ADDFOLDER_STRUTTURA" value="" type="java.lang.String" override="false" />
 	
 	<!-- Protocollo ARCHIFLOW -->
 	<Environment description="ARCHIFLOW_LOGIN: indirizzo servizio login" name="ARCHIFLOW_WS_LOGIN" value="" type="java.lang.String" override="false" />
@@ -172,6 +178,7 @@
 
     <!-- Protocollo/documentale ITALPROT -->
     <Environment description="ITALPROT: indirizzo servizio protocollo" name="ITALPROT_PROWSPROTOCOLLO" value="" type="java.lang.String" override="false" />
+    <Environment description="ITALPROT: indirizzo servizio fascicolo" name="ITALPROT_PROWSFASCICOLO" value="" type="java.lang.String" override="false" />
     <Environment description="ITALPROT: codice dell'ente per l'accesso al servizio protocollo" name="ITALPROT_CODICEENTE" value="" type="java.lang.String" override="false" />  
 	<Environment description="ITALPROT: codice ufficio operatore (partenza)" name="ITALPROT_PARTENZA_CODICE_UFFICIO_OPERATORE" value="" type="java.lang.String" override="false" />
     <Environment description="ITALPROT: codice ufficio operatore (arrivo)" name="ITALPROT_ARRIVO_CODICE_UFFICIO_OPERATORE" value="" type="java.lang.String" override="false" />
@@ -193,6 +200,79 @@
 	<Environment description="JDOC: protocollo parametro C11" name="JDOC_PROTOCOLLO_C11" value="NON DEFINITO" type="java.lang.String" override="false" />       
 	<Environment description="JDOC: protocollo parametro C01" name="JDOC_PROTOCOLLO_C01" value="PPC" type="java.lang.String" override="false" />    
 	<Environment description="JDOC: fascicolo parametro C01" name="JDOC_FASCICOLO_C01" value="ACQ" type="java.lang.String" override="false" />    
+	
+	<Environment description="JDOC: contratto parametro C01 (area)" name="JDOC_CONTRATTO_C01" value="PPC" type="java.lang.String" override="false" />
+	<Environment description="JDOC: contratto parametro C11 (fornitore)" name="JDOC_CONTRATTO_C11" value="100000" type="java.lang.String" override="false" />
+	<Environment description="JDOC: contratto parametro C16 (ragione sociale)" name="JDOC_CONTRATTO_C16" value="Fornitore da censire in ACG" type="java.lang.String" override="false" />
+        
+    <!--  Protocollo FOLIUMAGORA --> 
+    <Environment description="FOLIUMAGORA: indirizzo servizio fascicolo" name="FOLIUMAGORA_WS_FASCICOLO" value="" type="java.lang.String" override="false" />
+	<Environment description="FOLIUMAGORA: indirizzo servizio protocollo" name="FOLIUMAGORA_WS_PROTOCOLLO" value="" type="java.lang.String" override="false" />
+	<Environment description="FOLIUMAGORA: aoo" name="FOLIUMAGORA_AOO" value="" type="java.lang.String" override="false" />
+	<Environment description="FOLIUMAGORA: applicazione" name="FOLIUMAGORA_APPLICAZIONE" value="" type="java.lang.String" override="false" />
+	<Environment description="FOLIUMAGORA: ente" name="FOLIUMAGORA_ENTE" value="" type="java.lang.String" override="false" />
+	
+	<!--  Protocollo DOCER -->
+	<Environment description="DOCER: indirizzo del servizio 'AuthenticationService'" name="DOCER_AUTHENTICATION" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: indirizzo del servizio 'DocerService'" name="DOCER_WS_DOCER" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: indirizzo del servizio 'Protocollazione'" name="DOCER_WS_PROTOCOLLAZIONE" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: indirizzo del servizio 'Fascicolazione'" name="DOCER_WS_FASCICOLAZIONE" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: codice amministrazione/ente" name="DOCER_AMMINISTRAZIONE_CODICE" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: denominazione amministrazione/ente" name="DOCER_AMMINISTRAZIONE_DENOMINAZIONE" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: indirizzo telematico amministrazione/ente" name="DOCER_AMMINISTRAZIONE_INDIRIZZO_TELEMATICO" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: codice AOO" name="DOCER_AOO_CODICE" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: denominazione AOO" name="DOCER_AOO_DENOMINAZIONE" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: indirizzo telematico AOO" name="DOCER_AOO_INDIRIZZO_TELEMATICO" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: codice AOO mittente" name="DOCER_AOO_MITTENTE_CODICE" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: denominazione AOO mittente" name="DOCER_AOO_MITTENTE_DENOMINAZIONE" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: indirizzo telematico AOO mittente" name="DOCER_AOO_MITTENTE_INDIRIZZO_TELEMATICO" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: codice applicazione" name="DOCER_APPLICATION" value="" type="java.lang.String" override="false" />
+	<Environment description="DOCER: lista dei codici GROUP_ID o USER_ID cui assegnare i diritti sui documenti. I codici devono essere separati da virgola (,)" name="DOCER_ACL" value="" type="java.lang.String" override="false" />
+
+	<!--  Protocollo NUMIX -->
+	<Environment description="NUMIX: indirizzo del servizio protocollazione" name="NUMIX_WS" value="" type="java.lang.String" override="false" />
+    <Environment description="NUMIX: codice organizzazione OrgCode" name="NUMIX_ORGCODE" value="" type="java.lang.String" override="false" />
+    <Environment description="NUMIX: registry type protocol" name="NUMIX_REGISTRY_TYPE_PROTOCOL" value="Protocollo Ordinario/ Protocollo Emergenza" type="java.lang.String" override="false" />
+    <Environment description="NUMIX: registry type document" name="NUMIX_REGISTRY_TYPE_DOCUMENT" value="Nessuno" type="java.lang.String" override="false" />
+    <Environment description="NUMIX: Sender Id protocollo in ingresso" name="NUMIX_IN_SENDER_ID" value="" type="java.lang.String" override="false" />
+    <Environment description="NUMIX: Sender Id protocollo in uscita" name="NUMIX_OUT_SENDER_ID" value="" type="java.lang.String" override="false" />
+    <Environment description="NUMIX: Sender Id protocollo interno" name="NUMIX_INT_SENDER_ID" value="" type="java.lang.String" override="false" />
+    
+    <!--  Protocollo GENERIC01 -->
+    <Environment description="GENERIC01: indirizzo del servizio LOGIN" name="GENERIC01_LOGIN_WS" value="" type="java.lang.String" override="false" />
+    <Environment description="GENERIC01: parametro GRANT_TYPE" name="GENERIC01_LOGIN_GRANT_TYPE" value="client_credentials" type="java.lang.String" override="false" />
+    <Environment description="GENERIC01: parametro SCOPE" name="GENERIC01_LOGIN_SCOPE" value="openid" type="java.lang.String" override="false" />
+    <Environment description="GENERIC01: indirizzo del servizio PROTOCOLLO" name="GENERIC01_PROTOCOLLO_WS" value="" type="java.lang.String" override="false" />
+    <Environment description="GENERIC01: indirizzo del servizio DOCUMENTALE" name="GENERIC01_DOCUMENTALE_WS" value="" type="java.lang.String" override="false" />
+    <Environment description="GENERIC01: parametro SERVICE_PROVIDER_CODE" name="GENERIC01_PROTOCOLLO_SERVICE_PROVIDER_CODE" value="" type="java.lang.String" override="false" />
+    <Environment description="GENERIC01: parametro PROTOCOLLO_CLIENT_ID" name="GENERIC01_PROTOCOLLO_PROTOCOLLO_CLIENT_ID" value="" type="java.lang.String" override="false" />
+    <Environment description="GENERIC01: parametro PROTOCOLLO_USER_ID" name="GENERIC01_PROTOCOLLO_PROTOCOLLO_USER_ID" value="" type="java.lang.String" override="false" />
+    <Environment description="GENERIC01: parametro SYSLOGIN" name="GENERIC01_SYSLOGIN" value="" type="java.lang.String" override="false" />
+
+     <!-- Protocollo/documentale DATAGRAPH -->
+    <Environment description="DATAGRAPH: indirizzo servizio protocollo (DOCAreaProto)" name="DATAGRAPH_DOCAREAPROTO" value="" type="java.lang.String" override="false" />
+    <Environment description="DATAGRAPH: denominazione amministrazione" name="DATAGRAPH_DENOMINAZIONE_AMMINISTRAZIONE" value="" type="java.lang.String" override="false" />
+    <Environment description="DATAGRAPH: codice amministrazione" name="DATAGRAPH_CODICE_AMMINISTRAZIONE" value="" type="java.lang.String" override="false" />
+    <Environment description="DATAGRAPH: codice AOO" name="DATAGRAPH_CODICE_AOO" value="" type="java.lang.String" override="false" />
+    <Environment description="DATAGRAPH: nome applicativo protocollo" name="DATAGRAPH_NOME_APPLICATIVO" value="" type="java.lang.String" override="false" />
+    <Environment description="DATAGRAPH: tipo smistamento (CONOSCENZA o COMPETENZA)" name="DATAGRAPH_TIPO_SMISTAMENTO" value="COMPETENZA" type="java.lang.String" override="false" />
+    
+     <!--  Protocollo FOLIUM2 --> 
+	<Environment description="FOLIUM2: indirizzo servizio protocollo" name="FOLIUM2_WS_PROTOCOLLO" value="" type="java.lang.String" override="false" />
+	<Environment description="FOLIUM2: aoo" name="FOLIUM2_AOO" value="" type="java.lang.String" override="false" />
+	<Environment description="FOLIUM2: applicazione" name="FOLIUM2_APPLICAZIONE" value="" type="java.lang.String" override="false" />
+	<Environment description="FOLIUM2: ente" name="FOLIUM2_ENTE" value="" type="java.lang.String" override="false" />
+	<Environment description="FOLIUM2: registro" name="FOLIUM2_REGISTRO" value="" type="java.lang.String" override="false" />
+	<Environment description="FOLIUM2: esegui salvataggio dei documenti allegati" name="FOLIUM2_ESEGUI_SALVA_DOCUMENTO" value="SI" type="java.lang.String" override="false" />
+    
+     <!-- Protocollo/documentale INFOR2 -->
+    <Environment description="INFOR2: indirizzo servizio JPROTOCOLLO" name="INFOR2_JPROTOCOLLO_ENDPOINT" value="" type="java.lang.String" override="false" />
+    <Environment description="INFOR2: indirizzo servizio JPROTOCOLLOGEN" name="INFOR2_JPROTOCOLLOGEN_ENDPOINT" value="" type="java.lang.String" override="false" />
+    
+    <!--  Protocollo LAPIS/Documentale OPERA -->
+    <Environment description="LAPISOPERA: indirizzo del servizio protocollo LAPIS" name="LAPIS_PROTOCOLLO_URL" value="" type="java.lang.String" override="false" />
+    <Environment description="LAPISOPERA: indirizzo del servizio documentale OPERA" name="OPERA_DOCUMENTALE_URL" value="" type="java.lang.String" override="false" />
+    <Environment description="LAPISOPERA: codice applicativo protocollo LAPIS" name="LAPIS_CODICE_APPLICATIVO" value="" type="java.lang.String" override="false" />
         
 	<!-- TABELLATI -->
 	<!-- IRIDE/JIRIDE - Codice della classifica -->

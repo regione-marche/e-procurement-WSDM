@@ -1,5 +1,7 @@
 package it.maggioli.eldasoft.bl;
 
+import java.util.Date;
+
 import it.maggioli.eldasoft.ws.dm.WSDMAggiungiAllegatiIn;
 import it.maggioli.eldasoft.ws.dm.WSDMAggiungiAllegatiRes;
 import it.maggioli.eldasoft.ws.dm.WSDMAnagraficaLeggiRes;
@@ -24,11 +26,11 @@ import it.maggioli.eldasoft.ws.dm.WSDMProtocolloDocumentoRes;
 import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaIn;
 import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaRes;
 import it.maggioli.eldasoft.ws.dm.WSDMRicercaAccountEmail;
+import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicolo;
+import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicoloRes;
 import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneIn;
 import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneRes;
 import it.maggioli.eldasoft.ws.dm.WSDMVerificaMailRes;
-
-import java.util.Date;
 
 public interface IWSDMManager {
 
@@ -129,6 +131,30 @@ public interface IWSDMManager {
       WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn);
 
   /**
+   * Inserimento della richiesta di firma.
+   * 
+   * @param username
+   * @param password
+   * @param loginAttr
+   * @param wsdmprotocolloDocumentoIn
+   * @return
+   */
+  public abstract WSDMProtocolloDocumentoRes _firmaInserisci(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn);
+
+  /**
+   * Verifica della firma.
+   * 
+   * @param username
+   * @param password
+   * @param loginAttr
+   * @param numeroDocumento
+   * @return
+   */
+  public abstract WSDMProtocolloDocumentoRes _firmaVerifica(String username, String password, WSDMLoginAttr loginAttr,
+      String numeroDocumento);
+
+  /**
    * Lettura di un documento (con protocollo o senza protocollo).
    * 
    * @param login
@@ -192,10 +218,11 @@ public interface IWSDMManager {
    * @param annoFascicolo
    * @param numeroFascicolo
    * @param classificaFascicolo
+   * @param oggettoFascicolo
    * @return
    */
   public abstract WSDMFascicoloRes _fascicoloLeggi(String username, String password, WSDMLoginAttr loginAttr, String codiceFascicolo,
-      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo);
+      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo, String oggettoFascicolo);
 
   /**
    * Lettura del fascicolo con i documenti allegati (solo riferimenti).
@@ -205,10 +232,11 @@ public interface IWSDMManager {
    * @param annoFascicolo
    * @param numeroFascicolo
    * @param classificaFascicolo
+   * @param oggettoFascicolo
    * @return
    */
   public abstract WSDMFascicoloRes _fascicoloMetadatiLeggi(String username, String password, WSDMLoginAttr loginAttr,
-      String codiceFascicolo, Long annoFascicolo, String numeroFascicolo, String classificaFascicolo);
+      String codiceFascicolo, Long annoFascicolo, String numeroFascicolo, String classificaFascicolo, String oggettoFascicolo);
 
   /**
    * Modifica dei dati personalizzati del fascicolo
@@ -286,7 +314,8 @@ public interface IWSDMManager {
    * @param codiceAnagrafica
    * @return
    */
-  public abstract WSDMAnagraficaLeggiRes _anagraficaLeggi(String username, String password, WSDMLoginAttr loginAttr, String codiceAnagrafica);
+  public abstract WSDMAnagraficaLeggiRes _anagraficaLeggi(String username, String password, WSDMLoginAttr loginAttr,
+      String codiceAnagrafica);
 
   /**
    * Lettura della lista degli operatori.
@@ -347,4 +376,27 @@ public interface IWSDMManager {
    */
   public abstract WSDMListaAccountEmailRes _listaAccountEmail(String username, String password, WSDMLoginAttr loginAttr,
       WSDMRicercaAccountEmail ricercaAccountEmail);
+
+  /**
+   * Ricerca dei fascicolo.
+   * 
+   * @param username
+   * @param password
+   * @param loginAttr
+   * @param ricercaFascicolo
+   * @return
+   */
+  public abstract WSDMRicercaFascicoloRes _fascicoloRicerca(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMRicercaFascicolo ricercaFascicolo);
+
+  /**
+   * Lettura dell'esito del protocollo asincrono.
+   * 
+   * @param login
+   * @param id
+   * @return
+   */
+  public abstract WSDMProtocolloDocumentoRes _protocolloAsincronoEsito(String username, String password, WSDMLoginAttr loginAttr,
+      String id);
+
 }

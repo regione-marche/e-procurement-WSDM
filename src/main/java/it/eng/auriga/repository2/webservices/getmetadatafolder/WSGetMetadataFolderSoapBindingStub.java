@@ -103,13 +103,14 @@ public class WSGetMetadataFolderSoapBindingStub extends org.apache.axis.client.S
         }
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[0]);
-        _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("");
+        _call.setUseSOAPAction(false);
+        // _call.setSOAPActionURI("");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("http://getmetadatafolder.webservices.repository2.auriga.eng.it", "service"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
+        _call.removeProperty("SOAPAction");
  try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {codApplicazione, istanzaApplicazione, userName, password, xml, hash});
 
         if (_resp instanceof java.rmi.RemoteException) {

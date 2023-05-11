@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlType;
     "dimensionePag"
 })
 @XmlSeeAlso({
-    DatiRicercaAnagraficaType.class,
     DatiRicercaType.class,
-    DatiVisualizzazioneType.class
+    DatiVisualizzazioneType.class,
+    DatiRicercaAnagraficaType.class
 })
 public class PaginazioneType {
 

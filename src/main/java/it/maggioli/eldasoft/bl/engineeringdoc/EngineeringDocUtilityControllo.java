@@ -16,19 +16,25 @@ import java.util.ArrayList;
  */
 public class EngineeringDocUtilityControllo {
 
-  static private final String CTR_MESSAGE                    = "La richiesta non puo' essere inoltrata a causa dei seguenti controlli:";
-  static private final String CTR_MESSAGE_ID_UO_MITTENTE     = "valorizzare l'identificativo dell'unita' operativa mittente (di provenienza)";
-  static private final String CTR_MESSAGE_ID_UO_DESTINATARIA = "valorizzare l'identificativo dell'unita' operativa destinataria";
-  static private final String CTR_MESSAGE_OGGETTO_DOCUMENTO  = "valorizzare l'oggetto del documento";
-  static private final String CTR_MESSAGE_MITTENTE           = "indicare almeno un mittente";
-  static private final String CTR_MESSAGE_DESTINATARIO       = "indicare almeno un destinatario";
-  static private final String CTR_MESSAGE_ALLEGATO           = "inserire almeno un allegato";
-  static private final String CTR_MESSAGE_CODICE_FASCICOLO   = "valorizzare il codice del fascicolo";
-  static private final String CTR_MESSAGE_OGGETTO_FASCICOLO  = "valorizzare l'oggetto del fascicolo";
-  static private final String CTR_MESSAGE_NUMERO_DOCUMENTO   = "valorizzare il numero documento";
-  
-  static private final String CTR_MESSAGE_ATTO_ANNO             = "anno atto";
-  static private final String CTR_MESSAGE_ATTO_NUMERO           = "numero atto";
+  static private final String CTR_MESSAGE                           = "La richiesta non puo' essere inoltrata a causa dei seguenti controlli:";
+  static private final String CTR_MESSAGE_CLASSIFICA                = "valorizzare la classifica del documento";
+  static private final String CTR_MESSAGE_ANNO_PROTOCOLLO           = "valorizzare l'anno del protocollo";
+  static private final String CTR_MESSAGE_NUMERO_PROTOCOLLO         = "valorizzare il numero di protocollo";
+  static private final String CTR_MESSAGE_NUMERO_PROTOCOLLO_FORMATO = "il numero protocollo non rispetta il formato previsto (tipo/anno/numero)";
+  static private final String CTR_MESSAGE_OGGETTO_DOCUMENTO         = "valorizzare l'oggetto del documento";
+  static private final String CTR_MESSAGE_MITTENTE                  = "indicare almeno un mittente";
+  static private final String CTR_MESSAGE_DESTINATARIO              = "indicare almeno un destinatario";
+  static private final String CTR_MESSAGE_ALLEGATO                  = "inserire almeno un allegato";
+  static private final String CTR_MESSAGE_ANNO_FASCICOLO            = "valorizzare l'anno del fascicolo";
+  static private final String CTR_MESSAGE_NUMERO_FASCICOLO          = "valorizzare il numero del fascicolo";
+  static private final String CTR_MESSAGE_CODICE_FASCICOLO          = "valorizzare il codice del fascicolo";
+  static private final String CTR_MESSAGE_OGGETTO_FASCICOLO         = "valorizzare l'oggetto del fascicolo";
+  static private final String CTR_MESSAGE_NUMERO_DOCUMENTO          = "valorizzare il numero documento";
+  static private final String CTR_MESSAGE_CLASSIFICA_FASCICOLO      = "valorizzare la classifica (titolazione) del fascicolo";
+  static private final String CTR_MESSAGE_NSEC_FASCICOLO            = "il n.ro secondario/alternativo assegnato al fascicolo non puo' superare i 10 caratteri";
+
+  static private final String CTR_MESSAGE_ATTO_ANNO                 = "anno atto";
+  static private final String CTR_MESSAGE_ATTO_NUMERO               = "numero atto";
 
   /**
    * Controllo valori in ingresso per la richiesta _documentoInserisci.
@@ -38,12 +44,15 @@ public class EngineeringDocUtilityControllo {
    * @param wsdmprotocolloDocumentoIn
    * @return
    */
-  public static boolean ctrDocumentoInserisci(WSDMLoginAttr loginAttr, WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn,
+  public static boolean ctrProtocolloDocumentoInserisci(WSDMLoginAttr loginAttr, WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn,
       StringBuffer messaggio) {
     ArrayList<String> alObb = new ArrayList<String>();
 
     // Oggetto
     if (!isTestoValido(wsdmprotocolloDocumentoIn.getOggetto())) alObb.add(CTR_MESSAGE_OGGETTO_DOCUMENTO);
+
+    // Classifica, si utilizza la classifica del fascicolo
+    // if (!isTestoValido(wsdmprotocolloDocumentoIn.getClassifica())) alObb.add(CTR_MESSAGE_CLASSIFICA);
 
     // Mittenti/destinatari in funzione del verso:
     // - protocollo in ingresso: sono obbligatori almeno un mittente (esterno) e
@@ -54,14 +63,18 @@ public class EngineeringDocUtilityControllo {
     // dell'unita' operativa mittente e dell'unita' operativa destinataria
     if (WSDMProtocolloInOut.IN.equals(wsdmprotocolloDocumentoIn.getInout())) {
       if (wsdmprotocolloDocumentoIn.getMittenti() == null) alObb.add(CTR_MESSAGE_MITTENTE);
-      // if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria() == null) alObb.add(CTR_MESSAGE_ID_UO_DESTINATARIA);
+      // if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria() ==
+      // null) alObb.add(CTR_MESSAGE_ID_UO_DESTINATARIA);
     } else if (WSDMProtocolloInOut.OUT.equals(wsdmprotocolloDocumentoIn.getInout())) {
       if (wsdmprotocolloDocumentoIn.getDestinatari() == null) alObb.add(CTR_MESSAGE_DESTINATARIO);
-      // if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaMittente() == null) alObb.add(CTR_MESSAGE_ID_UO_MITTENTE);
-    } 
-//    else if (WSDMProtocolloInOut.INT.equals(wsdmprotocolloDocumentoIn.getInout())) {
-//      if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria() == null) alObb.add(CTR_MESSAGE_ID_UO_DESTINATARIA);
-//    }
+      // if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaMittente() == null)
+      // alObb.add(CTR_MESSAGE_ID_UO_MITTENTE);
+    }
+    // else if
+    // (WSDMProtocolloInOut.INT.equals(wsdmprotocolloDocumentoIn.getInout())) {
+    // if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria() == null)
+    // alObb.add(CTR_MESSAGE_ID_UO_DESTINATARIA);
+    // }
 
     // Presenza allegati
     if (wsdmprotocolloDocumentoIn.getAllegati() == null) alObb.add(CTR_MESSAGE_ALLEGATO);
@@ -71,8 +84,15 @@ public class EngineeringDocUtilityControllo {
       WSDMFascicolo wsdmFascicolo = wsdmprotocolloDocumentoIn.getFascicolo();
       if (wsdmFascicolo == null) {
         alObb.add(CTR_MESSAGE_OGGETTO_FASCICOLO);
+        alObb.add(CTR_MESSAGE_CLASSIFICA_FASCICOLO);
       } else {
         if (!isTestoValido(wsdmFascicolo.getOggettoFascicolo())) alObb.add(CTR_MESSAGE_OGGETTO_FASCICOLO);
+        if (!isTestoValido(wsdmFascicolo.getClassificaFascicolo())) alObb.add(CTR_MESSAGE_CLASSIFICA_FASCICOLO);
+        if (isTestoValido(wsdmFascicolo.getGenericS11())) {
+          if (wsdmFascicolo.getGenericS11().length() > 10) {
+            alObb.add(CTR_MESSAGE_NSEC_FASCICOLO);
+          }
+        }
       }
     }
 
@@ -80,9 +100,13 @@ public class EngineeringDocUtilityControllo {
     if (WSDMInserimentoInFascicolo.SI_FASCICOLO_ESISTENTE.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())) {
       WSDMFascicolo wsdmFascicolo = wsdmprotocolloDocumentoIn.getFascicolo();
       if (wsdmFascicolo == null) {
-        alObb.add(CTR_MESSAGE_CODICE_FASCICOLO);
+        alObb.add(CTR_MESSAGE_ANNO_FASCICOLO);
+        alObb.add(CTR_MESSAGE_NUMERO_FASCICOLO);
+        alObb.add(CTR_MESSAGE_CLASSIFICA_FASCICOLO);
       } else {
-        if (!isTestoValido(wsdmFascicolo.getCodiceFascicolo())) alObb.add(CTR_MESSAGE_CODICE_FASCICOLO);
+        if (wsdmFascicolo.getAnnoFascicolo() == null) alObb.add(CTR_MESSAGE_ANNO_FASCICOLO);
+        if (!isTestoValido(wsdmFascicolo.getNumeroFascicolo())) alObb.add(CTR_MESSAGE_NUMERO_FASCICOLO);
+        if (!isTestoValido(wsdmFascicolo.getClassificaFascicolo())) alObb.add(CTR_MESSAGE_CLASSIFICA_FASCICOLO);
       }
     }
 
@@ -104,6 +128,41 @@ public class EngineeringDocUtilityControllo {
   }
 
   /**
+   * Controllo valori in ingresso per la richiesta _protocolloLeggi.
+   * 
+   * @param login
+   * @param annoProtocollo
+   * @param numeroProtocollo
+   * @param messaggio
+   * @return
+   */
+  public static boolean ctrProtocolloLeggi(WSDMLoginAttr loginAttr, Long annoProtocollo, String numeroProtocollo, StringBuffer messaggio) {
+    ArrayList<String> alObb = new ArrayList<String>();
+    if (annoProtocollo == null) alObb.add(CTR_MESSAGE_ANNO_PROTOCOLLO);
+    if (!isTestoValido(numeroProtocollo)) alObb.add(CTR_MESSAGE_NUMERO_PROTOCOLLO);
+
+    // if (!isTestoValido(numeroProtocollo)) {
+    // alObb.add(CTR_MESSAGE_NUMERO_PROTOCOLLO);
+    // } else {
+    // // Il numero protocollo deve essere una stringa complessa costituita da
+    // // tipo, anno e numero, separatati dal carattere "/" (per esempio
+    // // PG/2016/345).
+    // String estremiProtocollo[] = numeroProtocollo.split("/");
+    // if (estremiProtocollo.length == 3) {
+    // if (!isTestoValido(estremiProtocollo[0]) ||
+    // !isTestoValido(estremiProtocollo[1]) ||
+    // !isTestoValido(estremiProtocollo[2])) {
+    // alObb.add(CTR_MESSAGE_NUMERO_PROTOCOLLO_FORMATO);
+    // }
+    // } else {
+    // alObb.add(CTR_MESSAGE_NUMERO_PROTOCOLLO_FORMATO);
+    // }
+    // }
+
+    return ctrEsito(messaggio, alObb);
+  }
+
+  /**
    * Controllo valori in ingresso per la richiesta _fascicoloLeggi.
    * 
    * @param login
@@ -113,9 +172,18 @@ public class EngineeringDocUtilityControllo {
    * @return
    */
   public static boolean ctrFascicoloLeggi(WSDMLoginAttr loginAttr, String codiceFascicolo, Long annoFascicolo, String numeroFascicolo,
-      StringBuffer messaggio) {
+      String classificaFascicolo, StringBuffer messaggio) {
     ArrayList<String> alObb = new ArrayList<String>();
-    if (!isTestoValido(codiceFascicolo)) alObb.add(CTR_MESSAGE_CODICE_FASCICOLO);
+
+    boolean nuovaModalitaRicercaFascicolo = false;
+
+    if (nuovaModalitaRicercaFascicolo) {
+      if (annoFascicolo == null) alObb.add(CTR_MESSAGE_ANNO_FASCICOLO);
+      if (!isTestoValido(numeroFascicolo)) alObb.add(CTR_MESSAGE_NUMERO_FASCICOLO);
+      if (!isTestoValido(classificaFascicolo)) alObb.add(CTR_MESSAGE_CLASSIFICA_FASCICOLO);
+    } else {
+      if (!isTestoValido(codiceFascicolo)) alObb.add(CTR_MESSAGE_CODICE_FASCICOLO);
+    }
     return ctrEsito(messaggio, alObb);
   }
 
@@ -129,7 +197,14 @@ public class EngineeringDocUtilityControllo {
    */
   public static boolean ctrFascicoloInserisci(WSDMLoginAttr loginAttr, WSDMFascicoloIn wsdmfascicoloIn, StringBuffer messaggio) {
     ArrayList<String> alObb = new ArrayList<String>();
+    if (!isTestoValido(wsdmfascicoloIn.getClassificaFascicolo())) alObb.add(CTR_MESSAGE_CLASSIFICA_FASCICOLO);
     if (!isTestoValido(wsdmfascicoloIn.getOggettoFascicolo())) alObb.add(CTR_MESSAGE_OGGETTO_FASCICOLO);
+    if (isTestoValido(wsdmfascicoloIn.getGenericS11())) {
+      if (wsdmfascicoloIn.getGenericS11().length() > 10) {
+        alObb.add(CTR_MESSAGE_NSEC_FASCICOLO);
+      }
+    }
+
     return ctrEsito(messaggio, alObb);
   }
 
@@ -149,7 +224,7 @@ public class EngineeringDocUtilityControllo {
     if (!isTestoValido(numero)) alObb.add(CTR_MESSAGE_ATTO_NUMERO);
     return ctrEsito(messaggio, alObb);
   }
-  
+
   /**
    * Gestione esito sul controllo dati obbligatori e formattazione del
    * messaggio.

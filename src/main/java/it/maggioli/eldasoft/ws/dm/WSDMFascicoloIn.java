@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlType(name = "WSDMFascicoloInType", propOrder = { "oggettoFascicolo", "classificaFascicolo", "descrizioneFascicolo", "struttura",
     "tipo", "genericS11", "genericS12", "genericS13", "genericS14", "genericS15", "genericD11", "genericD12", "genericD13", "genericD14",
-    "genericD15", "genericL11", "genericL12", "genericL13", "genericL14", "genericL15" })
+    "genericD15", "genericL11", "genericL12", "genericL13", "genericL14", "genericL15", "identificativoGara", "cig" })
 public class WSDMFascicoloIn {
 
   private String oggettoFascicolo;
@@ -32,6 +32,29 @@ public class WSDMFascicoloIn {
   private Long   genericL13;
   private Long   genericL14;
   private Long   genericL15;
+  
+  
+  public String getIdentificativoGara() {
+    return identificativoGara;
+  }
+
+  
+  public void setIdentificativoGara(String identificativoGara) {
+    this.identificativoGara = identificativoGara;
+  }
+
+  
+  public String getCig() {
+    return cig;
+  }
+
+  
+  public void setCig(String cig) {
+    this.cig = cig;
+  }
+
+  private String identificativoGara;
+  private String cig;
 
   public String getOggettoFascicolo() {
     return oggettoFascicolo;

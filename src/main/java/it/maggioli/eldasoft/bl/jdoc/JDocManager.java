@@ -47,6 +47,8 @@ import it.maggioli.eldasoft.ws.dm.WSDMProtocolloInOut;
 import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaIn;
 import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaRes;
 import it.maggioli.eldasoft.ws.dm.WSDMRicercaAccountEmail;
+import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicolo;
+import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicoloRes;
 import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneIn;
 import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneRes;
 import it.maggioli.eldasoft.ws.dm.WSDMVerificaMailRes;
@@ -98,6 +100,15 @@ public class JDocManager implements IWSDMManager {
   static private String JDOC_PROTOCOLLO_C01           = "java:comp/env/JDOC_PROTOCOLLO_C01";
   static private String JDOC_FASCICOLO_C01            = "java:comp/env/JDOC_FASCICOLO_C01";
   static private String JDOC_PROTOCOLLO_C11           = "java:comp/env/JDOC_PROTOCOLLO_C11";
+  
+  static private String JDOC_CONTRATTO_C01            = "java:comp/env/JDOC_CONTRATTO_C01";
+  static private String JDOC_CONTRATTO_C11            = "java:comp/env/JDOC_CONTRATTO_C11";
+  static private String JDOC_CONTRATTO_C16            = "java:comp/env/JDOC_CONTRATTO_C16";
+  static private String JDOC_CONTRATTO_C01_ND         = "JDOC: il parametro C01 (Area) per il tipo documento 'CONTRATTO' non e' definito";
+  static private String JDOC_CONTRATTO_C11_ND         = "JDOC: il parametro C11 (Codice fornitore) per il tipo documento 'CONTRATTO' non e' definito";
+  static private String JDOC_CONTRATTO_C16_ND         = "JDOC: il parametro C16 (Ragione sociale del fornitore) per il tipo documento 'CONTRATTO' non e' definito";
+  
+  
 
   private IWSOperazioni getIWSOperazioni() throws Exception {
     String address = InitialContext.doLookup(JDOC_WS_OPERAZIONI);
@@ -165,8 +176,45 @@ public class JDocManager implements IWSDMManager {
     return wsdmprotocolloDocumentoRes;
   }
 
+  
   private WSDMProtocolloDocumentoRes archivia(String username, String password, WSDMLoginAttr loginAttr,
       WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn) throws Exception, NamingException {
+    
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    String doctype = null;
+    
+    // Tipo di documento (doctype)
+    if (WSDMProtocolloInOut.IN.equals(wsdmprotocolloDocumentoIn.getInout())) {
+      doctype = InitialContext.doLookup(JDOC_DOCTYPE_ENTRATA);
+      if (doctype == null || (doctype != null && "".equals(doctype.trim()))) {
+        throw new Exception(JDOC_DOCTYPE_ENTRATA_ND);
+      } 
+    } else if (WSDMProtocolloInOut.OUT.equals(wsdmprotocolloDocumentoIn.getInout())) {
+      // WSDM-77: il doctype per la protocollazione in uscita viene ora
+      // passato da Appalti
+      // String doctype = InitialContext.doLookup(JDOC_DOCTYPE_USCITA);
+      doctype = wsdmprotocolloDocumentoIn.getTipoDocumento();
+
+    } else if (WSDMProtocolloInOut.INT.equals(wsdmprotocolloDocumentoIn.getInout())) {
+      // WSDM-77: il doctype per la protocollazione in uscita viene ora
+      // passato da Appalti
+      // String doctype = InitialContext.doLookup(JDOC_DOCTYPE_INTERNO);
+      doctype = wsdmprotocolloDocumentoIn.getTipoDocumento();
+    }
+    
+    if ("CONTRATTO".equals(doctype)) {
+      wsdmprotocolloDocumentoRes = archiviaCONTRATTO(username, password, loginAttr, wsdmprotocolloDocumentoIn, doctype);
+    } else {
+      wsdmprotocolloDocumentoRes = archiviaCORR_SOC(username, password, loginAttr, wsdmprotocolloDocumentoIn, doctype);
+    }
+    
+    return wsdmprotocolloDocumentoRes;
+    
+  }
+  
+  
+  private WSDMProtocolloDocumentoRes archiviaCORR_SOC(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn, String doctype) throws Exception, NamingException {
 
     WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
 
@@ -209,26 +257,7 @@ public class JDocManager implements IWSDMManager {
       }
 
       // Tipo di documento (doctype)
-      if (WSDMProtocolloInOut.IN.equals(wsdmprotocolloDocumentoIn.getInout())) {
-        String doctype = InitialContext.doLookup(JDOC_DOCTYPE_ENTRATA);
-        if (doctype == null || (doctype != null && "".equals(doctype.trim()))) {
-          throw new Exception(JDOC_DOCTYPE_ENTRATA_ND);
-        } else {
-          inputArchive.setDocType(doctype);
-        }
-      } else if (WSDMProtocolloInOut.OUT.equals(wsdmprotocolloDocumentoIn.getInout())) {
-        // WSDM-77: il doctype per la protocollazione in uscita viene ora
-        // passato da Appalti
-        // String doctype = InitialContext.doLookup(JDOC_DOCTYPE_USCITA);
-        String doctype = wsdmprotocolloDocumentoIn.getTipoDocumento();
-        inputArchive.setDocType(doctype);
-      } else if (WSDMProtocolloInOut.INT.equals(wsdmprotocolloDocumentoIn.getInout())) {
-        // WSDM-77: il doctype per la protocollazione in uscita viene ora
-        // passato da Appalti
-        // String doctype = InitialContext.doLookup(JDOC_DOCTYPE_INTERNO);
-        String doctype = wsdmprotocolloDocumentoIn.getTipoDocumento();
-        inputArchive.setDocType(doctype);
-      }
+      inputArchive.setDocType(doctype);
 
       // Lista dei "docField"
       ArrayOfDocField arrayOfDocField = new ArrayOfDocField();
@@ -297,7 +326,17 @@ public class JDocManager implements IWSDMManager {
         arrayOfDocField.getDocField().add(c14);
       }
 
-      // Codice RUP
+      // Iniziali del RUP
+      // Destinazione: DocField/C21
+      // Sorgente: GenericS45
+      if (wsdmprotocolloDocumentoIn.getGenericS45() != null) {
+        DocField c21 = new DocField();
+        c21.setChiave("C21");
+        c21.setValore(wsdmprotocolloDocumentoIn.getGenericS45());
+        arrayOfDocField.getDocField().add(c21);
+      }
+      
+      // Cognome e nome del RUP
       // Destinazione: DocField/C22
       // Sorgente: GenericS12
       if (wsdmprotocolloDocumentoIn.getGenericS12() != null) {
@@ -309,8 +348,7 @@ public class JDocManager implements IWSDMManager {
 
       // Destinatario per l'archiviazione in uscita
       // Destinazione: DocField/C12
-      // Sorgente: Concatenzazione di cognomeointestazione e nome della
-      // prima anagrafica destinataria
+      // Sorgente: Concatenazione di cognomeointestazione e nome
       if (WSDMProtocolloInOut.OUT.equals(wsdmprotocolloDocumentoIn.getInout())) {
         WSDMProtocolloAnagrafica[] anagraficaDestinatari = wsdmprotocolloDocumentoIn.getDestinatari();
         if (anagraficaDestinatari != null && anagraficaDestinatari.length > 0) {
@@ -337,8 +375,7 @@ public class JDocManager implements IWSDMManager {
 
       // Destinatario per l'archiviazione in ingresso
       // Destinazione: DocField/C12
-      // Sorgente: Concatenzazione di cognomeointestazione e nome della
-      // prima anagrafica destinataria
+      // Sorgente: Concatenzazione di cognomeointestazione e nome
       if (WSDMProtocolloInOut.IN.equals(wsdmprotocolloDocumentoIn.getInout())) {
         WSDMProtocolloAnagrafica[] anagraficaMittenti = wsdmprotocolloDocumentoIn.getMittenti();
         if (anagraficaMittenti != null && anagraficaMittenti.length > 0) {
@@ -641,6 +678,317 @@ public class JDocManager implements IWSDMManager {
 
   }
 
+  private WSDMProtocolloDocumentoRes archiviaCONTRATTO(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn, String doctype) throws Exception, NamingException {
+
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+
+    IWSOperazioni wsOperazioni = this.getIWSOperazioni();
+    InputParameter doLoginInput = new InputParameter();
+    doLoginInput.setUsername(username);
+    doLoginInput.setTokenOrPassword(password);
+
+    UserResult userResult = wsOperazioni.doLogin(doLoginInput);
+    Boolean _b = userResult.isIsOk();
+    if (_b) {
+
+      // Oggetto di input per la protocollazione
+      InputArchive inputArchive = new InputArchive();
+
+      // Username
+      inputArchive.setUsername(username);
+
+      // Token
+      String tokenOrPassword = userResult.getToken();
+      if (tokenOrPassword == null) {
+        tokenOrPassword = password;
+      }
+      inputArchive.setTokenOrPassword(tokenOrPassword);
+
+      // Utente che sta archiviando
+      String user = InitialContext.doLookup(JDOC_USER);
+      if (user == null || (user != null && "".equals(user.trim()))) {
+        throw new Exception(JDOC_USER_ND);
+      } else {
+        inputArchive.setUser(user);
+      }
+
+      // Azienda
+      String company = InitialContext.doLookup(JDOC_COMPANY);
+      if (company == null || (company != null && "".equals(company.trim()))) {
+        throw new Exception(JDOC_COMPANY_ND);
+      } else {
+        inputArchive.setCompany(company);
+      }
+
+      // Tipo di documento (doctype)
+      inputArchive.setDocType(doctype);
+
+      // Lista dei "docField"
+      ArrayOfDocField arrayOfDocField = new ArrayOfDocField();
+
+      // Area
+      // Destinazione: DocField/C01
+      // Sorgente: JDOC_CONTRATTO_C01 (valore fisso "PPC")
+      DocField c01 = new DocField();
+      c01.setChiave("C01");
+      String c01_value = InitialContext.doLookup(JDOC_CONTRATTO_C01);
+      if (c01_value == null || (c01_value != null && "".equals(c01_value.trim()))) {
+        throw new Exception(JDOC_CONTRATTO_C01_ND);
+      }
+      c01.setValore(c01_value);
+      arrayOfDocField.getDocField().add(c01);
+      
+      // Data di ricezione
+      // Destinazione: DocField/C02
+      // Sorgente: data corrente
+      DateFormat dataCorrenteFormat = new SimpleDateFormat("dd/MM/yyyy");
+      String sdataCorrente = dataCorrenteFormat.format(new Date());
+      DocField c02 = new DocField();
+      c02.setChiave("C02");
+      c02.setValore(sdataCorrente);
+      arrayOfDocField.getDocField().add(c02);
+      
+      // Data di firma del contratto
+      // Destinazione: DocField/C05
+      // Sorgente: data corrente
+      DocField c05 = new DocField();
+      c05.setChiave("C05");
+      c05.setValore(sdataCorrente);
+      arrayOfDocField.getDocField().add(c05);
+      
+      // Codice fornitore
+      // Destinazione: DocField/C11
+      // Sorgente: proprieta' JDOC_CONTRATTO_C11 (valore fisso "100000")
+      DocField c11 = new DocField();
+      c11.setChiave("C11");
+      String c11_value = InitialContext.doLookup(JDOC_CONTRATTO_C11);
+      if (c11_value == null || (c11_value != null && "".equals(c11_value.trim()))) {
+        throw new Exception(JDOC_CONTRATTO_C11_ND);
+      }
+      c11.setValore(c11_value);
+      arrayOfDocField.getDocField().add(c11);
+      
+      // Ragione sociale
+      // Destinazione: DocField/C16
+      // Sorgente: proprieta' JDOC_CONTRATTO_C16 (valore fisso "fornitore da censire in ACG")
+      DocField c16 = new DocField();
+      c16.setChiave("C16");
+      String c16_value = InitialContext.doLookup(JDOC_CONTRATTO_C16);
+      if (c16_value == null || (c16_value != null && "".equals(c16_value.trim()))) {
+        throw new Exception(JDOC_CONTRATTO_C16_ND);
+      }
+      c16.setValore(c16_value);
+      arrayOfDocField.getDocField().add(c16);
+      
+      // Oggetto
+      // Destinazione: DocField/C20
+      // Sorgente: oggetto
+      if (wsdmprotocolloDocumentoIn.getOggetto() != null) {
+        DocField c20 = new DocField();
+        c20.setChiave("C20");
+        c20.setValore(wsdmprotocolloDocumentoIn.getOggetto());
+        arrayOfDocField.getDocField().add(c20);
+      }
+      
+      // Iniziali del responsabile
+      // Destinazione: DocField/C21
+      // Sorgente: GenericS45
+      if (wsdmprotocolloDocumentoIn.getGenericS45() != null) {
+        DocField c21 = new DocField();
+        c21.setChiave("C21");
+        c21.setValore(wsdmprotocolloDocumentoIn.getGenericS45());
+        arrayOfDocField.getDocField().add(c21);
+      }
+      
+      // Responsabile
+      // Destinazione: DocField/C22
+      // Sorgente: GenericS12
+      if (wsdmprotocolloDocumentoIn.getGenericS12() != null) {
+        DocField c22 = new DocField();
+        c22.setChiave("C22");
+        c22.setValore(wsdmprotocolloDocumentoIn.getGenericS12());
+        arrayOfDocField.getDocField().add(c22);
+      }
+ 
+      // Eventuale creazione di un nuovo fascicolo
+      boolean esitoFascicolo = true;
+      String oggettoFascicolo = null;
+      String codiceFascicolo = null;
+      Long annoFascicolo = null;
+      String numeroFascicolo = null;
+      String genericS11 = null;
+      String genericS12 = null;
+
+      if (WSDMInserimentoInFascicolo.SI_FASCICOLO_NUOVO.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())) {
+
+        oggettoFascicolo = wsdmprotocolloDocumentoIn.getFascicolo().getOggettoFascicolo();
+        genericS11 = wsdmprotocolloDocumentoIn.getFascicolo().getGenericS11();
+        genericS12 = wsdmprotocolloDocumentoIn.getFascicolo().getGenericS12();
+
+        WSDMFascicoloIn wsdmFascicoloIn = new WSDMFascicoloIn();
+        wsdmFascicoloIn.setOggettoFascicolo(oggettoFascicolo);
+        wsdmFascicoloIn.setGenericS11(genericS11);
+        wsdmFascicoloIn.setGenericS12(genericS12);
+
+        WSDMFascicoloRes wsdmFascicoloRes = this._fascicoloInserisci(username, password, loginAttr, wsdmFascicoloIn);
+        if (!wsdmFascicoloRes.isEsito()) {
+          esitoFascicolo = false;
+          wsdmprotocolloDocumentoRes.setEsito(false);
+          wsdmprotocolloDocumentoRes.setMessaggio("fascicolo: " + wsdmFascicoloRes.getMessaggio());
+        } else {
+          codiceFascicolo = wsdmFascicoloRes.getFascicolo().getCodiceFascicolo();
+          annoFascicolo = wsdmFascicoloRes.getFascicolo().getAnnoFascicolo();
+          numeroFascicolo = wsdmFascicoloRes.getFascicolo().getNumeroFascicolo();
+        }
+      }
+
+      // Eventuale associazione con fascicolo gia' esistente.
+      // In questo caso e' necessario conoscere solamente il codice fascicolo
+      if (wsdmprotocolloDocumentoIn.getInserimentoInFascicolo().equals(WSDMInserimentoInFascicolo.SI_FASCICOLO_ESISTENTE)) {
+        codiceFascicolo = wsdmprotocolloDocumentoIn.getFascicolo().getCodiceFascicolo();
+      }
+
+      inputArchive.setDocFields(arrayOfDocField);
+
+      // Gestione del primo allegato.
+      // Gli altri allegati dovranno essere inviati con l'operazione
+      // "AddAttachment"
+      WSDMProtocolloAllegato[] allegati = wsdmprotocolloDocumentoIn.getAllegati();
+      if (allegati != null && allegati.length > 0) {
+        DocPutRequestOptions doc = new DocPutRequestOptions();
+        doc.setFileName(allegati[0].getNome());
+        doc.setFileType(allegati[0].getTipo());
+        doc.setIMG(allegati[0].getContenuto());
+
+        inputArchive.setDocPutRequestOptions(doc);
+      }
+
+      if (esitoFascicolo == true) {
+        ArchiveResult archiveResult = wsOperazioni.doArchive(inputArchive);
+        boolean archiveResultIsOk = archiveResult.isIsOk();
+        if (archiveResultIsOk) {
+          // Numero protocollo
+          Long numeroProtocollo = archiveResult.getResult();
+
+          // Verifica della protocollazione mediante GetDocumentConditionByIdDoc
+          InputByIdDoc inputByIdDoc = new InputByIdDoc();
+          inputByIdDoc.setIddoc(numeroProtocollo);
+          inputByIdDoc.setUsername(username);
+          inputByIdDoc.setTokenOrPassword(tokenOrPassword);
+
+          DocResultCondition docResultCondition = wsOperazioni.getDocumentConditionByIdDoc(inputByIdDoc);
+          boolean docResultConditionOk = docResultCondition.isIsOk();
+          if (docResultConditionOk) {
+
+            wsdmprotocolloDocumentoRes.setEsito(true);
+
+            // Dati del protocollo
+            WSDMProtocolloDocumento wsdmprotocolloDocumento = new WSDMProtocolloDocumento();
+            wsdmprotocolloDocumento.setNumeroDocumento(String.valueOf(numeroProtocollo));
+
+            Date now = new Date();
+            DateFormat annoCorrenteFormat = new SimpleDateFormat("yyyy");
+            String sAnnoCorrente = annoCorrenteFormat.format(now);
+            wsdmprotocolloDocumento.setAnnoProtocollo(new Long(sAnnoCorrente));
+
+            wsdmprotocolloDocumento.setNumeroProtocollo(String.valueOf(numeroProtocollo));
+            wsdmprotocolloDocumento.setDataProtocollo(now);
+
+            // Dati del fascicolo
+            WSDMFascicolo fascicolo = new WSDMFascicolo();
+            fascicolo.setAnnoFascicolo(annoFascicolo);
+            fascicolo.setCodiceFascicolo(codiceFascicolo);
+            fascicolo.setNumeroFascicolo(numeroFascicolo);
+            fascicolo.setOggettoFascicolo(oggettoFascicolo);
+            fascicolo.setGenericS11(genericS11);
+            fascicolo.setGenericS12(genericS12);
+            wsdmprotocolloDocumento.setInserimentoInFascicolo(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo());
+            wsdmprotocolloDocumento.setFascicolo(fascicolo);
+
+            wsdmprotocolloDocumentoRes.setProtocolloDocumento(wsdmprotocolloDocumento);
+
+            // Aggiunta ulteriori allegati
+            if (allegati != null && allegati.length > 1) {
+              for (int a = 1; a < allegati.length; a++) {
+                InputAddAttachment inputAddAttachment = new InputAddAttachment();
+                inputAddAttachment.setUsername(username);
+                inputAddAttachment.setTokenOrPassword(tokenOrPassword);
+                inputAddAttachment.setDescription(allegati[a].getTitolo());
+                inputAddAttachment.setFileName(allegati[a].getNome());
+                inputAddAttachment.setIdDoc(numeroProtocollo.toString());
+                inputAddAttachment.setIMG(allegati[a].getContenuto());
+                inputAddAttachment.setNotes(allegati[a].getTitolo());
+
+                AddAttachmentResult addAttachmentResult = wsOperazioni.addAttachment(inputAddAttachment);
+                if (!addAttachmentResult.isIsOk()) {
+                  ArrayOfError addAttachmentArrayOfError = addAttachmentResult.getErrorList();
+                  if (addAttachmentArrayOfError != null) {
+                    List<it.jdoc.Error> addAttachmentErrorList = addAttachmentArrayOfError.getError();
+                    String addAttachmentMessaggio = "";
+                    for (int e = 0; e < addAttachmentErrorList.size(); e++) {
+                      if ("".equals(addAttachmentMessaggio)) {
+                        addAttachmentMessaggio = addAttachmentErrorList.get(e).getErrorMessage();
+                      } else {
+                        addAttachmentMessaggio += " - " + addAttachmentErrorList.get(e).getErrorMessage();
+                      }
+                    }
+                    logger.debug("Errore nell'inserimento degli allegati successivi al documento principale: " + addAttachmentMessaggio);
+                  }
+                }
+              }
+            }
+
+            // Collegamento protocollo-fascicolo mediante operazione dolink
+            InputLink inputLink = new InputLink();
+            inputLink.setUsername(username);
+            inputLink.setTokenOrPassword(tokenOrPassword);
+            inputLink.setUser(user);
+            inputLink.setCompany(company);
+            inputLink.setIddoc1(new Long(codiceFascicolo));
+            inputLink.setIddoc2(numeroProtocollo);
+            LinkResult linkResult = wsOperazioni.doLink(inputLink);
+            if (!linkResult.isIsOk()) {
+              ArrayOfError arrayOfError = linkResult.getErrorList();
+              List<it.jdoc.Error> errorList = arrayOfError.getError();
+              String messaggioErroreDoLink = "";
+              for (int e = 0; e < errorList.size(); e++) {
+                if ("".equals(messaggioErroreDoLink)) {
+                  messaggioErroreDoLink = errorList.get(e).getErrorMessage();
+                } else {
+                  messaggioErroreDoLink += " - " + errorList.get(e).getErrorMessage();
+                }
+              }
+              logger.info("Errore nell'invocazione dell'operazione DoLink: " + messaggioErroreDoLink);
+            }
+          }
+
+        } else {
+          wsdmprotocolloDocumentoRes.setEsito(false);
+          String messaggio = "";
+          ArrayOfError arrayOfError = archiveResult.getErrorList();
+          if (arrayOfError != null) {
+            List<it.jdoc.Error> errorList = arrayOfError.getError();
+            for (int e = 0; e < errorList.size(); e++) {
+              if ("".equals(messaggio)) {
+                messaggio = errorList.get(e).getErrorMessage();
+              } else {
+                messaggio += " - " + errorList.get(e).getErrorMessage();
+              }
+            }
+          }
+          wsdmprotocolloDocumentoRes.setMessaggio(messaggio);
+        }
+      }
+
+    }
+
+    return wsdmprotocolloDocumentoRes;
+
+  }
+
+  
+  
   @Override
   public WSDMProtocolloDocumentoRes _protocolloLeggi(String username, String password, WSDMLoginAttr loginAttr, Long annoProtocollo,
       String numeroProtocollo) {
@@ -920,7 +1268,7 @@ public class JDocManager implements IWSDMManager {
 
   @Override
   public WSDMFascicoloRes _fascicoloLeggi(String username, String password, WSDMLoginAttr loginAttr, String codiceFascicolo,
-      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo) {
+      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo, String oggettoFascicolo) {
     WSDMFascicoloRes wsdmfascicoloRes = new WSDMFascicoloRes();
     wsdmfascicoloRes.setEsito(false);
     wsdmfascicoloRes.setMessaggio(OPERATION_NOT_SUPPORTED);
@@ -929,7 +1277,7 @@ public class JDocManager implements IWSDMManager {
 
   @Override
   public WSDMFascicoloRes _fascicoloMetadatiLeggi(String username, String password, WSDMLoginAttr loginAttr, String codiceFascicolo,
-      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo) {
+      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo, String oggettoFascicolo) {
     WSDMFascicoloRes wsdmFascicoloRes = new WSDMFascicoloRes();
     wsdmFascicoloRes.setEsito(false);
     wsdmFascicoloRes.setMessaggio(OPERATION_NOT_SUPPORTED);
@@ -1058,4 +1406,38 @@ public class JDocManager implements IWSDMManager {
     return wsdmListaAccountEmailRes;
   }
 
+  
+  @Override
+  public WSDMRicercaFascicoloRes _fascicoloRicerca(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMRicercaFascicolo ricercaFascicolo) {
+    WSDMRicercaFascicoloRes wsdmRicercaFascicoloRes = new WSDMRicercaFascicoloRes();
+    wsdmRicercaFascicoloRes.setEsito(false);
+    wsdmRicercaFascicoloRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmRicercaFascicoloRes;
+  }
+  
+  @Override
+  public WSDMProtocolloDocumentoRes _firmaInserisci(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
+
+  @Override
+  public WSDMProtocolloDocumentoRes _firmaVerifica(String username, String password, WSDMLoginAttr loginAttr, String numeroDocumento) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
+  
+  @Override
+  public WSDMProtocolloDocumentoRes _protocolloAsincronoEsito(String username, String password, WSDMLoginAttr loginAttr, String id) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
 }

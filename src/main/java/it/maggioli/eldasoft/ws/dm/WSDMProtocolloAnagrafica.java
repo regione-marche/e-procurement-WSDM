@@ -7,7 +7,8 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlType(name = "WSDMProtocolloAnagraficaType", propOrder = { "cognomeointestazione", "nome", "codiceFiscale", "indirizzoResidenza",
     "localitaResidenza", "comuneResidenza", "codiceComuneResidenza", "dataNascita", "comuneNascita", "codiceComuneNascita", "nazionalita",
-    "email", "istatComune", "tipoVoceRubrica", "mezzo", "partitaIVA", "emailAggiuntiva", "provinciaResidenza", "capResidenza" })
+    "email", "istatComune", "tipoVoceRubrica", "mezzo", "partitaIVA", "emailAggiuntiva", "provinciaResidenza", "capResidenza", "telefono",
+    "fax", "nazionalitaISO3166", "numeroCivicoResidenza" })
 public class WSDMProtocolloAnagrafica {
 
   private String              cognomeointestazione;
@@ -29,7 +30,12 @@ public class WSDMProtocolloAnagrafica {
   private String              partitaIVA;
   private String              provinciaResidenza;
   private String              capResidenza;
-  
+  private String              telefono;
+  private String              fax;
+  private String              nazionalitaISO3166;
+
+  private String              numeroCivicoResidenza;
+
   @XmlElement(required = true)
   public String getCognomeointestazione() {
     return cognomeointestazione;
@@ -54,8 +60,7 @@ public class WSDMProtocolloAnagrafica {
   public void setPartitaIVA(String partitaIVA) {
     this.partitaIVA = partitaIVA;
   }
-  
-  
+
   @XmlElement(required = true)
   public String getCodiceFiscale() {
     return codiceFiscale;
@@ -153,44 +158,68 @@ public class WSDMProtocolloAnagrafica {
     this.tipoVoceRubrica = tipoVoceRubrica;
   }
 
-  
   public String getMezzo() {
     return mezzo;
   }
 
-  
   public void setMezzo(String mezzo) {
     this.mezzo = mezzo;
   }
 
-  
   public String getEmailAggiuntiva() {
     return emailAggiuntiva;
   }
 
-  
   public void setEmailAggiuntiva(String emailAggiuntiva) {
     this.emailAggiuntiva = emailAggiuntiva;
   }
 
-  
   public String getProvinciaResidenza() {
     return provinciaResidenza;
   }
 
-  
   public void setProvinciaResidenza(String provinciaResidenza) {
     this.provinciaResidenza = provinciaResidenza;
   }
 
-  
   public String getCapResidenza() {
     return capResidenza;
   }
 
-  
   public void setCapResidenza(String capResidenza) {
     this.capResidenza = capResidenza;
+  }
+
+  public String getTelefono() {
+    return telefono;
+  }
+
+  public void setTelefono(String telefono) {
+    this.telefono = telefono;
+  }
+
+  public String getFax() {
+    return fax;
+  }
+
+  public void setFax(String fax) {
+    this.fax = fax;
+  }
+
+  public String getNazionalitaISO3166() {
+    return nazionalitaISO3166;
+  }
+
+  public void setNazionalitaISO3166(String nazionalitaISO3166) {
+    this.nazionalitaISO3166 = nazionalitaISO3166;
+  }
+
+  public String getNumeroCivicoResidenza() {
+    return numeroCivicoResidenza;
+  }
+
+  public void setNumeroCivicoResidenza(String numeroCivicoResidenza) {
+    this.numeroCivicoResidenza = numeroCivicoResidenza;
   }
 
 }

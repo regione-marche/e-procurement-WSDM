@@ -1,7 +1,5 @@
 package it.maggioli.eldasoft.ws.dm;
 
-import it.maggioli.eldasoft.bl.IWSDMManager;
-
 import java.rmi.RemoteException;
 import java.util.Date;
 
@@ -19,6 +17,8 @@ import org.apache.cxf.jaxws.context.WrappedMessageContext;
 import org.apache.cxf.message.Message;
 import org.apache.log4j.Logger;
 import org.apache.xml.security.utils.Base64;
+
+import it.maggioli.eldasoft.bl.IWSDMManager;
 
 @WebService(endpointInterface = "it.maggioli.eldasoft.ws.dm.WSDM", serviceName = "WSDM", targetNamespace = "http://dm.ws.eldasoft.maggioli.it/")
 public class WSDMImpl implements WSDM {
@@ -219,6 +219,41 @@ public class WSDMImpl implements WSDM {
   }
 
   /**
+   * Inserimento della richiesta di firma.
+   * 
+   * @param loginAttr
+   * @param wsdmprotocolloDocumentoIn
+   * @return
+   * @throws RemoteException
+   */
+  public WSDMProtocolloDocumentoRes WSDMFirmaInserisci(WSDMLoginAttr loginAttr, WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn)
+      throws RemoteException {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    UsernameToken ut = this.getUsernameToken();
+    String username = ut.getName();
+    String password = this.decodePassword(ut.getPassword());
+    wsdmprotocolloDocumentoRes = wsdmManager._firmaInserisci(username, password, loginAttr, wsdmprotocolloDocumentoIn);
+    return wsdmprotocolloDocumentoRes;
+  }
+
+  /**
+   * Verifica della firma.
+   * 
+   * @param loginAttr
+   * @param numeroDocumento
+   * @return
+   * @throws RemoteException
+   */
+  public WSDMProtocolloDocumentoRes WSDMFirmaVerifica(WSDMLoginAttr loginAttr, String numeroDocumento) throws RemoteException {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    UsernameToken ut = this.getUsernameToken();
+    String username = ut.getName();
+    String password = this.decodePassword(ut.getPassword());
+    wsdmprotocolloDocumentoRes = wsdmManager._firmaVerifica(username, password, loginAttr, numeroDocumento);
+    return wsdmprotocolloDocumentoRes;
+  }
+
+  /**
    * Lettura del documento.
    * 
    */
@@ -277,13 +312,13 @@ public class WSDMImpl implements WSDM {
    * 
    */
   public WSDMFascicoloRes WSDMFascicoloLeggi(WSDMLoginAttr loginAttr, String codiceFascicolo, Long annoFascicolo, String numeroFascicolo,
-      String classificaFascicolo) throws RemoteException {
+      String classificaFascicolo, String oggettoFascicolo) throws RemoteException {
     WSDMFascicoloRes wsdmfascicoloRes = new WSDMFascicoloRes();
     UsernameToken ut = this.getUsernameToken();
     String username = ut.getName();
     String password = this.decodePassword(ut.getPassword());
     wsdmfascicoloRes = wsdmManager._fascicoloLeggi(username, password, loginAttr, codiceFascicolo, annoFascicolo, numeroFascicolo,
-        classificaFascicolo);
+        classificaFascicolo, oggettoFascicolo);
     return wsdmfascicoloRes;
   }
 
@@ -292,13 +327,13 @@ public class WSDMImpl implements WSDM {
    * 
    */
   public WSDMFascicoloRes WSDMFascicoloMetadatiLeggi(WSDMLoginAttr loginAttr, String codiceFascicolo, Long annoFascicolo,
-      String numeroFascicolo, String classificaFascicolo) throws RemoteException {
+      String numeroFascicolo, String classificaFascicolo, String oggettoFascicolo) throws RemoteException {
     WSDMFascicoloRes wsdmfascicoloRes = new WSDMFascicoloRes();
     UsernameToken ut = this.getUsernameToken();
     String username = ut.getName();
     String password = this.decodePassword(ut.getPassword());
     wsdmfascicoloRes = wsdmManager._fascicoloMetadatiLeggi(username, password, loginAttr, codiceFascicolo, annoFascicolo, numeroFascicolo,
-        classificaFascicolo);
+        classificaFascicolo, oggettoFascicolo);
     return wsdmfascicoloRes;
   }
 
@@ -448,6 +483,25 @@ public class WSDMImpl implements WSDM {
     String password = this.decodePassword(ut.getPassword());
     wsdmListaAccountEmailRes = wsdmManager._listaAccountEmail(username, password, loginAttr, ricercaAccountEmail);
     return wsdmListaAccountEmailRes;
+  }
+
+  public WSDMRicercaFascicoloRes WSDMRicercaFascicolo(WSDMLoginAttr loginAttr, WSDMRicercaFascicolo ricercaFascicolo)
+      throws RemoteException {
+    WSDMRicercaFascicoloRes wsdmRicercaFascicoloRes = new WSDMRicercaFascicoloRes();
+    UsernameToken ut = this.getUsernameToken();
+    String username = ut.getName();
+    String password = this.decodePassword(ut.getPassword());
+    wsdmRicercaFascicoloRes = wsdmManager._fascicoloRicerca(username, password, loginAttr, ricercaFascicolo);
+    return wsdmRicercaFascicoloRes;
+  }
+
+  public WSDMProtocolloDocumentoRes WSDMProtocolloAsincronoEsito(WSDMLoginAttr loginAttr, String id) throws RemoteException {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    UsernameToken ut = this.getUsernameToken();
+    String username = ut.getName();
+    String password = this.decodePassword(ut.getPassword());
+    wsdmprotocolloDocumentoRes = wsdmManager._protocolloAsincronoEsito(username, password, loginAttr, id);
+    return wsdmprotocolloDocumentoRes;
   }
 
 }

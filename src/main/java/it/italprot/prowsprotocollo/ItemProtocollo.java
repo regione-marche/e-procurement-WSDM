@@ -16,6 +16,8 @@ public class ItemProtocollo  implements java.io.Serializable {
 
     private java.lang.String dataProtocollo;
 
+    private java.lang.String oraProtocollo;
+
     private java.lang.String segnatura;
 
     private java.lang.String oggetto;
@@ -34,6 +36,10 @@ public class ItemProtocollo  implements java.io.Serializable {
 
     private java.lang.String descrTipoDocumento;
 
+    private java.lang.String codiceUfficioFirmatario;
+
+    private java.lang.String descrizioneUfficioFirmatario;
+
     private java.lang.String firmatario;
 
     private java.lang.String firmatario_Descrizione;
@@ -50,11 +56,19 @@ public class ItemProtocollo  implements java.io.Serializable {
 
     private java.lang.String dataDiCarico;
 
+    private java.lang.String codiceUfficioUtenteDiInserimento;
+
+    private java.lang.String descrizioneUfficioUtenteDiInserimento;
+
     private java.lang.String utenteDiInserimento;
 
     private java.lang.String dataInserimento;
 
     private java.lang.String messaggio;
+
+    private java.lang.String formazione;
+
+    private java.lang.String formazione_agid;
 
     private it.italprot.prowsprotocollo.Allegato[] allegati;
 
@@ -65,6 +79,8 @@ public class ItemProtocollo  implements java.io.Serializable {
     private java.lang.String codiceFascicolo;
 
     private java.lang.String tipoProtocolloAntecedente;
+
+    private java.lang.String tipoSpedizione;
 
     private it.italprot.prowsprotocollo.MittenteDestinatario[] destinatari;
 
@@ -82,6 +98,7 @@ public class ItemProtocollo  implements java.io.Serializable {
            java.lang.String annoProtocollo,
            java.lang.String numeroProtocollo,
            java.lang.String dataProtocollo,
+           java.lang.String oraProtocollo,
            java.lang.String segnatura,
            java.lang.String oggetto,
            it.italprot.prowsprotocollo.Nota[] note,
@@ -91,6 +108,8 @@ public class ItemProtocollo  implements java.io.Serializable {
            java.lang.String tipoProtocollo_Descrizione,
            java.lang.String tipoDocumento,
            java.lang.String descrTipoDocumento,
+           java.lang.String codiceUfficioFirmatario,
+           java.lang.String descrizioneUfficioFirmatario,
            java.lang.String firmatario,
            java.lang.String firmatario_Descrizione,
            it.italprot.prowsprotocollo.MittenteDestinatario[] mittenti,
@@ -99,14 +118,19 @@ public class ItemProtocollo  implements java.io.Serializable {
            java.lang.String dataEvidenza,
            java.lang.String documentoRiservato,
            java.lang.String dataDiCarico,
+           java.lang.String codiceUfficioUtenteDiInserimento,
+           java.lang.String descrizioneUfficioUtenteDiInserimento,
            java.lang.String utenteDiInserimento,
            java.lang.String dataInserimento,
            java.lang.String messaggio,
+           java.lang.String formazione,
+           java.lang.String formazione_agid,
            it.italprot.prowsprotocollo.Allegato[] allegati,
            java.lang.String numeroProtocolloAntecedente,
            java.lang.String annoProtocolloAntecedente,
            java.lang.String codiceFascicolo,
            java.lang.String tipoProtocolloAntecedente,
+           java.lang.String tipoSpedizione,
            it.italprot.prowsprotocollo.MittenteDestinatario[] destinatari,
            it.italprot.prowsprotocollo.Trasmissione[] trasmissioniInterne,
            java.lang.String statoConservazione,
@@ -115,6 +139,7 @@ public class ItemProtocollo  implements java.io.Serializable {
            this.annoProtocollo = annoProtocollo;
            this.numeroProtocollo = numeroProtocollo;
            this.dataProtocollo = dataProtocollo;
+           this.oraProtocollo = oraProtocollo;
            this.segnatura = segnatura;
            this.oggetto = oggetto;
            this.note = note;
@@ -124,6 +149,8 @@ public class ItemProtocollo  implements java.io.Serializable {
            this.tipoProtocollo_Descrizione = tipoProtocollo_Descrizione;
            this.tipoDocumento = tipoDocumento;
            this.descrTipoDocumento = descrTipoDocumento;
+           this.codiceUfficioFirmatario = codiceUfficioFirmatario;
+           this.descrizioneUfficioFirmatario = descrizioneUfficioFirmatario;
            this.firmatario = firmatario;
            this.firmatario_Descrizione = firmatario_Descrizione;
            this.mittenti = mittenti;
@@ -132,14 +159,19 @@ public class ItemProtocollo  implements java.io.Serializable {
            this.dataEvidenza = dataEvidenza;
            this.documentoRiservato = documentoRiservato;
            this.dataDiCarico = dataDiCarico;
+           this.codiceUfficioUtenteDiInserimento = codiceUfficioUtenteDiInserimento;
+           this.descrizioneUfficioUtenteDiInserimento = descrizioneUfficioUtenteDiInserimento;
            this.utenteDiInserimento = utenteDiInserimento;
            this.dataInserimento = dataInserimento;
            this.messaggio = messaggio;
+           this.formazione = formazione;
+           this.formazione_agid = formazione_agid;
            this.allegati = allegati;
            this.numeroProtocolloAntecedente = numeroProtocolloAntecedente;
            this.annoProtocolloAntecedente = annoProtocolloAntecedente;
            this.codiceFascicolo = codiceFascicolo;
            this.tipoProtocolloAntecedente = tipoProtocolloAntecedente;
+           this.tipoSpedizione = tipoSpedizione;
            this.destinatari = destinatari;
            this.trasmissioniInterne = trasmissioniInterne;
            this.statoConservazione = statoConservazione;
@@ -224,6 +256,26 @@ public class ItemProtocollo  implements java.io.Serializable {
      */
     public void setDataProtocollo(java.lang.String dataProtocollo) {
         this.dataProtocollo = dataProtocollo;
+    }
+
+
+    /**
+     * Gets the oraProtocollo value for this ItemProtocollo.
+     * 
+     * @return oraProtocollo
+     */
+    public java.lang.String getOraProtocollo() {
+        return oraProtocollo;
+    }
+
+
+    /**
+     * Sets the oraProtocollo value for this ItemProtocollo.
+     * 
+     * @param oraProtocollo
+     */
+    public void setOraProtocollo(java.lang.String oraProtocollo) {
+        this.oraProtocollo = oraProtocollo;
     }
 
 
@@ -408,6 +460,46 @@ public class ItemProtocollo  implements java.io.Serializable {
 
 
     /**
+     * Gets the codiceUfficioFirmatario value for this ItemProtocollo.
+     * 
+     * @return codiceUfficioFirmatario
+     */
+    public java.lang.String getCodiceUfficioFirmatario() {
+        return codiceUfficioFirmatario;
+    }
+
+
+    /**
+     * Sets the codiceUfficioFirmatario value for this ItemProtocollo.
+     * 
+     * @param codiceUfficioFirmatario
+     */
+    public void setCodiceUfficioFirmatario(java.lang.String codiceUfficioFirmatario) {
+        this.codiceUfficioFirmatario = codiceUfficioFirmatario;
+    }
+
+
+    /**
+     * Gets the descrizioneUfficioFirmatario value for this ItemProtocollo.
+     * 
+     * @return descrizioneUfficioFirmatario
+     */
+    public java.lang.String getDescrizioneUfficioFirmatario() {
+        return descrizioneUfficioFirmatario;
+    }
+
+
+    /**
+     * Sets the descrizioneUfficioFirmatario value for this ItemProtocollo.
+     * 
+     * @param descrizioneUfficioFirmatario
+     */
+    public void setDescrizioneUfficioFirmatario(java.lang.String descrizioneUfficioFirmatario) {
+        this.descrizioneUfficioFirmatario = descrizioneUfficioFirmatario;
+    }
+
+
+    /**
      * Gets the firmatario value for this ItemProtocollo.
      * 
      * @return firmatario
@@ -568,6 +660,46 @@ public class ItemProtocollo  implements java.io.Serializable {
 
 
     /**
+     * Gets the codiceUfficioUtenteDiInserimento value for this ItemProtocollo.
+     * 
+     * @return codiceUfficioUtenteDiInserimento
+     */
+    public java.lang.String getCodiceUfficioUtenteDiInserimento() {
+        return codiceUfficioUtenteDiInserimento;
+    }
+
+
+    /**
+     * Sets the codiceUfficioUtenteDiInserimento value for this ItemProtocollo.
+     * 
+     * @param codiceUfficioUtenteDiInserimento
+     */
+    public void setCodiceUfficioUtenteDiInserimento(java.lang.String codiceUfficioUtenteDiInserimento) {
+        this.codiceUfficioUtenteDiInserimento = codiceUfficioUtenteDiInserimento;
+    }
+
+
+    /**
+     * Gets the descrizioneUfficioUtenteDiInserimento value for this ItemProtocollo.
+     * 
+     * @return descrizioneUfficioUtenteDiInserimento
+     */
+    public java.lang.String getDescrizioneUfficioUtenteDiInserimento() {
+        return descrizioneUfficioUtenteDiInserimento;
+    }
+
+
+    /**
+     * Sets the descrizioneUfficioUtenteDiInserimento value for this ItemProtocollo.
+     * 
+     * @param descrizioneUfficioUtenteDiInserimento
+     */
+    public void setDescrizioneUfficioUtenteDiInserimento(java.lang.String descrizioneUfficioUtenteDiInserimento) {
+        this.descrizioneUfficioUtenteDiInserimento = descrizioneUfficioUtenteDiInserimento;
+    }
+
+
+    /**
      * Gets the utenteDiInserimento value for this ItemProtocollo.
      * 
      * @return utenteDiInserimento
@@ -624,6 +756,46 @@ public class ItemProtocollo  implements java.io.Serializable {
      */
     public void setMessaggio(java.lang.String messaggio) {
         this.messaggio = messaggio;
+    }
+
+
+    /**
+     * Gets the formazione value for this ItemProtocollo.
+     * 
+     * @return formazione
+     */
+    public java.lang.String getFormazione() {
+        return formazione;
+    }
+
+
+    /**
+     * Sets the formazione value for this ItemProtocollo.
+     * 
+     * @param formazione
+     */
+    public void setFormazione(java.lang.String formazione) {
+        this.formazione = formazione;
+    }
+
+
+    /**
+     * Gets the formazione_agid value for this ItemProtocollo.
+     * 
+     * @return formazione_agid
+     */
+    public java.lang.String getFormazione_agid() {
+        return formazione_agid;
+    }
+
+
+    /**
+     * Sets the formazione_agid value for this ItemProtocollo.
+     * 
+     * @param formazione_agid
+     */
+    public void setFormazione_agid(java.lang.String formazione_agid) {
+        this.formazione_agid = formazione_agid;
     }
 
 
@@ -724,6 +896,26 @@ public class ItemProtocollo  implements java.io.Serializable {
      */
     public void setTipoProtocolloAntecedente(java.lang.String tipoProtocolloAntecedente) {
         this.tipoProtocolloAntecedente = tipoProtocolloAntecedente;
+    }
+
+
+    /**
+     * Gets the tipoSpedizione value for this ItemProtocollo.
+     * 
+     * @return tipoSpedizione
+     */
+    public java.lang.String getTipoSpedizione() {
+        return tipoSpedizione;
+    }
+
+
+    /**
+     * Sets the tipoSpedizione value for this ItemProtocollo.
+     * 
+     * @param tipoSpedizione
+     */
+    public void setTipoSpedizione(java.lang.String tipoSpedizione) {
+        this.tipoSpedizione = tipoSpedizione;
     }
 
 
@@ -830,6 +1022,9 @@ public class ItemProtocollo  implements java.io.Serializable {
             ((this.dataProtocollo==null && other.getDataProtocollo()==null) || 
              (this.dataProtocollo!=null &&
               this.dataProtocollo.equals(other.getDataProtocollo()))) &&
+            ((this.oraProtocollo==null && other.getOraProtocollo()==null) || 
+             (this.oraProtocollo!=null &&
+              this.oraProtocollo.equals(other.getOraProtocollo()))) &&
             ((this.segnatura==null && other.getSegnatura()==null) || 
              (this.segnatura!=null &&
               this.segnatura.equals(other.getSegnatura()))) &&
@@ -857,6 +1052,12 @@ public class ItemProtocollo  implements java.io.Serializable {
             ((this.descrTipoDocumento==null && other.getDescrTipoDocumento()==null) || 
              (this.descrTipoDocumento!=null &&
               this.descrTipoDocumento.equals(other.getDescrTipoDocumento()))) &&
+            ((this.codiceUfficioFirmatario==null && other.getCodiceUfficioFirmatario()==null) || 
+             (this.codiceUfficioFirmatario!=null &&
+              this.codiceUfficioFirmatario.equals(other.getCodiceUfficioFirmatario()))) &&
+            ((this.descrizioneUfficioFirmatario==null && other.getDescrizioneUfficioFirmatario()==null) || 
+             (this.descrizioneUfficioFirmatario!=null &&
+              this.descrizioneUfficioFirmatario.equals(other.getDescrizioneUfficioFirmatario()))) &&
             ((this.firmatario==null && other.getFirmatario()==null) || 
              (this.firmatario!=null &&
               this.firmatario.equals(other.getFirmatario()))) &&
@@ -881,6 +1082,12 @@ public class ItemProtocollo  implements java.io.Serializable {
             ((this.dataDiCarico==null && other.getDataDiCarico()==null) || 
              (this.dataDiCarico!=null &&
               this.dataDiCarico.equals(other.getDataDiCarico()))) &&
+            ((this.codiceUfficioUtenteDiInserimento==null && other.getCodiceUfficioUtenteDiInserimento()==null) || 
+             (this.codiceUfficioUtenteDiInserimento!=null &&
+              this.codiceUfficioUtenteDiInserimento.equals(other.getCodiceUfficioUtenteDiInserimento()))) &&
+            ((this.descrizioneUfficioUtenteDiInserimento==null && other.getDescrizioneUfficioUtenteDiInserimento()==null) || 
+             (this.descrizioneUfficioUtenteDiInserimento!=null &&
+              this.descrizioneUfficioUtenteDiInserimento.equals(other.getDescrizioneUfficioUtenteDiInserimento()))) &&
             ((this.utenteDiInserimento==null && other.getUtenteDiInserimento()==null) || 
              (this.utenteDiInserimento!=null &&
               this.utenteDiInserimento.equals(other.getUtenteDiInserimento()))) &&
@@ -890,6 +1097,12 @@ public class ItemProtocollo  implements java.io.Serializable {
             ((this.messaggio==null && other.getMessaggio()==null) || 
              (this.messaggio!=null &&
               this.messaggio.equals(other.getMessaggio()))) &&
+            ((this.formazione==null && other.getFormazione()==null) || 
+             (this.formazione!=null &&
+              this.formazione.equals(other.getFormazione()))) &&
+            ((this.formazione_agid==null && other.getFormazione_agid()==null) || 
+             (this.formazione_agid!=null &&
+              this.formazione_agid.equals(other.getFormazione_agid()))) &&
             ((this.allegati==null && other.getAllegati()==null) || 
              (this.allegati!=null &&
               java.util.Arrays.equals(this.allegati, other.getAllegati()))) &&
@@ -905,6 +1118,9 @@ public class ItemProtocollo  implements java.io.Serializable {
             ((this.tipoProtocolloAntecedente==null && other.getTipoProtocolloAntecedente()==null) || 
              (this.tipoProtocolloAntecedente!=null &&
               this.tipoProtocolloAntecedente.equals(other.getTipoProtocolloAntecedente()))) &&
+            ((this.tipoSpedizione==null && other.getTipoSpedizione()==null) || 
+             (this.tipoSpedizione!=null &&
+              this.tipoSpedizione.equals(other.getTipoSpedizione()))) &&
             ((this.destinatari==null && other.getDestinatari()==null) || 
              (this.destinatari!=null &&
               java.util.Arrays.equals(this.destinatari, other.getDestinatari()))) &&
@@ -939,6 +1155,9 @@ public class ItemProtocollo  implements java.io.Serializable {
         }
         if (getDataProtocollo() != null) {
             _hashCode += getDataProtocollo().hashCode();
+        }
+        if (getOraProtocollo() != null) {
+            _hashCode += getOraProtocollo().hashCode();
         }
         if (getSegnatura() != null) {
             _hashCode += getSegnatura().hashCode();
@@ -975,6 +1194,12 @@ public class ItemProtocollo  implements java.io.Serializable {
         if (getDescrTipoDocumento() != null) {
             _hashCode += getDescrTipoDocumento().hashCode();
         }
+        if (getCodiceUfficioFirmatario() != null) {
+            _hashCode += getCodiceUfficioFirmatario().hashCode();
+        }
+        if (getDescrizioneUfficioFirmatario() != null) {
+            _hashCode += getDescrizioneUfficioFirmatario().hashCode();
+        }
         if (getFirmatario() != null) {
             _hashCode += getFirmatario().hashCode();
         }
@@ -1007,6 +1232,12 @@ public class ItemProtocollo  implements java.io.Serializable {
         if (getDataDiCarico() != null) {
             _hashCode += getDataDiCarico().hashCode();
         }
+        if (getCodiceUfficioUtenteDiInserimento() != null) {
+            _hashCode += getCodiceUfficioUtenteDiInserimento().hashCode();
+        }
+        if (getDescrizioneUfficioUtenteDiInserimento() != null) {
+            _hashCode += getDescrizioneUfficioUtenteDiInserimento().hashCode();
+        }
         if (getUtenteDiInserimento() != null) {
             _hashCode += getUtenteDiInserimento().hashCode();
         }
@@ -1015,6 +1246,12 @@ public class ItemProtocollo  implements java.io.Serializable {
         }
         if (getMessaggio() != null) {
             _hashCode += getMessaggio().hashCode();
+        }
+        if (getFormazione() != null) {
+            _hashCode += getFormazione().hashCode();
+        }
+        if (getFormazione_agid() != null) {
+            _hashCode += getFormazione_agid().hashCode();
         }
         if (getAllegati() != null) {
             for (int i=0;
@@ -1038,6 +1275,9 @@ public class ItemProtocollo  implements java.io.Serializable {
         }
         if (getTipoProtocolloAntecedente() != null) {
             _hashCode += getTipoProtocolloAntecedente().hashCode();
+        }
+        if (getTipoSpedizione() != null) {
+            _hashCode += getTipoSpedizione().hashCode();
         }
         if (getDestinatari() != null) {
             for (int i=0;
@@ -1102,6 +1342,12 @@ public class ItemProtocollo  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("oraProtocollo");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "oraProtocollo"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("segnatura");
         elemField.setXmlName(new javax.xml.namespace.QName("", "segnatura"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -1156,6 +1402,19 @@ public class ItemProtocollo  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("codiceUfficioFirmatario");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "codiceUfficioFirmatario"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("descrizioneUfficioFirmatario");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "descrizioneUfficioFirmatario"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("firmatario");
         elemField.setXmlName(new javax.xml.namespace.QName("", "firmatario"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -1204,6 +1463,19 @@ public class ItemProtocollo  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("codiceUfficioUtenteDiInserimento");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "codiceUfficioUtenteDiInserimento"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("descrizioneUfficioUtenteDiInserimento");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "descrizioneUfficioUtenteDiInserimento"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("utenteDiInserimento");
         elemField.setXmlName(new javax.xml.namespace.QName("", "utenteDiInserimento"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -1219,6 +1491,20 @@ public class ItemProtocollo  implements java.io.Serializable {
         elemField.setFieldName("messaggio");
         elemField.setXmlName(new javax.xml.namespace.QName("", "messaggio"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("formazione");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "formazione"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("formazione_agid");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "formazione_agid"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
@@ -1248,6 +1534,12 @@ public class ItemProtocollo  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("tipoProtocolloAntecedente");
         elemField.setXmlName(new javax.xml.namespace.QName("", "tipoProtocolloAntecedente"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("tipoSpedizione");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "tipoSpedizione"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

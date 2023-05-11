@@ -3,7 +3,8 @@ package it.maggioli.eldasoft.ws.dm;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(name = "WSDMProtocolloAllegatoType", propOrder = { "titolo", "tipo", "nome", "contenuto", "serial", "IDBase", "versione", "idAllegato", "urlDownload" })
+@XmlType(name = "WSDMProtocolloAllegatoType", propOrder = { "titolo", "tipo", "nome", "contenuto", "serial", "IDBase", "versione",
+    "idAllegato", "urlDownload", "isSigned", "isSealed", "isTimeMarked", "isCertifiedCopy" })
 public class WSDMProtocolloAllegato {
 
   private String titolo;
@@ -15,6 +16,10 @@ public class WSDMProtocolloAllegato {
   private Long   versione;
   private String idAllegato;
   private String urlDownload;
+  private Long   isSigned;
+  private Long   isSealed;
+  private Long   isTimeMarked;
+  private Long   isCertifiedCopy;
 
   @XmlElement(required = true)
   public String getTitolo() {
@@ -76,24 +81,52 @@ public class WSDMProtocolloAllegato {
     this.versione = versione;
   }
 
-  
   public String getIdAllegato() {
     return idAllegato;
   }
 
-  
   public void setIdAllegato(String idAllegato) {
     this.idAllegato = idAllegato;
   }
 
-  
   public String getUrlDownload() {
     return urlDownload;
   }
 
-  
   public void setUrlDownload(String urlDownload) {
     this.urlDownload = urlDownload;
+  }
+
+  public Long getIsSigned() {
+    return isSigned;
+  }
+
+  public void setIsSigned(Long isSigned) {
+    this.isSigned = isSigned;
+  }
+
+  public Long getIsSealed() {
+    return isSealed;
+  }
+
+  public void setIsSealed(Long isSealed) {
+    this.isSealed = isSealed;
+  }
+
+  public Long getIsTimeMarked() {
+    return isTimeMarked;
+  }
+
+  public void setIsTimeMarked(Long isTimeMarked) {
+    this.isTimeMarked = isTimeMarked;
+  }
+
+  public Long getIsCertifiedCopy() {
+    return isCertifiedCopy;
+  }
+
+  public void setIsCertifiedCopy(Long isCertifiedCopy) {
+    this.isCertifiedCopy = isCertifiedCopy;
   }
 
 }

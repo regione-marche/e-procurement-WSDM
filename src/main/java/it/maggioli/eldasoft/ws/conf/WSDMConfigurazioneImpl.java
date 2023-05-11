@@ -42,90 +42,90 @@ public class WSDMConfigurazioneImpl implements WSDMConfigurazione {
 
     try {
 
+      // Codice configurazione restituita ai client
       String remotewsdm = InitialContext.doLookup(REMOTEWSDM);
+
+      if ("DATAGRAPH.PRISMA".equals(remotewsdm)) {
+        remotewsdm = "PRISMA";
+      }
+      if ("FOLIUM2.FOLIUM".equals(remotewsdm)) {
+        remotewsdm = "FOLIUM";
+      } 
+      if ("INFOR2.INFOR".equals(remotewsdm)) {
+        remotewsdm = "INFOR";
+      } 
+      
       configurazione.setRemotewsdm(remotewsdm);
 
-      // Gestione dei tabellati.
-      // E' possibile che per la particolare protocollazione (specificata in
-      // REMOTEWSDM)
-      // non ci sia alcun tabellato definito.
+      // Configurazione e gestione dei tabellati
+      String remotewsdmTabellati = InitialContext.doLookup(REMOTEWSDM);
 
-      // 10/01/2019: i tabellati sono stati deprecati.
-      // Dalle prossime versioni verrano forniti solo i tabellati previsti per
-      // le protocollazioni gia' implementate ed attive alla data del
-      // 10/01/2019 (IRIDE, JIRIDE, PALEO, ENGINEERING, ENGINEERINGDOC,
-      // ARCHIFLOW, TITULUS, SMAT, FOLIUM, ARCHIFLOWFA, EASYDOC),
-      // progressivamente dovranno essere eliminati detti tabellati.
-
-//      if ("IRIDE".equals(remotewsdm)
-//          || "JIRIDE".equals(remotewsdm)
-//          || "PALEO".equals(remotewsdm)
-//          || "ENGINEERING".equals(remotewsdm)
-//          || "ENGINEERINGDOC".equals(remotewsdm)
-//          || "ARCHIFLOW".equals(remotewsdm)
-//          || "TITULUS".equals(remotewsdm)
-//          || "SMAT".equals(remotewsdm)
-//          || "FOLIUM".equals(remotewsdm)
-//          || "ARCHIFLOWFA".equals(remotewsdm)
-//          || "EASYDOC".equals(remotewsdm)) {
-        try {
-          InitialContext ctx_tab = new InitialContext();
-          if ("IRIDE".equals(remotewsdm)) {
-            remotewsdm = "JIRIDE";
-          }
-          String _searchtab = "java:comp/env/tab/" + remotewsdm;
-
-          // Tabellati
-          NamingEnumeration<NameClassPair> _tablist = ctx_tab.list(_searchtab);
-          NamingEnumeration<NameClassPair> _tablisttot = ctx_tab.list(_searchtab);
-          int _tabnum = -1;
-          int _tabnumtot = 0;
-          while (_tablisttot.hasMore()) {
-            _tabnumtot++;
-            _tablisttot.next();
-          }
-
-          if (_tabnumtot > 0) {
-            WSDMTabellato[] tabellati = new WSDMTabellato[_tabnumtot];
-            while (_tablist.hasMore()) {
-              String _tabName = _tablist.next().getName();
-              String _tabFullName = _searchtab + "/" + _tabName;
-              _tabnum++;
-              tabellati[_tabnum] = new WSDMTabellato();
-              tabellati[_tabnum].setNome(_tabName);
-
-              // Elementi
-              NamingEnumeration<NameClassPair> _keylist = ctx_tab.list(_tabFullName);
-              NamingEnumeration<NameClassPair> _keylisttot = ctx_tab.list(_tabFullName);
-              int _keynum = -1;
-              int _keynumtot = 0;
-              while (_keylisttot.hasMore()) {
-                _keynumtot++;
-                _keylisttot.next();
-              }
-
-              if (_keynumtot > 0) {
-                WSDMTabellatoElemento[] elementi = new WSDMTabellatoElemento[_keynumtot];
-                while (_keylist.hasMore()) {
-                  String _keyName = _keylist.next().getName();
-                  String _keyFullName = _tabFullName + "/" + _keyName;
-                  _keynum++;
-                  elementi[_keynum] = new WSDMTabellatoElemento();
-                  String codice = _keyName;
-                  codice = codice.replaceAll("###", "/");
-                  elementi[_keynum].setCodice(codice);
-                  elementi[_keynum].setDescrizione((String) InitialContext.doLookup(_keyFullName));
-                }
-                tabellati[_tabnum].setElementi(elementi);
-              }
-            }
-            configurazione.setTabellati(tabellati);
-          }
-        } catch (Exception e) {
-
+      try {
+        InitialContext ctx_tab = new InitialContext();
+        if ("IRIDE".equals(remotewsdmTabellati)) {
+          remotewsdmTabellati = "JIRIDE";
         }
-        // Fine gestione tabellati
-//      }
+        if ("DATAGRAPH.PRISMA".equals(remotewsdmTabellati)) {
+          remotewsdmTabellati = "DATAGRAPH";
+        }
+        if ("FOLIUM2.FOLIUM".equals(remotewsdmTabellati)) {
+          remotewsdmTabellati = "FOLIUM2";
+        }
+        if ("INFOR2.INFOR".equals(remotewsdmTabellati)) {
+          remotewsdmTabellati = "INFOR2";
+        }
+
+        String _searchtab = "java:comp/env/tab/" + remotewsdmTabellati;
+
+        // Tabellati
+        NamingEnumeration<NameClassPair> _tablist = ctx_tab.list(_searchtab);
+        NamingEnumeration<NameClassPair> _tablisttot = ctx_tab.list(_searchtab);
+        int _tabnum = -1;
+        int _tabnumtot = 0;
+        while (_tablisttot.hasMore()) {
+          _tabnumtot++;
+          _tablisttot.next();
+        }
+
+        if (_tabnumtot > 0) {
+          WSDMTabellato[] tabellati = new WSDMTabellato[_tabnumtot];
+          while (_tablist.hasMore()) {
+            String _tabName = _tablist.next().getName();
+            String _tabFullName = _searchtab + "/" + _tabName;
+            _tabnum++;
+            tabellati[_tabnum] = new WSDMTabellato();
+            tabellati[_tabnum].setNome(_tabName);
+
+            // Elementi
+            NamingEnumeration<NameClassPair> _keylist = ctx_tab.list(_tabFullName);
+            NamingEnumeration<NameClassPair> _keylisttot = ctx_tab.list(_tabFullName);
+            int _keynum = -1;
+            int _keynumtot = 0;
+            while (_keylisttot.hasMore()) {
+              _keynumtot++;
+              _keylisttot.next();
+            }
+
+            if (_keynumtot > 0) {
+              WSDMTabellatoElemento[] elementi = new WSDMTabellatoElemento[_keynumtot];
+              while (_keylist.hasMore()) {
+                String _keyName = _keylist.next().getName();
+                String _keyFullName = _tabFullName + "/" + _keyName;
+                _keynum++;
+                elementi[_keynum] = new WSDMTabellatoElemento();
+                String codice = _keyName;
+                codice = codice.replaceAll("###", "/");
+                elementi[_keynum].setCodice(codice);
+                elementi[_keynum].setDescrizione((String) InitialContext.doLookup(_keyFullName));
+              }
+              tabellati[_tabnum].setElementi(elementi);
+            }
+          }
+          configurazione.setTabellati(tabellati);
+        }
+      } catch (Exception e) {
+
+      }
 
       configurazione.setEsito(true);
     } catch (Throwable t) {

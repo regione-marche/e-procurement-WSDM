@@ -2,6 +2,9 @@
 
 <table class="contenitore">
 	<tr>
+		<th id="thfooter"></th>
+	</tr>
+	<tr>
 		<td style="text-align: center;">
 			<br>
 			<br>

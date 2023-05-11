@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 
-<html>
+<html lang="it">
 	<head>
 		<style type="text/css">
 			body {
@@ -262,6 +262,9 @@
 <%@ page import="javax.naming.Context" %>
 <%@ page import="javax.naming.InitialContext" %>
 	<table class="griglia">
+		<tr>
+			<th id="thlogging"></th>
+		</tr>
 		<tr>
 			<td>
 				<div id="logging" style="width:100%; font-size: 11px; white-space: pre-wrap; word-wrap: break-word;"></div>

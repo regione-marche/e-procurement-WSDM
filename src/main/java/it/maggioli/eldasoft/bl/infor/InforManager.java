@@ -74,6 +74,8 @@ import it.maggioli.eldasoft.ws.dm.WSDMProtocolloInOut;
 import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaIn;
 import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaRes;
 import it.maggioli.eldasoft.ws.dm.WSDMRicercaAccountEmail;
+import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicolo;
+import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicoloRes;
 import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneIn;
 import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneRes;
 import it.maggioli.eldasoft.ws.dm.WSDMVerificaMailRes;
@@ -140,7 +142,15 @@ public class InforManager implements IWSDMManager {
         WSDMProtocolloAllegato[] allegati = wsdmprotocolloDocumentoIn.getAllegati();
         if (allegati.length > 0) {
           allegato_principale = new Documento();
-          allegato_principale.setTitolo(allegati[0].getTitolo());
+          
+          String allegatoPrincipaleTitolo = allegati[0].getTitolo();
+          if (allegatoPrincipaleTitolo != null) {
+            if (allegatoPrincipaleTitolo.length() > 100) {
+              allegatoPrincipaleTitolo = allegatoPrincipaleTitolo.substring(0, 100);
+            }
+          }
+          
+          allegato_principale.setTitolo(allegatoPrincipaleTitolo);
           allegato_principale.setNomeFile(allegati[0].getNome());
           allegato_principale.setFile(allegati[0].getContenuto());
         }
@@ -149,7 +159,15 @@ public class InforManager implements IWSDMManager {
           altri_allegati = new Documento[allegati.length - 1];
           for (int i = 1; i < allegati.length; i++) {
             Documento d = new Documento();
-            d.setTitolo(allegati[i].getTitolo());
+            
+            String altriAllegatiTitolo = allegati[i].getTitolo();
+            if (altriAllegatiTitolo != null) {
+              if (altriAllegatiTitolo.length() > 100) {
+                altriAllegatiTitolo = altriAllegatiTitolo.substring(0, 100);
+              }
+            }
+            
+            d.setTitolo(altriAllegatiTitolo);
             d.setNomeFile(allegati[i].getNome());
             d.setFile(allegati[i].getContenuto());
             altri_allegati[i - 1] = d;
@@ -564,17 +582,17 @@ public class InforManager implements IWSDMManager {
 
   @Override
   public WSDMFascicoloRes _fascicoloLeggi(String username, String password, WSDMLoginAttr loginAttr, String codiceFascicolo,
-      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo) {
+      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo, String oggettoFascicolo) {
     // WSDMFascicoloRes retval = new WSDMFascicoloRes();
     // retval.setEsito(false);
     // retval.setMessaggio(OPERATION_NOT_SUPPORTED);
     // return retval;
-    return _fascicoloMetadatiLeggi(username, password, loginAttr, codiceFascicolo, annoFascicolo, numeroFascicolo, classificaFascicolo);
+    return _fascicoloMetadatiLeggi(username, password, loginAttr, codiceFascicolo, annoFascicolo, numeroFascicolo, classificaFascicolo, oggettoFascicolo);
   }
 
   @Override
   public WSDMFascicoloRes _fascicoloMetadatiLeggi(String username, String password, WSDMLoginAttr loginAttr, String codiceFascicolo,
-      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo) {
+      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo, String oggettoFascicolo) {
     // WSDMFascicoloRes retval = new WSDMFascicoloRes();
     // retval.setEsito(false);
     // retval.setMessaggio(OPERATION_NOT_SUPPORTED);
@@ -772,4 +790,37 @@ public class InforManager implements IWSDMManager {
   }
   
   
+  @Override
+  public WSDMRicercaFascicoloRes _fascicoloRicerca(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMRicercaFascicolo ricercaFascicolo) {
+    WSDMRicercaFascicoloRes wsdmRicercaFascicoloRes = new WSDMRicercaFascicoloRes();
+    wsdmRicercaFascicoloRes.setEsito(false);
+    wsdmRicercaFascicoloRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmRicercaFascicoloRes;
+  }
+  
+  @Override
+  public WSDMProtocolloDocumentoRes _firmaInserisci(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
+
+  @Override
+  public WSDMProtocolloDocumentoRes _firmaVerifica(String username, String password, WSDMLoginAttr loginAttr, String numeroDocumento) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
+  
+  @Override
+  public WSDMProtocolloDocumentoRes _protocolloAsincronoEsito(String username, String password, WSDMLoginAttr loginAttr, String id) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
 }

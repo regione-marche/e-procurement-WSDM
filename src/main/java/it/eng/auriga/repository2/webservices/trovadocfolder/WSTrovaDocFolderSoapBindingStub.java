@@ -103,8 +103,8 @@ public class WSTrovaDocFolderSoapBindingStub extends org.apache.axis.client.Stub
         }
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[0]);
-        _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("");
+        _call.setUseSOAPAction(false);
+        //_call.setSOAPActionURI("");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("http://trovadocfolder.webservices.repository2.auriga.eng.it", "service"));
 

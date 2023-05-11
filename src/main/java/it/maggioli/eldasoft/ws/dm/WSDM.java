@@ -42,6 +42,14 @@ public interface WSDM {
   WSDMProtocolloDocumentoRes WSDMDocumentoInserisci(@WebParam(name = "loginAttr") WSDMLoginAttr login,
       @WebParam(name = "protocolloDocumentoIn") WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn) throws RemoteException;
 
+  @WSDLDocumentation("Inserimento richiesta di firma")
+  WSDMProtocolloDocumentoRes WSDMFirmaInserisci(@WebParam(name = "loginAttr") WSDMLoginAttr login,
+      @WebParam(name = "protocolloDocumentoIn") WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn) throws RemoteException;
+
+  @WSDLDocumentation("Verifica della firma")
+  WSDMProtocolloDocumentoRes WSDMFirmaVerifica(@WebParam(name = "login") WSDMLoginAttr login,
+      @WebParam(name = "numeroDocumento") String numeroDocumento) throws RemoteException;
+
   @WSDLDocumentation("Lettura del documento")
   WSDMProtocolloDocumentoRes WSDMDocumentoLeggi(@WebParam(name = "login") WSDMLoginAttr login,
       @WebParam(name = "numeroDocumento") String numeroDocumento) throws RemoteException;
@@ -68,14 +76,14 @@ public interface WSDM {
   @WSDLDocumentation("Lettura del fascicolo e dei documenti inseriti nel fascicolo")
   WSDMFascicoloRes WSDMFascicoloLeggi(@WebParam(name = "loginAttr") WSDMLoginAttr login,
       @WebParam(name = "codiceFascicolo") String codiceFascicolo, @WebParam(name = "annoFascicolo") Long annoFascicolo,
-      @WebParam(name = "numeroFascicolo") String numeroFascicolo, @WebParam(name = "classificaFascicolo") String classificaFascicolo)
-      throws RemoteException;
+      @WebParam(name = "numeroFascicolo") String numeroFascicolo, @WebParam(name = "classificaFascicolo") String classificaFascicolo,
+      @WebParam(name = "oggettoFascicolo") String oggettoFascicolo) throws RemoteException;
 
   @WSDLDocumentation("Lettura metadati del fascicolo")
   WSDMFascicoloRes WSDMFascicoloMetadatiLeggi(@WebParam(name = "loginAttr") WSDMLoginAttr login,
       @WebParam(name = "codiceFascicolo") String codiceFascicolo, @WebParam(name = "annoFascicolo") Long annoFascicolo,
-      @WebParam(name = "numeroFascicolo") String numeroFascicolo, @WebParam(name = "classificaFascicolo") String classificaFascicolo)
-      throws RemoteException;
+      @WebParam(name = "numeroFascicolo") String numeroFascicolo, @WebParam(name = "classificaFascicolo") String classificaFascicolo,
+      @WebParam(name = "oggettoFascicolo") String oggettoFascicolo) throws RemoteException;
 
   @WSDLDocumentation("Modifica dei dati personalizzati del fascicolo")
   WSDMFascicoloModificaRes WSDMFascicoloModifica(@WebParam(name = "loginAttr") WSDMLoginAttr login,
@@ -91,9 +99,9 @@ public interface WSDM {
       @WebParam(name = "numeroProtocollo") String numeroProtocollo) throws RemoteException;
 
   @WSDLDocumentation("Lettura dell'atto o del contratto e della lista dei documenti associati")
-  WSDMProtocolloDocumentoRes WSDMAttoContrattoLeggi(@WebParam(name = "loginAttr") WSDMLoginAttr login,
-      @WebParam(name = "tipo") String tipo, @WebParam(name = "organo") String organo, @WebParam(name = "anno") Long anno,
-      @WebParam(name = "numero") String numero) throws RemoteException;
+  WSDMProtocolloDocumentoRes WSDMAttoContrattoLeggi(@WebParam(name = "loginAttr") WSDMLoginAttr login, @WebParam(name = "tipo") String tipo,
+      @WebParam(name = "organo") String organo, @WebParam(name = "anno") Long anno, @WebParam(name = "numero") String numero)
+      throws RemoteException;
 
   @WSDLDocumentation("Ricerca degli atti e dei contratti")
   WSDMAttoContrattoRes WSDMAttoContrattoRicerca(@WebParam(name = "loginAttr") WSDMLoginAttr login, @WebParam(name = "tipo") String tipo,
@@ -123,5 +131,13 @@ public interface WSDM {
   @WSDLDocumentation("Lista degli account email")
   WSDMListaAccountEmailRes WSDMListaAccountEmail(@WebParam(name = "loginAttr") WSDMLoginAttr login,
       @WebParam(name = "ricercaAccountEmail") WSDMRicercaAccountEmail ricercaAccountEmail) throws RemoteException;
-  
+
+  @WSDLDocumentation("Lista dei fascicoli")
+  WSDMRicercaFascicoloRes WSDMRicercaFascicolo(@WebParam(name = "loginAttr") WSDMLoginAttr login,
+      @WebParam(name = "fascicoloRicerca") WSDMRicercaFascicolo ricercaFascicolo) throws RemoteException;
+
+  @WSDLDocumentation("Lettura esito del protocollo asincrono")
+  WSDMProtocolloDocumentoRes WSDMProtocolloAsincronoEsito(@WebParam(name = "loginAttr") WSDMLoginAttr login,
+      @WebParam(name = "id") String id) throws RemoteException;
+
 }

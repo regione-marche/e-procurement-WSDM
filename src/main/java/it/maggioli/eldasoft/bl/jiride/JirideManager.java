@@ -1,5 +1,57 @@
 package it.maggioli.eldasoft.bl.jiride;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.UnmarshallerHandler;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.ws.WebServiceException;
+
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.message.Message;
+import org.apache.log4j.Logger;
+import org.apache.xmlbeans.XmlOptions;
+import org.apache.xmlbeans.impl.util.Base64;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLFilter;
+import org.xml.sax.XMLReader;
+
 import it.iride.protocollo.xsd.AllegatoIn;
 import it.iride.protocollo.xsd.ArrayOfAllegatoIn;
 import it.iride.protocollo.xsd.ArrayOfMittenteDestinatarioIn;
@@ -53,6 +105,8 @@ import it.maggioli.eldasoft.ws.dm.WSDMProtocolloInOut;
 import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaIn;
 import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaRes;
 import it.maggioli.eldasoft.ws.dm.WSDMRicercaAccountEmail;
+import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicolo;
+import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicoloRes;
 import it.maggioli.eldasoft.ws.dm.WSDMRiga;
 import it.maggioli.eldasoft.ws.dm.WSDMTabella;
 import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneIn;
@@ -61,53 +115,6 @@ import it.maggioli.eldasoft.ws.dm.WSDMUfficio;
 import it.maggioli.eldasoft.ws.dm.WSDMVerificaMailRes;
 import it.utrwssgateway.UtrWSSGateway;
 import it.utrwssgateway.UtrWSSGatewayServiceLocator;
-
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.StringTokenizer;
-
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.UnmarshallerHandler;
-import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.ws.WebServiceException;
-
-import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.frontend.ClientProxy;
-import org.apache.cxf.message.Message;
-import org.apache.log4j.Logger;
-import org.apache.xmlbeans.XmlOptions;
-import org.apache.xmlbeans.impl.util.Base64;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLFilter;
-import org.xml.sax.XMLReader;
-
 import wwwpa2k.ulisse.iride.web_services.ws_tabelle.schema.WsTabelle;
 import wwwpa2k.ulisse.iride.web_services.ws_tabelle.schema.WsTabelleSoap;
 
@@ -125,6 +132,9 @@ public class JirideManager implements IWSDMManager {
 
   static private String      WSFASCICOLO                        = "java:comp/env/JIRIDE_WSFASCICOLO";
   static private String      WSFASCICOLO_NOT_DEFINED            = "JIRIDE: l'indirizzo del servizio fascicolo non e' definito";
+  static private String      PROTOCOLLO_MODO_FASCICOLAZIONE     = "java:comp/env/JIRIDE_PROTOCOLLO_MODO_FASCICOLAZIONE";
+  static private String      MODO_FASCICOLAZIONE_DIRETTA        = "DIRETTA";
+  static private String      MODO_FASCICOLAZIONE_INDIRETTA      = "INDIRETTA";
 
   static private String      WSATTO                             = "java:comp/env/JIRIDE_WSATTO";
   static private String      WSATTO_NOT_DEFINED                 = "JIRIDE: l'indirizzo del servizio atti non e' definito";
@@ -161,6 +171,12 @@ public class JirideManager implements IWSDMManager {
   static public final String PROTOCOLLO_IN_USCITA               = "U";
 
   static public final String PROTOCOLLO_INTERNO                 = "I";
+
+  static private String      DOWNLOAD_ALLEGATI_REPWSSGATEWAY    = "java:comp/env/JIRIDE_DOWNLOAD_ALLEGATI_REPWSSGATEWAY";
+  static private String      REPWSSGATEWAY_WS                   = "java:comp/env/JIRIDE_REPWSSGATEWAY_WS";
+  static private String      REPWSSGATEWAY_WS_NOT_DEFINED       = "JIRIDE: l'indirizzo del servizio REPWSSGATEWAY non e' definito";
+  static private String      REPWSSGATEWAY_ALIAS                = "java:comp/env/JIRIDE_REPWSSGATEWAY_ALIAS";
+  static private String      REPWSSGATEWAY_ALIAS_NOT_DEFINED    = "JIRIDE: l'alias di accesso al servizio REPWSSGATEWAY non e' definito";
 
   /**
    * Ottiene ProtocolloSoap.
@@ -436,6 +452,11 @@ public class JirideManager implements IWSDMManager {
             codiceFascicolo = wsdmFascicoloRes.getFascicolo().getCodiceFascicolo();
             annoFascicolo = wsdmFascicoloRes.getFascicolo().getAnnoFascicolo();
             numeroFascicolo = wsdmFascicoloRes.getFascicolo().getNumeroFascicolo();
+
+            wsdmprotocolloDocumentoIn.getFascicolo().setCodiceFascicolo(codiceFascicolo);
+            wsdmprotocolloDocumentoIn.getFascicolo().setAnnoFascicolo(annoFascicolo);
+            wsdmprotocolloDocumentoIn.getFascicolo().setNumeroFascicolo(numeroFascicolo);
+
           }
         }
 
@@ -447,9 +468,24 @@ public class JirideManager implements IWSDMManager {
           numeroFascicolo = wsdmprotocolloDocumentoIn.getFascicolo().getNumeroFascicolo();
         }
 
+        // 20/01/2022 Gestione del modo di fascicolazione del protocollo.
+        // La nuova modalita' DIRETTA e' abilitata di default e prevede
+        // l'indicazione del nuovo tag "IdFascicolo" direttamente nella
+        // richiesta di protocollazione o archiviazione.
+        // Se la modalita' e' DIRETTA non e' necessario associare il protocollo
+        // al fascicolo con l'operazione "fascicoloAggiungiDocumento" (vedi
+        // issue WSDM-100).
+        String modoFascicolazione = "DIRETTA";
+        try {
+          modoFascicolazione = InitialContext.doLookup(PROTOCOLLO_MODO_FASCICOLAZIONE);
+        } catch (NamingException e) {
+
+        }
+
         // Inserimento dell'elemento documentale nel protocollo
         if (esito) {
-          String protocolloInString = this.popolaProtocolloInString(username, password, loginAttr, wsdmprotocolloDocumentoIn);
+          String protocolloInString = this.popolaProtocolloInString(username, password, loginAttr, wsdmprotocolloDocumentoIn,
+              modoFascicolazione);
           String protocolloOutString = this.getProtocolloSoap().inserisciProtocolloEAnagraficheString(protocolloInString,
               codiceAmministrazione, codiceAOO);
           ProtocolloOut protocolloOut = this.protocolloOutFromString(protocolloOutString);
@@ -461,24 +497,38 @@ public class JirideManager implements IWSDMManager {
 
         // Eventuale associazione del nuovo elemento documentale al fascicolo
         // (nuovo o esistente)
+        // 20/01/2022 - La fascicolazione mediante l'operazione
+        // "fascicoloAggiungiDocumento" avviene solo se la fascicolazione del
+        // protocollo e' in modalita' INDIRETTA
         if (esito) {
-          if (WSDMInserimentoInFascicolo.SI_FASCICOLO_NUOVO.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())
-              || WSDMInserimentoInFascicolo.SI_FASCICOLO_ESISTENTE.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())) {
-            String numeroDocumento = wsdmprotocolloDocumentoRes.getProtocolloDocumento().getNumeroDocumento();
-            WSDMFascicoloRes wsdmFascicoloRes = this._fascicoloAggiungiDocumento(username, password, loginAttr, codiceFascicolo,
-                numeroDocumento);
-            if (wsdmFascicoloRes.isEsito()) {
-              WSDMFascicolo wsdmFascicolo = new WSDMFascicolo();
-              wsdmFascicolo.setCodiceFascicolo(codiceFascicolo);
-              wsdmFascicolo.setAnnoFascicolo(annoFascicolo);
-              wsdmFascicolo.setNumeroFascicolo(numeroFascicolo);
-              wsdmprotocolloDocumentoRes.getProtocolloDocumento().setFascicolo(wsdmFascicolo);
-            } else {
-              wsdmprotocolloDocumentoRes.setEsito(false);
-              wsdmprotocolloDocumentoRes.setMessaggio("fascicolo: " + wsdmFascicoloRes.getMessaggio());
+          if (MODO_FASCICOLAZIONE_INDIRETTA.equals(modoFascicolazione)) {
+            if (esito) {
+              if (WSDMInserimentoInFascicolo.SI_FASCICOLO_NUOVO.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())
+                  || WSDMInserimentoInFascicolo.SI_FASCICOLO_ESISTENTE.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())) {
+                String numeroDocumento = wsdmprotocolloDocumentoRes.getProtocolloDocumento().getNumeroDocumento();
+                WSDMFascicoloRes wsdmFascicoloRes = this._fascicoloAggiungiDocumento(username, password, loginAttr, codiceFascicolo,
+                    numeroDocumento);
+                if (wsdmFascicoloRes.isEsito()) {
+                  WSDMFascicolo wsdmFascicolo = new WSDMFascicolo();
+                  wsdmFascicolo.setCodiceFascicolo(codiceFascicolo);
+                  wsdmFascicolo.setAnnoFascicolo(annoFascicolo);
+                  wsdmFascicolo.setNumeroFascicolo(numeroFascicolo);
+                  wsdmprotocolloDocumentoRes.getProtocolloDocumento().setFascicolo(wsdmFascicolo);
+                } else {
+                  wsdmprotocolloDocumentoRes.setEsito(false);
+                  wsdmprotocolloDocumentoRes.setMessaggio("fascicolo: " + wsdmFascicoloRes.getMessaggio());
+                }
+              }
             }
+          } else {
+            WSDMFascicolo wsdmFascicolo = new WSDMFascicolo();
+            wsdmFascicolo.setCodiceFascicolo(codiceFascicolo);
+            wsdmFascicolo.setAnnoFascicolo(annoFascicolo);
+            wsdmFascicolo.setNumeroFascicolo(numeroFascicolo);
+            wsdmprotocolloDocumentoRes.getProtocolloDocumento().setFascicolo(wsdmFascicolo);
           }
         }
+
       } else {
         wsdmprotocolloDocumentoRes.setEsito(false);
         wsdmprotocolloDocumentoRes.setMessaggio(messaggioCtr.toString());
@@ -513,9 +563,46 @@ public class JirideManager implements IWSDMManager {
         String ruolo = loginAttr.getRuolo();
         String codiceAmministrazione = InitialContext.doLookup(CODICEAMMINISTRAZIONE);
         String codiceAOO = InitialContext.doLookup(CODICEAOO);
-        String documentoOutString = this.getProtocolloSoap().leggiProtocolloString(annoProtocollo.shortValue(),
-            new Long(numeroProtocollo).intValue(), username, ruolo, codiceAmministrazione, codiceAOO, "");
+
+        String download_allegati_repwssgateway = "N";
+        try {
+          download_allegati_repwssgateway = InitialContext.doLookup(DOWNLOAD_ALLEGATI_REPWSSGATEWAY);
+          if (!"S".equals(download_allegati_repwssgateway)) {
+            download_allegati_repwssgateway = "N";
+          }
+        } catch (NamingException e) {
+
+        }
+
+        String documentoOutString = null;
+        if ("N".equals(download_allegati_repwssgateway)) {
+          documentoOutString = this.getProtocolloSoap().leggiProtocolloString(annoProtocollo.shortValue(),
+              new Long(numeroProtocollo).intValue(), username, ruolo, codiceAmministrazione, codiceAOO, "");
+        } else {
+          // FiltroDocumento
+          // IdDocumento Stringa Identificativo del documento da estrarre,
+          // AnnoProtocollo Stringa Anno di protocollo,
+          // NumeroProtocollo Stringa Numero di protocollo,
+          // DownloadAllegati Stringa Indica se estrarre il contenuto degli
+          // allegati (S/N),
+          // Ruolo Stringa Ruolo dell'utente di collegamento (deve esistere
+          // nella tabella S32_RUOLI),
+          // Utente Stringa Utente di collegamento (deve esistere nella tabella
+          // S32_UTENTI)
+
+          String filtroDocumento = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+          filtroDocumento += "<FiltroDocumento>";
+          filtroDocumento += "<AnnoProtocollo>" + annoProtocollo.toString() + "</AnnoProtocollo>";
+          filtroDocumento += "<NumeroProtocollo>" + numeroProtocollo + "</NumeroProtocollo>";
+          filtroDocumento += "<DownloadAllegati>N</DownloadAllegati>";
+          filtroDocumento += "<Ruolo>" + loginAttr.getRuolo() + "</Ruolo>";
+          filtroDocumento += "<Utente>" + username + "</Utente>";
+          filtroDocumento += "</FiltroDocumento>";
+          documentoOutString = this.getProtocolloSoap().leggiDocumentoPlus(filtroDocumento, codiceAmministrazione, codiceAOO);
+        }
+
         wsdmprotocolloDocumentoRes = this.popolaWSDMPDResDaDocumentoOut(documentoOutString);
+
       } else {
         wsdmprotocolloDocumentoRes.setEsito(false);
         wsdmprotocolloDocumentoRes.setMessaggio(messaggioCtr.toString());
@@ -577,6 +664,11 @@ public class JirideManager implements IWSDMManager {
             codiceFascicolo = wsdmFascicoloRes.getFascicolo().getCodiceFascicolo();
             annoFascicolo = wsdmFascicoloRes.getFascicolo().getAnnoFascicolo();
             numeroFascicolo = wsdmFascicoloRes.getFascicolo().getNumeroFascicolo();
+
+            wsdmprotocolloDocumentoIn.getFascicolo().setCodiceFascicolo(codiceFascicolo);
+            wsdmprotocolloDocumentoIn.getFascicolo().setAnnoFascicolo(annoFascicolo);
+            wsdmprotocolloDocumentoIn.getFascicolo().setNumeroFascicolo(numeroFascicolo);
+
           }
         }
 
@@ -588,9 +680,24 @@ public class JirideManager implements IWSDMManager {
           numeroFascicolo = wsdmprotocolloDocumentoIn.getFascicolo().getNumeroFascicolo();
         }
 
+        // 20/01/2022 Gestione del modo di fascicolazione del protocollo.
+        // La nuova modalita' DIRETTA e' abilitata di default e prevede
+        // l'indicazione del nuovo tag "IdFascicolo" direttamente nella
+        // richiesta di protocollazione o archiviazione.
+        // Se la modalita' e' DIRETTA non e' necessario associare il protocollo
+        // al fascicolo con l'operazione "fascicoloAggiungiDocumento" (vedi
+        // issue WSDM-100).
+        String modoFascicolazione = "DIRETTA";
+        try {
+          modoFascicolazione = InitialContext.doLookup(PROTOCOLLO_MODO_FASCICOLAZIONE);
+        } catch (NamingException e) {
+
+        }
+
         // Inserimento dell'elemento documentale nel protocollo
         if (esito) {
-          String protocolloInString = this.popolaProtocolloInString(username, password, loginAttr, wsdmprotocolloDocumentoIn);
+          String protocolloInString = this.popolaProtocolloInString(username, password, loginAttr, wsdmprotocolloDocumentoIn,
+              modoFascicolazione);
           String protocolloOutString = this.getProtocolloSoap().inserisciDocumentoEAnagraficheString(protocolloInString,
               codiceAmministrazione, codiceAOO);
           ProtocolloOut protocolloOut = this.protocolloOutFromString(protocolloOutString);
@@ -602,22 +709,35 @@ public class JirideManager implements IWSDMManager {
 
         // Eventuale associazione del nuovo elemento documentale al fascicolo
         // (nuovo o esistente)
+        // 20/01/2022 - La fascicolazione mediante l'operazione
+        // "fascicoloAggiungiDocumento" avviene solo se la fascicolazione del
+        // protocollo e' in modalita' INDIRETTA
         if (esito) {
-          if (WSDMInserimentoInFascicolo.SI_FASCICOLO_NUOVO.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())
-              || WSDMInserimentoInFascicolo.SI_FASCICOLO_ESISTENTE.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())) {
-            String numeroDocumento = wsdmprotocolloDocumentoRes.getProtocolloDocumento().getNumeroDocumento();
-            WSDMFascicoloRes wsdmFascicoloRes = this._fascicoloAggiungiDocumento(username, password, loginAttr, codiceFascicolo,
-                numeroDocumento);
-            if (wsdmFascicoloRes.isEsito()) {
-              WSDMFascicolo wsdmFascicolo = new WSDMFascicolo();
-              wsdmFascicolo.setCodiceFascicolo(codiceFascicolo);
-              wsdmFascicolo.setAnnoFascicolo(annoFascicolo);
-              wsdmFascicolo.setNumeroFascicolo(numeroFascicolo);
-              wsdmprotocolloDocumentoRes.getProtocolloDocumento().setFascicolo(wsdmFascicolo);
-            } else {
-              wsdmprotocolloDocumentoRes.setEsito(false);
-              wsdmprotocolloDocumentoRes.setMessaggio("fascicolo: " + wsdmFascicoloRes.getMessaggio());
+          if (MODO_FASCICOLAZIONE_INDIRETTA.equals(modoFascicolazione)) {
+            if (esito) {
+              if (WSDMInserimentoInFascicolo.SI_FASCICOLO_NUOVO.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())
+                  || WSDMInserimentoInFascicolo.SI_FASCICOLO_ESISTENTE.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())) {
+                String numeroDocumento = wsdmprotocolloDocumentoRes.getProtocolloDocumento().getNumeroDocumento();
+                WSDMFascicoloRes wsdmFascicoloRes = this._fascicoloAggiungiDocumento(username, password, loginAttr, codiceFascicolo,
+                    numeroDocumento);
+                if (wsdmFascicoloRes.isEsito()) {
+                  WSDMFascicolo wsdmFascicolo = new WSDMFascicolo();
+                  wsdmFascicolo.setCodiceFascicolo(codiceFascicolo);
+                  wsdmFascicolo.setAnnoFascicolo(annoFascicolo);
+                  wsdmFascicolo.setNumeroFascicolo(numeroFascicolo);
+                  wsdmprotocolloDocumentoRes.getProtocolloDocumento().setFascicolo(wsdmFascicolo);
+                } else {
+                  wsdmprotocolloDocumentoRes.setEsito(false);
+                  wsdmprotocolloDocumentoRes.setMessaggio("fascicolo: " + wsdmFascicoloRes.getMessaggio());
+                }
+              }
             }
+          } else {
+            WSDMFascicolo wsdmFascicolo = new WSDMFascicolo();
+            wsdmFascicolo.setCodiceFascicolo(codiceFascicolo);
+            wsdmFascicolo.setAnnoFascicolo(annoFascicolo);
+            wsdmFascicolo.setNumeroFascicolo(numeroFascicolo);
+            wsdmprotocolloDocumentoRes.getProtocolloDocumento().setFascicolo(wsdmFascicolo);
           }
         }
       } else {
@@ -652,10 +772,43 @@ public class JirideManager implements IWSDMManager {
         String ruolo = loginAttr.getRuolo();
         String codiceAmministrazione = InitialContext.doLookup(CODICEAMMINISTRAZIONE);
         String codiceAOO = InitialContext.doLookup(CODICEAOO);
-        String documentoOutString = this.getProtocolloSoap().leggiDocumentoString(Integer.parseInt(numeroDocumento), username, ruolo,
-            codiceAmministrazione, codiceAOO);
-        // DocumentoOut documentoOut =
-        // this.documentoOutFromString(documentoOutString);
+
+        String download_allegati_repwssgateway = "N";
+        try {
+          download_allegati_repwssgateway = InitialContext.doLookup(DOWNLOAD_ALLEGATI_REPWSSGATEWAY);
+          if (!"S".equals(download_allegati_repwssgateway)) {
+            download_allegati_repwssgateway = "N";
+          }
+        } catch (NamingException e) {
+
+        }
+
+        String documentoOutString = null;
+        if ("N".equals(download_allegati_repwssgateway)) {
+          documentoOutString = this.getProtocolloSoap().leggiDocumentoString(Integer.parseInt(numeroDocumento), username, ruolo,
+              codiceAmministrazione, codiceAOO);
+        } else {
+          // FiltroDocumento
+          // IdDocumento Stringa Identificativo del documento da estrarre,
+          // AnnoProtocollo Stringa Anno di protocollo,
+          // NumeroProtocollo Stringa Numero di protocollo,
+          // DownloadAllegati Stringa Indica se estrarre il contenuto degli
+          // allegati (S/N),
+          // Ruolo Stringa Ruolo dell'utente di collegamento (deve esistere
+          // nella tabella S32_RUOLI),
+          // Utente Stringa Utente di collegamento (deve esistere nella tabella
+          // S32_UTENTI)
+
+          String filtroDocumento = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+          filtroDocumento += "<FiltroDocumento>";
+          filtroDocumento += "<IdDocumento>" + numeroDocumento + "</IdDocumento>";
+          filtroDocumento += "<DownloadAllegati>N</DownloadAllegati>";
+          filtroDocumento += "<Ruolo>" + loginAttr.getRuolo() + "</Ruolo>";
+          filtroDocumento += "<Utente>" + username + "</Utente>";
+          filtroDocumento += "</FiltroDocumento>";
+          documentoOutString = this.getProtocolloSoap().leggiDocumentoPlus(filtroDocumento, codiceAmministrazione, codiceAOO);
+        }
+
         wsdmprotocolloDocumentoRes = this.popolaWSDMPDResDaDocumentoOut(documentoOutString);
       } else {
         wsdmprotocolloDocumentoRes.setEsito(false);
@@ -725,37 +878,37 @@ public class JirideManager implements IWSDMManager {
 
         // Oggetto
         if (wsdmfascicoloIn.getOggettoFascicolo() != null) {
-          fascicoloInString += "<Oggetto>" + wsdmfascicoloIn.getOggettoFascicolo() + "</Oggetto>";
+          fascicoloInString += "<Oggetto>" + conversioneCaratteriXML(wsdmfascicoloIn.getOggettoFascicolo()) + "</Oggetto>";
         }
 
         // Classifica
         if (wsdmfascicoloIn.getClassificaFascicolo() != null) {
-          fascicoloInString += "<Classifica>" + wsdmfascicoloIn.getClassificaFascicolo() + "</Classifica>";
+          fascicoloInString += "<Classifica>" + conversioneCaratteriXML(wsdmfascicoloIn.getClassificaFascicolo()) + "</Classifica>";
         }
 
         // Altri dati
         if (wsdmfascicoloIn.getDescrizioneFascicolo() != null) {
-          fascicoloInString += "<AltriDati>" + wsdmfascicoloIn.getDescrizioneFascicolo() + "</AltriDati>";
+          fascicoloInString += "<AltriDati>" + conversioneCaratteriXML(wsdmfascicoloIn.getDescrizioneFascicolo()) + "</AltriDati>";
         }
 
         // Tipo fascicolo
         if (wsdmfascicoloIn.getTipo() != null) {
-          fascicoloInString += "<TipoFascicolo>" + wsdmfascicoloIn.getTipo() + "</TipoFascicolo>";
+          fascicoloInString += "<TipoFascicolo>" + conversioneCaratteriXML(wsdmfascicoloIn.getTipo()) + "</TipoFascicolo>";
         }
 
         // Struttura, ufficio responsabile
         if (wsdmfascicoloIn.getStruttura() != null) {
-          fascicoloInString += "<UfficioResp>" + wsdmfascicoloIn.getStruttura() + "</UfficioResp>";
+          fascicoloInString += "<UfficioResp>" + conversioneCaratteriXML(wsdmfascicoloIn.getStruttura()) + "</UfficioResp>";
         }
 
         // Utente
         if (username != null) {
-          fascicoloInString += "<Utente>" + username + "</Utente>";
+          fascicoloInString += "<Utente>" + conversioneCaratteriXML(username) + "</Utente>";
         }
 
         // Ruolo
         if (ruolo != null) {
-          fascicoloInString += "<Ruolo>" + ruolo + "</Ruolo>";
+          fascicoloInString += "<Ruolo>" + conversioneCaratteriXML(ruolo) + "</Ruolo>";
         }
 
         fascicoloInString += "</FascicoloIn>";
@@ -842,7 +995,7 @@ public class JirideManager implements IWSDMManager {
 
   @Override
   public WSDMFascicoloRes _fascicoloLeggi(String username, String password, WSDMLoginAttr loginAttr, String codiceFascicolo,
-      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo) {
+      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo, String oggettoFascicolo) {
 
     WSDMFascicoloRes wsdmfascicoloRes = new WSDMFascicoloRes();
 
@@ -884,8 +1037,9 @@ public class JirideManager implements IWSDMManager {
 
   @Override
   public WSDMFascicoloRes _fascicoloMetadatiLeggi(String username, String password, WSDMLoginAttr loginAttr, String codiceFascicolo,
-      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo) {
-    return _fascicoloLeggi(username, password, loginAttr, codiceFascicolo, annoFascicolo, numeroFascicolo, classificaFascicolo);
+      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo, String oggettoFascicolo) {
+    return _fascicoloLeggi(username, password, loginAttr, codiceFascicolo, annoFascicolo, numeroFascicolo, classificaFascicolo,
+        oggettoFascicolo);
   }
 
   /**
@@ -1108,11 +1262,12 @@ public class JirideManager implements IWSDMManager {
    * @param password
    * @param loginAttr
    * @param wsdmprotocolloDocumentoIn
+   * @param modoFascicolazione
    * @return
    * @throws IOException
    */
   private String popolaProtocolloInString(String username, String password, WSDMLoginAttr loginAttr,
-      WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn) throws IOException {
+      WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn, String modoFascicolazione) throws IOException {
     // Origine
     String origine = null;
     if (WSDMProtocolloInOut.IN.equals(wsdmprotocolloDocumentoIn.getInout())) {
@@ -1132,7 +1287,10 @@ public class JirideManager implements IWSDMManager {
     ProtocolloIn protocolloIn = protoInDocument.addNewProtoIn();
     protocolloIn.setData(dataDDMMYYYY);
 
-    if (WSDMInserimentoInFascicolo.NO.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())) {
+    // La classifica deve essere sempre indicata solo se non si indica il
+    // fascicolo o in caso di fascicolazione indiretta
+    if (WSDMInserimentoInFascicolo.NO.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())
+        || MODO_FASCICOLAZIONE_INDIRETTA.equals(modoFascicolazione)) {
       protocolloIn.setClassifica(wsdmprotocolloDocumentoIn.getClassifica());
     }
     protocolloIn.setTipoDocumento(wsdmprotocolloDocumentoIn.getTipoDocumento());
@@ -1156,6 +1314,18 @@ public class JirideManager implements IWSDMManager {
 
     protocolloIn.setAggiornaAnagrafiche(flagAggiornaAnagrafiche);
     protocolloIn.setInCaricoA(wsdmprotocolloDocumentoIn.getMittenteInterno());
+
+    // 20/01/2022 L'indicazione del fascicolo in cui fascicolare il protocollo
+    // viene indicato nel tracciato stesso della protocollazione.
+    // Non e' piu' necessario effettuare l'operazione con la funzione di
+    // fascicolaAggiungiDocumento. (vedi issue WSDM-100)
+    if (!MODO_FASCICOLAZIONE_INDIRETTA.equals(modoFascicolazione)) {
+      if (WSDMInserimentoInFascicolo.SI_FASCICOLO_NUOVO.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())
+          || WSDMInserimentoInFascicolo.SI_FASCICOLO_ESISTENTE.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())) {
+        protocolloIn.setIdFascicolo(wsdmprotocolloDocumentoIn.getFascicolo().getCodiceFascicolo());
+      }
+    }
+
     protocolloIn.setAnnoPratica("");
     protocolloIn.setNumeroPratica("");
     protocolloIn.setUtente(username);
@@ -1300,11 +1470,23 @@ public class JirideManager implements IWSDMManager {
    * 
    * @param documentoOut
    * @return
-   * @throws DocumentException
+   * @throws Exception
+   * @throws RemoteException
    */
-  private WSDMProtocolloDocumentoRes popolaWSDMPDResDaDocumentoOut(String documentoOutString) throws DocumentException {
+  private WSDMProtocolloDocumentoRes popolaWSDMPDResDaDocumentoOut(String documentoOutString) throws RemoteException, Exception {
 
     WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+
+    // Gestione della lettura mediante REPWSSGATEWAY
+    String download_allegati_repwssgateway = "N";
+    try {
+      download_allegati_repwssgateway = InitialContext.doLookup(DOWNLOAD_ALLEGATI_REPWSSGATEWAY);
+      if (!"S".equals(download_allegati_repwssgateway)) {
+        download_allegati_repwssgateway = "N";
+      }
+    } catch (NamingException e) {
+
+    }
 
     // Esito, secondo le specifiche JIRIDE, e' necessario controllare se
     // l'attributo "Errore" e' popolato.
@@ -1398,13 +1580,26 @@ public class JirideManager implements IWSDMManager {
                   wsdmallegati[ao].setTipo(tipo);
                 }
 
-                if (allegato.element("Image") != null) {
-                  String contenuto = allegato.element("Image").getText();
-                  if (contenuto != null) {
-                    wsdmallegati[ao].setContenuto(Base64.decode(contenuto.getBytes()));
+                // Bisogna verificare come deve essere gestito il download
+                // dello stream dati.
+                // Nel modo "classico" (download_allegati_repwssgateway = "N")
+                // il contenuto e' all'interno dell'attributo "Image".
+                // Se il download e' previsto mediante il servizio
+                // RepWSSGateway (download_allegati_repwssgateway = "S")
+                // allora e' necessario invocare, in quel servizio,
+                // l'operazione docExtract.
+                if ("N".equals(download_allegati_repwssgateway)) {
+                  if (allegato.element("Image") != null) {
+                    String contenuto = allegato.element("Image").getText();
+                    if (contenuto != null) {
+                      wsdmallegati[ao].setContenuto(Base64.decode(contenuto.getBytes()));
+                    }
+                  }
+                } else {
+                  if (allegato.element("Serial") != null) {
+                    getRepWSSGatewayDocExtract(allegato, wsdmallegati[ao]);
                   }
                 }
-
               }
             }
             wsdmprotocolloDocumento.setAllegati(wsdmallegati);
@@ -1699,8 +1894,8 @@ public class JirideManager implements IWSDMManager {
    * @throws SAXException
    * @throws IOException
    */
-  private ProtocolloOut protocolloOutFromString(String protocolloOutString) throws JAXBException, ParserConfigurationException,
-      SAXException, IOException {
+  private ProtocolloOut protocolloOutFromString(String protocolloOutString)
+      throws JAXBException, ParserConfigurationException, SAXException, IOException {
     JAXBContext context = JAXBContext.newInstance(ProtocolloOut.class);
 
     XMLFilter filter = new NamespaceFilter();
@@ -1786,7 +1981,8 @@ public class JirideManager implements IWSDMManager {
         String inviaMailMessaggioOutXML = this.getWSPostaSoap().inviaMail(inviaMailMessaggioInXML, codiceAmministrazione, codiceAOO);
 
         // Conversione delle risposta XML in oggetto MessaggioOut
-        it.iride.protocollo.xsd.inviamail.messaggioout.MessaggioOut messaggioOut = this.inviaMailMessageOutFromXML(inviaMailMessaggioOutXML);
+        it.iride.protocollo.xsd.inviamail.messaggioout.MessaggioOut messaggioOut = this.inviaMailMessageOutFromXML(
+            inviaMailMessaggioOutXML);
 
         // Lettura della risposta.
         // Dalle specifiche JIRIDE si evince che
@@ -1895,7 +2091,8 @@ public class JirideManager implements IWSDMManager {
             codiceAOO);
 
         // Conversione della risposta XML in oggetto MessaggioOut
-        it.iride.protocollo.xsd.verificamail.messaggioout.MessaggioOut messaggioOut = this.verificaMailMessageOutFromXML(verificaMailMessaggioOutXML);
+        it.iride.protocollo.xsd.verificamail.messaggioout.MessaggioOut messaggioOut = this.verificaMailMessageOutFromXML(
+            verificaMailMessaggioOutXML);
         wsdmVerificaMailRes.setEsito(true);
         wsdmVerificaMailRes.setInviato(messaggioOut.getInviato());
         if (messaggioOut.getNumAccettazioni() != null) {
@@ -2017,7 +2214,9 @@ public class JirideManager implements IWSDMManager {
         // suppone che si voglia annullare
         // la riservatezza dei documenti indicati
         if (wsdmprotocolloModificaIn.getDataFineRiservatezza() == null
-            && (wsdmprotocolloModificaIn.getLivelloRiservatezza() == null || (wsdmprotocolloModificaIn.getLivelloRiservatezza() != null && "".equals(wsdmprotocolloModificaIn.getLivelloRiservatezza().trim())))) {
+            && (wsdmprotocolloModificaIn.getLivelloRiservatezza() == null
+                || (wsdmprotocolloModificaIn.getLivelloRiservatezza() != null
+                    && "".equals(wsdmprotocolloModificaIn.getLivelloRiservatezza().trim())))) {
           protocolloModificaInString += "<EliminaRiservatezza>S</EliminaRiservatezza>";
         }
 
@@ -2301,7 +2500,8 @@ public class JirideManager implements IWSDMManager {
 
     try {
       StringBuffer messaggioCtr = new StringBuffer();
-      if (JirideUtilityControllo.ctrDocumentoCollega(loginAttr, numeroDocumentoPadre, numeroDocumentoFiglio, tipoCollegamento, messaggioCtr)) {
+      if (JirideUtilityControllo.ctrDocumentoCollega(loginAttr, numeroDocumentoPadre, numeroDocumentoFiglio, tipoCollegamento,
+          messaggioCtr)) {
 
         boolean esito = false;
         String messaggio = "";
@@ -2759,12 +2959,28 @@ public class JirideManager implements IWSDMManager {
         }
 
       } else {
+
+        InputStream isR = connection.getErrorStream();
+        String res = "";
+        int countByte = 0;
+        byte[] buffer = new byte[1024];
+        while ((countByte = isR.read(buffer)) != -1) {
+          byte[] tmpByte = new byte[countByte];
+          for (int i = 0; i < countByte; i++)
+            tmpByte[i] = buffer[i];
+          String s = new String(tmpByte);
+          buffer = new byte[1024];
+          res += s;
+        }
+        res = res.trim();
+
+        if (logger.isDebugEnabled()) {
+          logger.debug("getErrorStream: " + res);
+        }
+
         wsdmListaAccountEmailRes.setEsito(false);
-        wsdmListaAccountEmailRes.setMessaggio("Il sistema ha risposto con l'errore "
-            + httpStatus
-            + "( "
-            + connection.getResponseMessage()
-            + ")");
+        wsdmListaAccountEmailRes.setMessaggio(
+            "Il sistema ha risposto con l'errore " + httpStatus + " (" + connection.getResponseMessage() + ")");
       }
 
     } catch (WebServiceException w) {
@@ -2782,5 +2998,216 @@ public class JirideManager implements IWSDMManager {
     }
 
     return wsdmListaAccountEmailRes;
+  }
+
+  private void getRepWSSGatewayDocExtract(Element allegato, WSDMProtocolloAllegato wsdmAllegato) {
+
+    HttpURLConnection httpConn = null;
+
+    try {
+
+      // Lettura parametri di collegamento
+      String repWssGateway_ws = InitialContext.doLookup(REPWSSGATEWAY_WS);
+      if (repWssGateway_ws == null || (repWssGateway_ws != null && "".equals(repWssGateway_ws.trim()))) {
+        throw new Exception(REPWSSGATEWAY_WS_NOT_DEFINED);
+      }
+
+      String repWssGateway_alias = InitialContext.doLookup(REPWSSGATEWAY_ALIAS);
+      if (repWssGateway_alias == null || (repWssGateway_alias != null && "".equals(repWssGateway_alias.trim()))) {
+        throw new Exception(REPWSSGATEWAY_ALIAS_NOT_DEFINED);
+      }
+
+      // Messaggio di richiesta
+      // <soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      // xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      // xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+      // xmlns:urn="urn:RepWSSGateway">
+      // <soapenv:Header/>
+      // <soapenv:Body>
+      // <urn:docExtract
+      // soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+      // <logonCredentials xsi:type="xsd:string" ><![CDATA[<logon_credentials
+      // alias="alice@sicraweb"/>]]></logonCredentials>
+      // <documentUID xsi:type="xsd:string">53149</documentUID>
+      // </urn:docExtract>
+      // </soapenv:Body>
+      // </soapenv:Envelope>
+
+      // Invio della richiesta
+      String responseString = "";
+      String outputString = "";
+      URL url = new URL(repWssGateway_ws);
+      URLConnection connection = url.openConnection();
+      httpConn = (HttpURLConnection) connection;
+      ByteArrayOutputStream bout = new ByteArrayOutputStream();
+
+      // Composizione della stringa completa
+      String documentUID = allegato.element("Serial").getText();
+      String xmlInput = " <soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:RepWSSGateway\">\n"
+          + " <soapenv:Header/>\n"
+          + " <soapenv:Body>\n"
+          + " <urn:docExtract soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n"
+          + " <logonCredentials xsi:type=\"xsd:string\" ><![CDATA[<logon_credentials alias=\""
+          + repWssGateway_alias
+          + "\"/>]]></logonCredentials>\n"
+          + " <documentUID xsi:type=\"xsd:string\">"
+          + documentUID
+          + "</documentUID>\n"
+          + " </urn:docExtract>\n"
+          + " </soapenv:Body>\n"
+          + " </soapenv:Envelope>";
+
+      logger.debug("Messaggio XML di richiesta: " + xmlInput);
+
+      byte[] buffer = new byte[xmlInput.length()];
+      buffer = xmlInput.getBytes("UTF-8");
+      bout.write(buffer);
+      byte[] b = bout.toByteArray();
+
+      // Parametri HTTP
+      httpConn.setRequestProperty("Content-Length", String.valueOf(b.length));
+      httpConn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
+      httpConn.setRequestProperty("SOAPAction", "");
+      httpConn.setRequestMethod("POST");
+      httpConn.setDoOutput(true);
+      httpConn.setDoInput(true);
+      OutputStream out = httpConn.getOutputStream();
+      out.write(b);
+      out.close();
+
+      // Risposta
+      int responseCode = httpConn.getResponseCode();
+      if (responseCode == 200) {
+        // Risposta positiva (responseCode == 200) si legge lo stream dati in
+        // ingresso, restituito dal servizio, dall'oggetto InputStream
+        InputStreamReader isr = new InputStreamReader(httpConn.getInputStream());
+        BufferedReader in = new BufferedReader(isr);
+
+        while ((responseString = in.readLine()) != null) {
+          outputString = outputString + responseString;
+        }
+      } else {
+        // Risposta negativa (responseCode != 200) si legge lo stream di
+        // errori in ingresso dall'oggetto ErrorStream. Anche la notifica di
+        // "Accesso Negato" su un particolare file o documento viene segnalata,
+        // dal servizio, con un errore di tipo 500.
+        InputStreamReader isr = new InputStreamReader(httpConn.getErrorStream());
+        BufferedReader in = new BufferedReader(isr);
+
+        while ((responseString = in.readLine()) != null) {
+          outputString = outputString + responseString;
+        }
+      }
+      logger.debug("Messaggio XML di risposta: " + outputString);
+
+      // Messaggio di risposta in caso POSITIVO (responseCode == 200)
+      // <?xml version="1.0" encoding="utf-8"?>
+      // <soapenv:Envelope
+      // xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+      // xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      // xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      // <soapenv:Body><ns1:docExtractResponse
+      // soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      // xmlns:ns1="urn:RepWSSGateway"><docExtractReturn xsi:type="xsd:string">
+      // Q29...
+      // </docExtractReturn>
+      // </ns1:docExtractResponse>
+      // </soapenv:Body>
+      // </soapenv:Envelope>
+
+      // Messaggio di risposta NEGATIVO (responseCode != 200)
+      // <soapenv:Envelope
+      // xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+      // xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      // xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      // <soapenv:Body>
+      // <soapenv:Fault>
+      // <faultcode>soapenv:Server.userException</faultcode>
+      // <faultstring><![CDATA[java.rmi.RemoteException: REPOSITORY DOCUMENTALE:
+      // Si e' verificato un problema, seguono dettagli.
+      // <html>Non e' possibile visualizzare il documento<br><b>TESTO.TXT (Primo
+      // documento) [ID:53149]</b>.<br><br>Permesso negato.</html>; nested
+      // exception is:
+      // REPOSITORY DOCUMENTALE: Si e' verificato un problema, seguono dettagli.
+      // <html>Non e' possibile visualizzare il documento<br><b>TESTO.TXT (Primo
+      // documento) [ID:53149]</b>.<br><br>Permesso
+      // negato.</html>]]></faultstring>
+      // <detail>
+      // <ns1:hostname
+      // xmlns:ns1="http://xml.apache.org/axis/">swjb81jiride-new</ns1:hostname>
+      // </detail>
+      // </soapenv:Fault>
+      // </soapenv:Body>
+      // </soapenv:Envelope>
+
+      // Lettura della risposta
+      DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+      InputSource src = new InputSource();
+      src.setCharacterStream(new StringReader(outputString));
+      org.w3c.dom.Document doc = builder.parse(src);
+
+      if (doc != null) {
+        if (responseCode == 200) {
+          String base64Content = "";
+          if (doc.getElementsByTagName("docExtractReturn") != null && doc.getElementsByTagName("docExtractReturn").item(0) != null) {
+            base64Content = doc.getElementsByTagName("docExtractReturn").item(0).getTextContent();
+          }
+          if (base64Content != null) {
+            wsdmAllegato.setContenuto(Base64.decode(base64Content.getBytes()));
+          }
+        } else {
+          String faultString = "";
+          if (doc.getElementsByTagName("faultstring") != null && doc.getElementsByTagName("faultstring").item(0) != null) {
+            faultString = doc.getElementsByTagName("faultstring").item(0).getTextContent();
+          }
+          if (faultString != null) {
+            wsdmAllegato.setTipo("txt");
+            String nome = allegato.element("NomeAllegato").getText();
+            wsdmAllegato.setNome(nome + " (AccessoNegato).txt");
+            wsdmAllegato.setContenuto(faultString.getBytes());
+          }
+        }
+      }
+    } catch (Exception e) {
+      wsdmAllegato.setTipo("txt");
+      String nome = allegato.element("NomeAllegato").getText();
+      wsdmAllegato.setNome(nome + " (AccessoNegato).txt");
+      String messaggio = e.getMessage();
+      wsdmAllegato.setContenuto(messaggio.getBytes());
+    }
+  }
+
+  @Override
+  public WSDMRicercaFascicoloRes _fascicoloRicerca(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMRicercaFascicolo ricercaFascicolo) {
+    WSDMRicercaFascicoloRes wsdmRicercaFascicoloRes = new WSDMRicercaFascicoloRes();
+    wsdmRicercaFascicoloRes.setEsito(false);
+    wsdmRicercaFascicoloRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmRicercaFascicoloRes;
+  }
+
+  @Override
+  public WSDMProtocolloDocumentoRes _firmaInserisci(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
+
+  @Override
+  public WSDMProtocolloDocumentoRes _firmaVerifica(String username, String password, WSDMLoginAttr loginAttr, String numeroDocumento) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
+  
+  @Override
+  public WSDMProtocolloDocumentoRes _protocolloAsincronoEsito(String username, String password, WSDMLoginAttr loginAttr, String id) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
   }
 }

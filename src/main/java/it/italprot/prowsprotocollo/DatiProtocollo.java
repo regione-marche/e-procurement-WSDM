@@ -38,7 +38,11 @@ public class DatiProtocollo  implements java.io.Serializable {
 
     private java.lang.String classificazione;
 
+    private java.lang.String tipoSpedizione;
+
     private it.italprot.prowsprotocollo.Trasmissione[] trasmissioniInterne;
+
+    private java.lang.String formazione;
 
     private it.italprot.prowsprotocollo.Allegato allegato;
 
@@ -63,7 +67,9 @@ public class DatiProtocollo  implements java.io.Serializable {
            it.italprot.prowsprotocollo.MittenteDestinatario[] mittenti,
            it.italprot.prowsprotocollo.MittenteDestinatario[] destinatari,
            java.lang.String classificazione,
+           java.lang.String tipoSpedizione,
            it.italprot.prowsprotocollo.Trasmissione[] trasmissioniInterne,
+           java.lang.String formazione,
            it.italprot.prowsprotocollo.Allegato allegato,
            it.italprot.prowsprotocollo.AllegatoPrecaricato[] allegatiPrecaricati) {
            this.tipoProtocollo = tipoProtocollo;
@@ -81,7 +87,9 @@ public class DatiProtocollo  implements java.io.Serializable {
            this.mittenti = mittenti;
            this.destinatari = destinatari;
            this.classificazione = classificazione;
+           this.tipoSpedizione = tipoSpedizione;
            this.trasmissioniInterne = trasmissioniInterne;
+           this.formazione = formazione;
            this.allegato = allegato;
            this.allegatiPrecaricati = allegatiPrecaricati;
     }
@@ -388,6 +396,26 @@ public class DatiProtocollo  implements java.io.Serializable {
 
 
     /**
+     * Gets the tipoSpedizione value for this DatiProtocollo.
+     * 
+     * @return tipoSpedizione
+     */
+    public java.lang.String getTipoSpedizione() {
+        return tipoSpedizione;
+    }
+
+
+    /**
+     * Sets the tipoSpedizione value for this DatiProtocollo.
+     * 
+     * @param tipoSpedizione
+     */
+    public void setTipoSpedizione(java.lang.String tipoSpedizione) {
+        this.tipoSpedizione = tipoSpedizione;
+    }
+
+
+    /**
      * Gets the trasmissioniInterne value for this DatiProtocollo.
      * 
      * @return trasmissioniInterne
@@ -404,6 +432,26 @@ public class DatiProtocollo  implements java.io.Serializable {
      */
     public void setTrasmissioniInterne(it.italprot.prowsprotocollo.Trasmissione[] trasmissioniInterne) {
         this.trasmissioniInterne = trasmissioniInterne;
+    }
+
+
+    /**
+     * Gets the formazione value for this DatiProtocollo.
+     * 
+     * @return formazione
+     */
+    public java.lang.String getFormazione() {
+        return formazione;
+    }
+
+
+    /**
+     * Sets the formazione value for this DatiProtocollo.
+     * 
+     * @param formazione
+     */
+    public void setFormazione(java.lang.String formazione) {
+        this.formazione = formazione;
     }
 
 
@@ -503,9 +551,15 @@ public class DatiProtocollo  implements java.io.Serializable {
             ((this.classificazione==null && other.getClassificazione()==null) || 
              (this.classificazione!=null &&
               this.classificazione.equals(other.getClassificazione()))) &&
+            ((this.tipoSpedizione==null && other.getTipoSpedizione()==null) || 
+             (this.tipoSpedizione!=null &&
+              this.tipoSpedizione.equals(other.getTipoSpedizione()))) &&
             ((this.trasmissioniInterne==null && other.getTrasmissioniInterne()==null) || 
              (this.trasmissioniInterne!=null &&
               java.util.Arrays.equals(this.trasmissioniInterne, other.getTrasmissioniInterne()))) &&
+            ((this.formazione==null && other.getFormazione()==null) || 
+             (this.formazione!=null &&
+              this.formazione.equals(other.getFormazione()))) &&
             ((this.allegato==null && other.getAllegato()==null) || 
              (this.allegato!=null &&
               this.allegato.equals(other.getAllegato()))) &&
@@ -592,6 +646,9 @@ public class DatiProtocollo  implements java.io.Serializable {
         if (getClassificazione() != null) {
             _hashCode += getClassificazione().hashCode();
         }
+        if (getTipoSpedizione() != null) {
+            _hashCode += getTipoSpedizione().hashCode();
+        }
         if (getTrasmissioniInterne() != null) {
             for (int i=0;
                  i<java.lang.reflect.Array.getLength(getTrasmissioniInterne());
@@ -602,6 +659,9 @@ public class DatiProtocollo  implements java.io.Serializable {
                     _hashCode += obj.hashCode();
                 }
             }
+        }
+        if (getFormazione() != null) {
+            _hashCode += getFormazione().hashCode();
         }
         if (getAllegato() != null) {
             _hashCode += getAllegato().hashCode();
@@ -729,12 +789,26 @@ public class DatiProtocollo  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("tipoSpedizione");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "tipoSpedizione"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("trasmissioniInterne");
         elemField.setXmlName(new javax.xml.namespace.QName("", "trasmissioniInterne"));
         elemField.setXmlType(new javax.xml.namespace.QName("urn:proWsProtocollo", "trasmissione"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         elemField.setItemQName(new javax.xml.namespace.QName("", "trasmissione"));
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("formazione");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "formazione"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("allegato");

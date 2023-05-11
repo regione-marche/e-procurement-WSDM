@@ -24,6 +24,8 @@ public class Allegato  implements java.io.Serializable {
 
     private java.lang.String mettiAllaFirma;
 
+    private java.lang.String sha;
+
     public Allegato() {
     }
 
@@ -35,7 +37,8 @@ public class Allegato  implements java.io.Serializable {
            java.lang.String stream,
            java.lang.String note,
            java.lang.String marcaDocumento,
-           java.lang.String mettiAllaFirma) {
+           java.lang.String mettiAllaFirma,
+           java.lang.String sha) {
            this.id = id;
            this.tipoFile = tipoFile;
            this.nomeFile = nomeFile;
@@ -44,6 +47,7 @@ public class Allegato  implements java.io.Serializable {
            this.note = note;
            this.marcaDocumento = marcaDocumento;
            this.mettiAllaFirma = mettiAllaFirma;
+           this.sha = sha;
     }
 
 
@@ -206,6 +210,26 @@ public class Allegato  implements java.io.Serializable {
         this.mettiAllaFirma = mettiAllaFirma;
     }
 
+
+    /**
+     * Gets the sha value for this Allegato.
+     * 
+     * @return sha
+     */
+    public java.lang.String getSha() {
+        return sha;
+    }
+
+
+    /**
+     * Sets the sha value for this Allegato.
+     * 
+     * @param sha
+     */
+    public void setSha(java.lang.String sha) {
+        this.sha = sha;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Allegato)) return false;
@@ -241,7 +265,10 @@ public class Allegato  implements java.io.Serializable {
               this.marcaDocumento.equals(other.getMarcaDocumento()))) &&
             ((this.mettiAllaFirma==null && other.getMettiAllaFirma()==null) || 
              (this.mettiAllaFirma!=null &&
-              this.mettiAllaFirma.equals(other.getMettiAllaFirma())));
+              this.mettiAllaFirma.equals(other.getMettiAllaFirma()))) &&
+            ((this.sha==null && other.getSha()==null) || 
+             (this.sha!=null &&
+              this.sha.equals(other.getSha())));
         __equalsCalc = null;
         return _equals;
     }
@@ -276,6 +303,9 @@ public class Allegato  implements java.io.Serializable {
         }
         if (getMettiAllaFirma() != null) {
             _hashCode += getMettiAllaFirma().hashCode();
+        }
+        if (getSha() != null) {
+            _hashCode += getSha().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -332,6 +362,12 @@ public class Allegato  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("mettiAllaFirma");
         elemField.setXmlName(new javax.xml.namespace.QName("", "mettiAllaFirma"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("sha");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "sha"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

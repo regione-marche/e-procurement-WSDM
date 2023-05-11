@@ -24,6 +24,8 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _GestioneTabelleResponse_QNAME = new QName("http://infor.arezzo.it/jente/jprotocollo/webservices/gen", "gestioneTabelleResponse");
+    private final static QName _GestioneTabelle_QNAME = new QName("http://infor.arezzo.it/jente/jprotocollo/webservices/gen", "gestioneTabelle");
     private final static QName _GestioneAnagraficaResponse_QNAME = new QName("http://infor.arezzo.it/jente/jprotocollo/webservices/gen", "gestioneAnagraficaResponse");
     private final static QName _GestioneFascicoliResponse_QNAME = new QName("http://infor.arezzo.it/jente/jprotocollo/webservices/gen", "gestioneFascicoliResponse");
     private final static QName _GestioneAnagrafica_QNAME = new QName("http://infor.arezzo.it/jente/jprotocollo/webservices/gen", "gestioneAnagrafica");
@@ -39,107 +41,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ProtocolloDettaglioType }
-     * 
-     */
-    public ProtocolloDettaglioType createProtocolloDettaglioType() {
-        return new ProtocolloDettaglioType();
-    }
-
-    /**
-     * Create an instance of {@link TipoSocietaType }
-     * 
-     */
-    public TipoSocietaType createTipoSocietaType() {
-        return new TipoSocietaType();
-    }
-
-    /**
-     * Create an instance of {@link RichiestaAllegaProtocolloFascicolo }
-     * 
-     */
-    public RichiestaAllegaProtocolloFascicolo createRichiestaAllegaProtocolloFascicolo() {
-        return new RichiestaAllegaProtocolloFascicolo();
-    }
-
-    /**
-     * Create an instance of {@link ProtocolloRiferimentoType }
-     * 
-     */
-    public ProtocolloRiferimentoType createProtocolloRiferimentoType() {
-        return new ProtocolloRiferimentoType();
-    }
-
-    /**
      * Create an instance of {@link GestioneFascicoli }
      * 
      */
     public GestioneFascicoli createGestioneFascicoli() {
         return new GestioneFascicoli();
-    }
-
-    /**
-     * Create an instance of {@link RispostaGestioneAnagrafica }
-     * 
-     */
-    public RispostaGestioneAnagrafica createRispostaGestioneAnagrafica() {
-        return new RispostaGestioneAnagrafica();
-    }
-
-    /**
-     * Create an instance of {@link DatiRicercaType }
-     * 
-     */
-    public DatiRicercaType createDatiRicercaType() {
-        return new DatiRicercaType();
-    }
-
-    /**
-     * Create an instance of {@link RichiestaGestioneAnagrafica }
-     * 
-     */
-    public RichiestaGestioneAnagrafica createRichiestaGestioneAnagrafica() {
-        return new RichiestaGestioneAnagrafica();
-    }
-
-    /**
-     * Create an instance of {@link TitolarioType }
-     * 
-     */
-    public TitolarioType createTitolarioType() {
-        return new TitolarioType();
-    }
-
-    /**
-     * Create an instance of {@link FascicoloDettaglioType.Ufficio }
-     * 
-     */
-    public FascicoloDettaglioType.Ufficio createFascicoloDettaglioTypeUfficio() {
-        return new FascicoloDettaglioType.Ufficio();
-    }
-
-    /**
-     * Create an instance of {@link AnagraficaType }
-     * 
-     */
-    public AnagraficaType createAnagraficaType() {
-        return new AnagraficaType();
-    }
-
-    /**
-     * Create an instance of {@link AnagraficaType.AltriDati }
-     * 
-     */
-    public AnagraficaType.AltriDati createAnagraficaTypeAltriDati() {
-        return new AnagraficaType.AltriDati();
-    }
-
-    /**
-     * Create an instance of {@link AllegaProtocolloFascicolo }
-     * 
-     */
-    public AllegaProtocolloFascicolo createAllegaProtocolloFascicolo() {
-        return new AllegaProtocolloFascicolo();
     }
 
     /**
@@ -151,67 +57,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GestioneTabelle }
+     * 
+     */
+    public GestioneTabelle createGestioneTabelle() {
+        return new GestioneTabelle();
+    }
+
+    /**
      * Create an instance of {@link AllegatoDettaglioType }
      * 
      */
     public AllegatoDettaglioType createAllegatoDettaglioType() {
         return new AllegatoDettaglioType();
-    }
-
-    /**
-     * Create an instance of {@link GestioneAnagrafica }
-     * 
-     */
-    public GestioneAnagrafica createGestioneAnagrafica() {
-        return new GestioneAnagrafica();
-    }
-
-    /**
-     * Create an instance of {@link FascicoloDettaglioType }
-     * 
-     */
-    public FascicoloDettaglioType createFascicoloDettaglioType() {
-        return new FascicoloDettaglioType();
-    }
-
-    /**
-     * Create an instance of {@link DatiRicercaAnagraficaType }
-     * 
-     */
-    public DatiRicercaAnagraficaType createDatiRicercaAnagraficaType() {
-        return new DatiRicercaAnagraficaType();
-    }
-
-    /**
-     * Create an instance of {@link GestioneFascicoliResponse }
-     * 
-     */
-    public GestioneFascicoliResponse createGestioneFascicoliResponse() {
-        return new GestioneFascicoliResponse();
-    }
-
-    /**
-     * Create an instance of {@link CorrispondenteType }
-     * 
-     */
-    public CorrispondenteType createCorrispondenteType() {
-        return new CorrispondenteType();
-    }
-
-    /**
-     * Create an instance of {@link GestioneAnagraficaResponse }
-     * 
-     */
-    public GestioneAnagraficaResponse createGestioneAnagraficaResponse() {
-        return new GestioneAnagraficaResponse();
-    }
-
-    /**
-     * Create an instance of {@link TipoSchedaType }
-     * 
-     */
-    public TipoSchedaType createTipoSchedaType() {
-        return new TipoSchedaType();
     }
 
     /**
@@ -223,43 +81,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FascicoloDettaglioType.AltriDati }
+     * Create an instance of {@link AnagraficaType }
      * 
      */
-    public FascicoloDettaglioType.AltriDati createFascicoloDettaglioTypeAltriDati() {
-        return new FascicoloDettaglioType.AltriDati();
-    }
-
-    /**
-     * Create an instance of {@link RispostaAllegaProtocolloFascicolo }
-     * 
-     */
-    public RispostaAllegaProtocolloFascicolo createRispostaAllegaProtocolloFascicolo() {
-        return new RispostaAllegaProtocolloFascicolo();
-    }
-
-    /**
-     * Create an instance of {@link BaseType }
-     * 
-     */
-    public BaseType createBaseType() {
-        return new BaseType();
-    }
-
-    /**
-     * Create an instance of {@link RegistroType }
-     * 
-     */
-    public RegistroType createRegistroType() {
-        return new RegistroType();
-    }
-
-    /**
-     * Create an instance of {@link FascicoloDettaglioType.AltriDati.Attributi }
-     * 
-     */
-    public FascicoloDettaglioType.AltriDati.Attributi createFascicoloDettaglioTypeAltriDatiAttributi() {
-        return new FascicoloDettaglioType.AltriDati.Attributi();
+    public AnagraficaType createAnagraficaType() {
+        return new AnagraficaType();
     }
 
     /**
@@ -271,11 +97,83 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link RichiestaGestioneTabelle }
+     * 
+     */
+    public RichiestaGestioneTabelle createRichiestaGestioneTabelle() {
+        return new RichiestaGestioneTabelle();
+    }
+
+    /**
+     * Create an instance of {@link FascicoloDettaglioType.Ufficio }
+     * 
+     */
+    public FascicoloDettaglioType.Ufficio createFascicoloDettaglioTypeUfficio() {
+        return new FascicoloDettaglioType.Ufficio();
+    }
+
+    /**
+     * Create an instance of {@link RichiestaGestioneAnagrafica }
+     * 
+     */
+    public RichiestaGestioneAnagrafica createRichiestaGestioneAnagrafica() {
+        return new RichiestaGestioneAnagrafica();
+    }
+
+    /**
+     * Create an instance of {@link PaginazioneType }
+     * 
+     */
+    public PaginazioneType createPaginazioneType() {
+        return new PaginazioneType();
+    }
+
+    /**
+     * Create an instance of {@link DatiRicercaType }
+     * 
+     */
+    public DatiRicercaType createDatiRicercaType() {
+        return new DatiRicercaType();
+    }
+
+    /**
+     * Create an instance of {@link GestioneAnagraficaResponse }
+     * 
+     */
+    public GestioneAnagraficaResponse createGestioneAnagraficaResponse() {
+        return new GestioneAnagraficaResponse();
+    }
+
+    /**
+     * Create an instance of {@link BaseType }
+     * 
+     */
+    public BaseType createBaseType() {
+        return new BaseType();
+    }
+
+    /**
+     * Create an instance of {@link TitolarioType }
+     * 
+     */
+    public TitolarioType createTitolarioType() {
+        return new TitolarioType();
+    }
+
+    /**
      * Create an instance of {@link AllegaProtocolloFascicoloResponse }
      * 
      */
     public AllegaProtocolloFascicoloResponse createAllegaProtocolloFascicoloResponse() {
         return new AllegaProtocolloFascicoloResponse();
+    }
+
+    /**
+     * Create an instance of {@link RispostaAllegaProtocolloFascicolo }
+     * 
+     */
+    public RispostaAllegaProtocolloFascicolo createRispostaAllegaProtocolloFascicolo() {
+        return new RispostaAllegaProtocolloFascicolo();
     }
 
     /**
@@ -287,11 +185,181 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PaginazioneType }
+     * Create an instance of {@link RispostaGestioneTabelle }
      * 
      */
-    public PaginazioneType createPaginazioneType() {
-        return new PaginazioneType();
+    public RispostaGestioneTabelle createRispostaGestioneTabelle() {
+        return new RispostaGestioneTabelle();
+    }
+
+    /**
+     * Create an instance of {@link CorrispondenteType }
+     * 
+     */
+    public CorrispondenteType createCorrispondenteType() {
+        return new CorrispondenteType();
+    }
+
+    /**
+     * Create an instance of {@link GestioneTabelleResponse }
+     * 
+     */
+    public GestioneTabelleResponse createGestioneTabelleResponse() {
+        return new GestioneTabelleResponse();
+    }
+
+    /**
+     * Create an instance of {@link DatiRicercaTabelleType }
+     * 
+     */
+    public DatiRicercaTabelleType createDatiRicercaTabelleType() {
+        return new DatiRicercaTabelleType();
+    }
+
+    /**
+     * Create an instance of {@link ProtocolloDettaglioType }
+     * 
+     */
+    public ProtocolloDettaglioType createProtocolloDettaglioType() {
+        return new ProtocolloDettaglioType();
+    }
+
+    /**
+     * Create an instance of {@link RegistroType }
+     * 
+     */
+    public RegistroType createRegistroType() {
+        return new RegistroType();
+    }
+
+    /**
+     * Create an instance of {@link AnagraficaType.AltriDati }
+     * 
+     */
+    public AnagraficaType.AltriDati createAnagraficaTypeAltriDati() {
+        return new AnagraficaType.AltriDati();
+    }
+
+    /**
+     * Create an instance of {@link FascicoloDettaglioType.AltriDati }
+     * 
+     */
+    public FascicoloDettaglioType.AltriDati createFascicoloDettaglioTypeAltriDati() {
+        return new FascicoloDettaglioType.AltriDati();
+    }
+
+    /**
+     * Create an instance of {@link RispostaGestioneAnagrafica }
+     * 
+     */
+    public RispostaGestioneAnagrafica createRispostaGestioneAnagrafica() {
+        return new RispostaGestioneAnagrafica();
+    }
+
+    /**
+     * Create an instance of {@link RichiestaAllegaProtocolloFascicolo }
+     * 
+     */
+    public RichiestaAllegaProtocolloFascicolo createRichiestaAllegaProtocolloFascicolo() {
+        return new RichiestaAllegaProtocolloFascicolo();
+    }
+
+    /**
+     * Create an instance of {@link CodificaType }
+     * 
+     */
+    public CodificaType createCodificaType() {
+        return new CodificaType();
+    }
+
+    /**
+     * Create an instance of {@link DatiRicercaAnagraficaType }
+     * 
+     */
+    public DatiRicercaAnagraficaType createDatiRicercaAnagraficaType() {
+        return new DatiRicercaAnagraficaType();
+    }
+
+    /**
+     * Create an instance of {@link GestioneAnagrafica }
+     * 
+     */
+    public GestioneAnagrafica createGestioneAnagrafica() {
+        return new GestioneAnagrafica();
+    }
+
+    /**
+     * Create an instance of {@link TipoSocietaType }
+     * 
+     */
+    public TipoSocietaType createTipoSocietaType() {
+        return new TipoSocietaType();
+    }
+
+    /**
+     * Create an instance of {@link GestioneFascicoliResponse }
+     * 
+     */
+    public GestioneFascicoliResponse createGestioneFascicoliResponse() {
+        return new GestioneFascicoliResponse();
+    }
+
+    /**
+     * Create an instance of {@link FascicoloDettaglioType.AltriDati.Attributi }
+     * 
+     */
+    public FascicoloDettaglioType.AltriDati.Attributi createFascicoloDettaglioTypeAltriDatiAttributi() {
+        return new FascicoloDettaglioType.AltriDati.Attributi();
+    }
+
+    /**
+     * Create an instance of {@link AllegaProtocolloFascicolo }
+     * 
+     */
+    public AllegaProtocolloFascicolo createAllegaProtocolloFascicolo() {
+        return new AllegaProtocolloFascicolo();
+    }
+
+    /**
+     * Create an instance of {@link TipoSchedaType }
+     * 
+     */
+    public TipoSchedaType createTipoSchedaType() {
+        return new TipoSchedaType();
+    }
+
+    /**
+     * Create an instance of {@link FascicoloDettaglioType }
+     * 
+     */
+    public FascicoloDettaglioType createFascicoloDettaglioType() {
+        return new FascicoloDettaglioType();
+    }
+
+    /**
+     * Create an instance of {@link ProtocolloRiferimentoType }
+     * 
+     */
+    public ProtocolloRiferimentoType createProtocolloRiferimentoType() {
+        return new ProtocolloRiferimentoType();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GestioneTabelleResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://infor.arezzo.it/jente/jprotocollo/webservices/gen", name = "gestioneTabelleResponse")
+    public JAXBElement<GestioneTabelleResponse> createGestioneTabelleResponse(GestioneTabelleResponse value) {
+        return new JAXBElement<GestioneTabelleResponse>(_GestioneTabelleResponse_QNAME, GestioneTabelleResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GestioneTabelle }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://infor.arezzo.it/jente/jprotocollo/webservices/gen", name = "gestioneTabelle")
+    public JAXBElement<GestioneTabelle> createGestioneTabelle(GestioneTabelle value) {
+        return new JAXBElement<GestioneTabelle>(_GestioneTabelle_QNAME, GestioneTabelle.class, null, value);
     }
 
     /**

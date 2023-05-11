@@ -56,9 +56,9 @@ import javax.xml.bind.annotation.XmlType;
 public class Soggetti {
 
     @XmlElements({
-        @XmlElement(name = "amministrazione", type = Amministrazione.class),
+        @XmlElement(name = "soggetto", type = Soggetto.class),
         @XmlElement(name = "anagrafica", type = Anagrafica.class),
-        @XmlElement(name = "soggetto", type = Soggetto.class)
+        @XmlElement(name = "amministrazione", type = Amministrazione.class)
     })
     protected List<Object> soggettoOrAnagraficaOrAmministrazione;
     @XmlElement(nillable = true)
@@ -82,9 +82,9 @@ public class Soggetti {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Amministrazione }
-     * {@link Anagrafica }
      * {@link Soggetto }
+     * {@link Anagrafica }
+     * {@link Amministrazione }
      * 
      * 
      */

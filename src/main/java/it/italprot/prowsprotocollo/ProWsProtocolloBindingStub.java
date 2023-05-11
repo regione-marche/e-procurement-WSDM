@@ -16,7 +16,7 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
     static org.apache.axis.description.OperationDesc [] _operations;
 
     static {
-        _operations = new org.apache.axis.description.OperationDesc[13];
+        _operations = new org.apache.axis.description.OperationDesc[16];
         _initOperationDesc1();
         _initOperationDesc2();
     }
@@ -121,6 +121,21 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         _operations[5] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("CheckDocumentoAllaFirma");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "token"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "numeroDocumento"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "items"), org.apache.axis.description.ParameterDesc.OUT, new javax.xml.namespace.QName("urn:proWsProtocollo", "itemEsitoFirma"), it.italprot.prowsprotocollo.ItemEsitoFirma.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "messageResult"), org.apache.axis.description.ParameterDesc.OUT, new javax.xml.namespace.QName("urn:proWsProtocollo", "messageResult"), it.italprot.prowsprotocollo.MessageResult.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(org.apache.axis.encoding.XMLType.AXIS_VOID);
+        oper.setStyle(org.apache.axis.constants.Style.RPC);
+        oper.setUse(org.apache.axis.constants.Use.ENCODED);
+        _operations[6] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
         oper.setName("GetProtocolloFattura");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "token"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
@@ -133,7 +148,7 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         oper.setReturnType(org.apache.axis.encoding.XMLType.AXIS_VOID);
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[6] = oper;
+        _operations[7] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("GetOrganigramma");
@@ -146,7 +161,7 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         oper.setReturnType(org.apache.axis.encoding.XMLType.AXIS_VOID);
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[7] = oper;
+        _operations[8] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("PutAllegato");
@@ -179,7 +194,41 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         oper.setReturnType(org.apache.axis.encoding.XMLType.AXIS_VOID);
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[8] = oper;
+        _operations[9] = oper;
+
+    }
+
+    private static void _initOperationDesc2(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("PutAllegatoDocumentoAllaFirma");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "token"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "numero"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "tipoFile"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "nomeFile"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "estensione"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "stream"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "note"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "marcaDocumento"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "mettiAllaFirma"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "allegati"), org.apache.axis.description.ParameterDesc.OUT, new javax.xml.namespace.QName("urn:proWsProtocollo", "allegati"), it.italprot.prowsprotocollo.Allegato[].class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "messageResult"), org.apache.axis.description.ParameterDesc.OUT, new javax.xml.namespace.QName("urn:proWsProtocollo", "messageResult"), it.italprot.prowsprotocollo.MessageResult.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(org.apache.axis.encoding.XMLType.AXIS_VOID);
+        oper.setStyle(org.apache.axis.constants.Style.RPC);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[10] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("PutProtocollo");
@@ -194,13 +243,23 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         oper.setReturnType(org.apache.axis.encoding.XMLType.AXIS_VOID);
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[9] = oper;
+        _operations[11] = oper;
 
-    }
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("PutDocumentoAllaFirma");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "token"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "datiDocumento"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:proWsProtocollo", "datiDocumento"), it.italprot.prowsprotocollo.DatiDocumento.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "datiDocumento"), org.apache.axis.description.ParameterDesc.OUT, new javax.xml.namespace.QName("urn:proWsProtocollo", "retDocumento"), it.italprot.prowsprotocollo.RetDocumento.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "messageResult"), org.apache.axis.description.ParameterDesc.OUT, new javax.xml.namespace.QName("urn:proWsProtocollo", "messageResult"), it.italprot.prowsprotocollo.MessageResult.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(org.apache.axis.encoding.XMLType.AXIS_VOID);
+        oper.setStyle(org.apache.axis.constants.Style.RPC);
+        oper.setUse(org.apache.axis.constants.Use.ENCODED);
+        _operations[12] = oper;
 
-    private static void _initOperationDesc2(){
-        org.apache.axis.description.OperationDesc oper;
-        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("NotificaMailProtocollo");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "token"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
@@ -222,7 +281,7 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         oper.setReturnType(org.apache.axis.encoding.XMLType.AXIS_VOID);
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[10] = oper;
+        _operations[13] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("InsertDocumento");
@@ -239,7 +298,7 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         oper.setReturnType(org.apache.axis.encoding.XMLType.AXIS_VOID);
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[11] = oper;
+        _operations[14] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("GetNotificaMailProtocollo");
@@ -260,7 +319,7 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         oper.setReturnType(org.apache.axis.encoding.XMLType.AXIS_VOID);
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[12] = oper;
+        _operations[15] = oper;
 
     }
 
@@ -325,6 +384,13 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("urn:proWsProtocollo", "datiDocumento");
+            cachedSerQNames.add(qName);
+            cls = it.italprot.prowsprotocollo.DatiDocumento.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("urn:proWsProtocollo", "datiProtocollo");
             cachedSerQNames.add(qName);
             cls = it.italprot.prowsprotocollo.DatiProtocollo.class;
@@ -353,6 +419,13 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
             qName = new javax.xml.namespace.QName("urn:proWsProtocollo", "firmatario");
             cachedSerQNames.add(qName);
             cls = it.italprot.prowsprotocollo.Firmatario.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("urn:proWsProtocollo", "itemEsitoFirma");
+            cachedSerQNames.add(qName);
+            cls = it.italprot.prowsprotocollo.ItemEsitoFirma.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -444,6 +517,13 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
+            qName = new javax.xml.namespace.QName("urn:proWsProtocollo", "retDocumento");
+            cachedSerQNames.add(qName);
+            cls = it.italprot.prowsprotocollo.RetDocumento.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("urn:proWsProtocollo", "retProtocollo");
             cachedSerQNames.add(qName);
             cls = it.italprot.prowsprotocollo.RetProtocollo.class;
@@ -526,8 +606,7 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
             synchronized (this) {
                 if (firstCall()) {
                     // must set encoding style before registering serializers
-                    _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-                    _call.setEncodingStyle(org.apache.axis.Constants.URI_SOAP11_ENC);
+                    _call.setEncodingStyle(null);
                     for (int i = 0; i < cachedSerFactories.size(); ++i) {
                         java.lang.Class cls = (java.lang.Class) cachedSerClasses.get(i);
                         javax.xml.namespace.QName qName =
@@ -564,7 +643,7 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[0]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://93.43.91.194/itaTest/ws/Protocollo/proWsProtocollo.php/GetItaEngineContextToken");
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/GetItaEngineContextToken");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "GetItaEngineContextToken"));
 
@@ -595,7 +674,7 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[1]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://93.43.91.194/itaTest/ws/Protocollo/proWsProtocollo.php/GetItaEngineContextTokenInfo");
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/GetItaEngineContextTokenInfo");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "GetItaEngineContextTokenInfo"));
 
@@ -633,7 +712,7 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[2]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://93.43.91.194/itaTest/ws/Protocollo/proWsProtocollo.php/CheckItaEngineContextToken");
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/CheckItaEngineContextToken");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "CheckItaEngineContextToken"));
 
@@ -664,7 +743,7 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[3]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://93.43.91.194/itaTest/ws/Protocollo/proWsProtocollo.php/DestroyItaEngineContextToken");
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/DestroyItaEngineContextToken");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "DestroyItaEngineContextToken"));
 
@@ -695,7 +774,7 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[4]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://93.43.91.194/itaTest/ws/Protocollo/proWsProtocollo.php/GetAllegato");
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/GetAllegato");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "GetAllegato"));
 
@@ -733,7 +812,7 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[5]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://93.43.91.194/itaTest/ws/Protocollo/proWsProtocollo.php/GetProtocollo");
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/GetProtocollo");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "GetProtocollo"));
 
@@ -764,14 +843,52 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
 }
     }
 
-    public void getProtocolloFattura(java.lang.String token, java.lang.String fileFattura, it.italprot.prowsprotocollo.holders.ItemProtocolloHolder items, it.italprot.prowsprotocollo.holders.MessageResultHolder messageResult) throws java.rmi.RemoteException {
+    public void checkDocumentoAllaFirma(java.lang.String token, java.lang.String numeroDocumento, it.italprot.prowsprotocollo.holders.ItemEsitoFirmaHolder items, it.italprot.prowsprotocollo.holders.MessageResultHolder messageResult) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[6]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://93.43.91.194/itaTest/ws/Protocollo/proWsProtocollo.php/GetProtocolloFattura");
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/CheckDocumentoAllaFirma");
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("", "CheckDocumentoAllaFirma"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {token, numeroDocumento});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            java.util.Map _output;
+            _output = _call.getOutputParams();
+            try {
+                items.value = (it.italprot.prowsprotocollo.ItemEsitoFirma) _output.get(new javax.xml.namespace.QName("", "items"));
+            } catch (java.lang.Exception _exception) {
+                items.value = (it.italprot.prowsprotocollo.ItemEsitoFirma) org.apache.axis.utils.JavaUtils.convert(_output.get(new javax.xml.namespace.QName("", "items")), it.italprot.prowsprotocollo.ItemEsitoFirma.class);
+            }
+            try {
+                messageResult.value = (it.italprot.prowsprotocollo.MessageResult) _output.get(new javax.xml.namespace.QName("", "messageResult"));
+            } catch (java.lang.Exception _exception) {
+                messageResult.value = (it.italprot.prowsprotocollo.MessageResult) org.apache.axis.utils.JavaUtils.convert(_output.get(new javax.xml.namespace.QName("", "messageResult")), it.italprot.prowsprotocollo.MessageResult.class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
+    public void getProtocolloFattura(java.lang.String token, java.lang.String fileFattura, it.italprot.prowsprotocollo.holders.ItemProtocolloHolder items, it.italprot.prowsprotocollo.holders.MessageResultHolder messageResult) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[7]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/GetProtocolloFattura");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "GetProtocolloFattura"));
 
@@ -807,9 +924,9 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[7]);
+        _call.setOperation(_operations[8]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://93.43.91.194/itaTest/ws/Protocollo/proWsProtocollo.php/GetOrganigramma");
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/GetOrganigramma");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "GetOrganigramma"));
 
@@ -845,9 +962,9 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[8]);
+        _call.setOperation(_operations[9]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://93.43.91.194/itaTest/ws/Protocollo/proWsProtocollo.php/PutAllegato");
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/PutAllegato");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "PutAllegato"));
 
@@ -878,14 +995,55 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
 }
     }
 
+    public void putAllegatoDocumentoAllaFirma(java.lang.String token, java.lang.String numero, java.lang.String tipoFile, java.lang.String nomeFile, java.lang.String estensione, java.lang.String stream, java.lang.String note, java.lang.String marcaDocumento, java.lang.String mettiAllaFirma, it.italprot.prowsprotocollo.holders.AllegatiHolder allegati, it.italprot.prowsprotocollo.holders.MessageResultHolder messageResult) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[10]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/PutAllegatoDocumentoAllaFirma");
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("", "PutAllegatoDocumentoAllaFirma"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {token, numero, tipoFile, nomeFile, estensione, stream, note, marcaDocumento, mettiAllaFirma});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            java.util.Map _output;
+            _output = _call.getOutputParams();
+            try {
+                allegati.value = (it.italprot.prowsprotocollo.Allegato[]) _output.get(new javax.xml.namespace.QName("", "allegati"));
+            } catch (java.lang.Exception _exception) {
+                allegati.value = (it.italprot.prowsprotocollo.Allegato[]) org.apache.axis.utils.JavaUtils.convert(_output.get(new javax.xml.namespace.QName("", "allegati")), it.italprot.prowsprotocollo.Allegato[].class);
+            }
+            try {
+                messageResult.value = (it.italprot.prowsprotocollo.MessageResult) _output.get(new javax.xml.namespace.QName("", "messageResult"));
+            } catch (java.lang.Exception _exception) {
+                messageResult.value = (it.italprot.prowsprotocollo.MessageResult) org.apache.axis.utils.JavaUtils.convert(_output.get(new javax.xml.namespace.QName("", "messageResult")), it.italprot.prowsprotocollo.MessageResult.class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
     public void putProtocollo(java.lang.String token, it.italprot.prowsprotocollo.DatiProtocollo datiProtocollo, it.italprot.prowsprotocollo.holders.RetProtocolloHolder datiProtocollo2, it.italprot.prowsprotocollo.holders.MessageResultHolder messageResult) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[9]);
+        _call.setOperation(_operations[11]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://93.43.91.194/itaTest/ws/Protocollo/proWsProtocollo.php/PutProtocollo");
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/PutProtocollo");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "PutProtocollo"));
 
@@ -916,14 +1074,52 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
 }
     }
 
+    public void putDocumentoAllaFirma(java.lang.String token, it.italprot.prowsprotocollo.DatiDocumento datiDocumento, it.italprot.prowsprotocollo.holders.RetDocumentoHolder datiDocumento2, it.italprot.prowsprotocollo.holders.MessageResultHolder messageResult) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[12]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/PutDocumentoAllaFirma");
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("", "PutDocumentoAllaFirma"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {token, datiDocumento});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            java.util.Map _output;
+            _output = _call.getOutputParams();
+            try {
+                datiDocumento2.value = (it.italprot.prowsprotocollo.RetDocumento) _output.get(new javax.xml.namespace.QName("", "datiDocumento"));
+            } catch (java.lang.Exception _exception) {
+                datiDocumento2.value = (it.italprot.prowsprotocollo.RetDocumento) org.apache.axis.utils.JavaUtils.convert(_output.get(new javax.xml.namespace.QName("", "datiDocumento")), it.italprot.prowsprotocollo.RetDocumento.class);
+            }
+            try {
+                messageResult.value = (it.italprot.prowsprotocollo.MessageResult) _output.get(new javax.xml.namespace.QName("", "messageResult"));
+            } catch (java.lang.Exception _exception) {
+                messageResult.value = (it.italprot.prowsprotocollo.MessageResult) org.apache.axis.utils.JavaUtils.convert(_output.get(new javax.xml.namespace.QName("", "messageResult")), it.italprot.prowsprotocollo.MessageResult.class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
     public void notificaMailProtocollo(java.lang.String token, java.lang.String anno, java.lang.String numero, java.lang.String tipo, java.lang.String oggettoCustom, java.lang.String bodyCustom, it.italprot.prowsprotocollo.holders.StatoNotificaHolder statoNotifica, it.italprot.prowsprotocollo.holders.MessageResultHolder messageResult) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[10]);
+        _call.setOperation(_operations[13]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://93.43.91.194/itaTest/ws/Protocollo/proWsProtocollo.php/NotificaMailProtocollo");
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/NotificaMailProtocollo");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "NotificaMailProtocollo"));
 
@@ -959,9 +1155,9 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[11]);
+        _call.setOperation(_operations[14]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://93.43.91.194/itaTest/ws/Protocollo/proWsProtocollo.php/InsertDocumento");
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/InsertDocumento");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "InsertDocumento"));
 
@@ -997,9 +1193,9 @@ public class ProWsProtocolloBindingStub extends org.apache.axis.client.Stub impl
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[12]);
+        _call.setOperation(_operations[15]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://93.43.91.194/itaTest/ws/Protocollo/proWsProtocollo.php/GetNotificaMailProtocollo");
+        _call.setSOAPActionURI("https://prmc.nuvolaitalsoft.it/itaTest/ws/Protocollo/proWsProtocollo.php/GetNotificaMailProtocollo");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
         _call.setOperationName(new javax.xml.namespace.QName("", "GetNotificaMailProtocollo"));
 

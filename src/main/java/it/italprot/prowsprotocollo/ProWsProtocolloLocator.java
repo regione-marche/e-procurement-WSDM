@@ -22,7 +22,7 @@ public class ProWsProtocolloLocator extends org.apache.axis.client.Service imple
     }
 
     // Use to get a proxy class for proWsProtocolloPort
-    private java.lang.String proWsProtocolloPort_address = "http://93.43.91.194:5443/itaTest/ws/Protocollo/proWsProtocollo.php";
+    private java.lang.String proWsProtocolloPort_address = "https://prmc.nuvolaitalsoft.it:443/itaTest/ws/Protocollo/proWsProtocollo.php";
 
     public java.lang.String getproWsProtocolloPortAddress() {
         return proWsProtocolloPort_address;

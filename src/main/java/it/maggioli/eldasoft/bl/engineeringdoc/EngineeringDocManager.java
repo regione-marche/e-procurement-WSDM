@@ -1,42 +1,68 @@
 package it.maggioli.eldasoft.bl.engineeringdoc;
 
-import it.eng.auriga.repository2.webservices.addfolder.WSAddFolder;
-import it.eng.auriga.repository2.webservices.addfolder.WSAddFolderService;
-import it.eng.auriga.repository2.webservices.addfolder.WSAddFolderServiceLocator;
-import it.eng.auriga.repository2.webservices.addfolder.WSAddFolderSoapBindingStub;
-import it.eng.auriga.repository2.webservices.addunitadoc.WSAddUd;
-import it.eng.auriga.repository2.webservices.addunitadoc.WSAddUdService;
-import it.eng.auriga.repository2.webservices.addunitadoc.WSAddUdServiceLocator;
-import it.eng.auriga.repository2.webservices.addunitadoc.WSAddUdSoapBindingStub;
-import it.eng.auriga.repository2.webservices.extractmulti.WSExtractMulti;
-import it.eng.auriga.repository2.webservices.extractmulti.WSExtractMultiService;
-import it.eng.auriga.repository2.webservices.extractmulti.WSExtractMultiServiceLocator;
-import it.eng.auriga.repository2.webservices.extractmulti.WSExtractMultiSoapBindingStub;
-import it.eng.auriga.repository2.webservices.getmetadatafolder.WSGetMetadataFolder;
-import it.eng.auriga.repository2.webservices.getmetadatafolder.WSGetMetadataFolderService;
-import it.eng.auriga.repository2.webservices.getmetadatafolder.WSGetMetadataFolderServiceLocator;
-import it.eng.auriga.repository2.webservices.getmetadatafolder.WSGetMetadataFolderSoapBindingStub;
-import it.eng.auriga.repository2.webservices.getmetadataud.WSGetMetadataUd;
-import it.eng.auriga.repository2.webservices.getmetadataud.WSGetMetadataUdService;
-import it.eng.auriga.repository2.webservices.getmetadataud.WSGetMetadataUdServiceLocator;
-import it.eng.auriga.repository2.webservices.getmetadataud.WSGetMetadataUdSoapBindingStub;
-import it.eng.auriga.repository2.webservices.trovadocfolder.WSTrovaDocFolder;
-import it.eng.auriga.repository2.webservices.trovadocfolder.WSTrovaDocFolderService;
-import it.eng.auriga.repository2.webservices.trovadocfolder.WSTrovaDocFolderServiceLocator;
-import it.eng.auriga.repository2.webservices.trovadocfolder.WSTrovaDocFolderSoapBindingStub;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.rmi.RemoteException;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import javax.activation.DataHandler;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.rpc.ServiceException;
+import javax.xml.soap.AttachmentPart;
+import javax.xml.soap.MessageFactory;
+import javax.xml.soap.MimeHeaders;
+import javax.xml.soap.SOAPBody;
+import javax.xml.soap.SOAPConnection;
+import javax.xml.soap.SOAPConnectionFactory;
+import javax.xml.soap.SOAPConstants;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+import javax.xml.soap.SOAPPart;
+import javax.xml.ws.WebServiceException;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.log4j.Logger;
+import org.apache.ws.security.WSSecurityException;
+import org.apache.ws.security.util.Base64;
+import org.w3c.dom.NodeList;
+
 import it.engineering.documentale.xsd.baseoutput_ws.BaseOutputWS;
+import it.engineering.documentale.xsd.estermixidentificazioneud.EstremiRegNumType;
 import it.engineering.documentale.xsd.estermixidentificazioneud.EstremiXIdentificazioneUD;
+import it.engineering.documentale.xsd.newfolder.AssegnatarioEffType;
+import it.engineering.documentale.xsd.newfolder.ClassificazioneType;
+import it.engineering.documentale.xsd.newfolder.FascDiTitolarioType;
+import it.engineering.documentale.xsd.newfolder.LivelloGerarchiaType;
 import it.engineering.documentale.xsd.newfolder.NewFolder;
-import it.engineering.documentale.xsd.newfolder.NewFolder.DatiFolderCustom;
 import it.engineering.documentale.xsd.newud.AllegatoUDType;
+import it.engineering.documentale.xsd.newud.AssegnazioneInternaType;
+import it.engineering.documentale.xsd.newud.AttributoAddizionaleType;
 import it.engineering.documentale.xsd.newud.ClassifFascicoloType;
+import it.engineering.documentale.xsd.newud.ClassifUAType;
 import it.engineering.documentale.xsd.newud.DestinatarioEsternoType;
-import it.engineering.documentale.xsd.newud.EstremiXIdentificazioneFolderNoLibType;
 import it.engineering.documentale.xsd.newud.NewUD;
 import it.engineering.documentale.xsd.newud.NewUD.CollocazioneClassificazioneUD;
 import it.engineering.documentale.xsd.newud.NewUD.DatiEntrata;
 import it.engineering.documentale.xsd.newud.NewUD.DatiProduzione;
 import it.engineering.documentale.xsd.newud.NewUD.DatiUscita;
+import it.engineering.documentale.xsd.newud.NewUD.RegistrazioneDaDare;
 import it.engineering.documentale.xsd.newud.SoggettoEsternoType;
 import it.engineering.documentale.xsd.newud.UOType;
 import it.engineering.documentale.xsd.newud.VersioneElettronicaType;
@@ -46,6 +72,7 @@ import it.engineering.documentale.xsd.outputdatiud.ClassifFascicoloEstesoType;
 import it.engineering.documentale.xsd.outputdatiud.DatiUD;
 import it.engineering.documentale.xsd.outputfilesud.OutputFilesUD;
 import it.engineering.documentale.xsd.outputfilesud.OutputFilesUD.DatiFileEstratto;
+import it.engineering.documentale.xsd.outputorganigramma.NodoOrganigrammaType;
 import it.engineering.documentale.xsd.outputud.OutputUD;
 import it.engineering.documentale.xsd.searchoutputstd.Lista;
 import it.engineering.documentale.xsd.searchoutputstd.Lista.Riga;
@@ -56,7 +83,6 @@ import it.engineering.documentale.xsd.trovadocfolder.TrovaDocFolder;
 import it.engineering.documentale.xsd.trovadocfolder.TrovaDocFolder.FiltriAvanzati;
 import it.engineering.documentale.xsd.trovadocfolder.TrovaDocFolder.FiltriAvanzati.RegistrazioneDoc;
 import it.engineering.documentale.xsd.trovadocfolder.TrovaDocFolder.FiltriPrincipali;
-import it.engineering.documentale.xsd.trovadocfolder.TrovaDocFolder.FiltriPrincipali.CercaInFolder;
 import it.maggioli.eldasoft.bl.IWSDMManager;
 import it.maggioli.eldasoft.ws.dm.WSDMAggiungiAllegatiIn;
 import it.maggioli.eldasoft.ws.dm.WSDMAggiungiAllegatiRes;
@@ -89,38 +115,13 @@ import it.maggioli.eldasoft.ws.dm.WSDMProtocolloInOut;
 import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaIn;
 import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaRes;
 import it.maggioli.eldasoft.ws.dm.WSDMRicercaAccountEmail;
+import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicolo;
+import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicoloRes;
 import it.maggioli.eldasoft.ws.dm.WSDMTipoVoceRubrica;
 import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneIn;
 import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneRes;
+import it.maggioli.eldasoft.ws.dm.WSDMUfficio;
 import it.maggioli.eldasoft.ws.dm.WSDMVerificaMailRes;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.RemoteException;
-import java.util.Date;
-import java.util.List;
-
-import javax.activation.DataHandler;
-import javax.mail.util.ByteArrayDataSource;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.rpc.ServiceException;
-import javax.xml.soap.SOAPException;
-import javax.xml.ws.WebServiceException;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.log4j.Logger;
-import org.apache.ws.security.WSSecurityException;
-import org.apache.ws.security.util.Base64;
-import org.apache.xerces.dom.ElementNSImpl;
 
 /**
  * Manager per la gestione documentale mediante sistema di protocollo
@@ -130,34 +131,55 @@ import org.apache.xerces.dom.ElementNSImpl;
 
 public class EngineeringDocManager implements IWSDMManager {
 
-  static Logger               logger                              = Logger.getLogger(EngineeringDocManager.class);
+  static Logger               logger                                = Logger.getLogger(EngineeringDocManager.class);
 
   // Informazioni relative al documentale
-  static private String       WSADDUD                             = "java:comp/env/ENGINEERINGDOC_WSADDUD";
-  static private String       WSGETMETADATAUD                     = "java:comp/env/ENGINEERINGDOC_WSGETMETADATAUD";
-  static private String       WSEXTRACTMULTI                      = "java:comp/env/ENGINEERINGDOC_WSEXTRACTMULTI";
-  static private String       WSADDFOLDER                         = "java:comp/env/ENGINEERINGDOC_WSADDFOLDER";
-  static private String       WSGETMETADATAFOLDER                 = "java:comp/env/ENGINEERINGDOC_WSGETMETADATAFOLDER";
-  static private String       WSTROVADOCFOLDER                    = "java:comp/env/ENGINEERINGDOC_WSTROVADOCFOLDER";
+  static private String       WSADDUD                               = "java:comp/env/ENGINEERINGDOC_WSADDUD";
+  static private String       ADDUD_DISPACH_METHOD                  = "http://addunitadoc.webservices.repository2.auriga.eng.it";
 
-  static private String       WSADDUD_URL_NOT_DEFINED             = "WSDM - Gestione documentale: indirizzo servizio di inserimento di una unita' documentaria non definito. ";
-  static private String       WSGETMETADATAUD_URL_NOT_DEFINED     = "WSDM - Gestione documentale: indirizzo servizio di estrazione dei metadati di una unita' documentaria non definito. ";
-  static private String       WSEXTRACTMULTI_URL_NOT_DEFINED      = "WSDM - Gestione documentale: indirizzo servizio di estrazione di tutti i file relativi ad una unita' documentaria non definito. ";
-  static private String       WSADDFOLDER_URL_NOT_DEFINED         = "WSDM - Gestione documentale: indirizzo servizio di creazione di un nuovo folder non definito. ";
-  static private String       WSGETMETADATAFOLDER_URL_NOT_DEFINED = "WSDM - Gestione documentale: indirizzo servizio di estrazione dei metadati di un folder non definito. ";
-  static private String       WSTROVADOCFOLDER_URL_NOT_DEFINED    = "WSDM - Gestione documentale: indirizzo servizio di ricerca nel repository documentale non definito. ";
+  static private String       WSGETMETADATAUD                       = "java:comp/env/ENGINEERINGDOC_WSGETMETADATAUD";
+  static private String       GETMETADATAUD_DISPATCH_METHOD         = "http://getmetadataud.webservices.repository2.auriga.eng.it";
 
-  static private String       CODICEAPPLICAZIONE                  = "java:comp/env/ENGINEERINGDOC_CODICEAPPLICAZIONE";
-  static private String       ISTANZAAPPLICAZIONE                 = "java:comp/env/ENGINEERINGDOC_ISTANZAAPPLICAZIONE";
+  static private String       WSEXTRACTMULTI                        = "java:comp/env/ENGINEERINGDOC_WSEXTRACTMULTI";
+  static private String       EXTRACTMULTI_DISPATCH_METHOD          = "http://extractmulti.webservices.repository2.auriga.eng.it";
+
+  static private String       WSADDFOLDER                           = "java:comp/env/ENGINEERINGDOC_WSADDFOLDER";
+  static private String       WSADDFOLDER_DISPATCH_METHOD           = "http://addfolder.webservices.repository2.auriga.eng.it";
+  static private String       ADDFOLDER_GENERICS12                  = "java:comp/env/ENGINEERINGDOC_ADDFOLDER_GENERICS12";
+  static private String       ADDFOLDER_STRUTTURA                   = "java:comp/env/ENGINEERINGDOC_ADDFOLDER_STRUTTURA";
+
+  static private String       WSGETMETADATAFOLDER                   = "java:comp/env/ENGINEERINGDOC_WSGETMETADATAFOLDER";
+  static private String       GETMETADATAFOLDER_DISPATCH_METHOD     = "http://getmetadatafolder.webservices.repository2.auriga.eng.it";
+
+  static private String       WSTROVADOCFOLDER                      = "java:comp/env/ENGINEERINGDOC_WSTROVADOCFOLDER";
+  static private String       TROVADOCFOLDER_DISPATCH_METHOD        = "http://trovadocfolder.webservices.repository2.auriga.eng.it";
+
+  static private String       WSTROVAINORGANIGRAMMA                 = "java:comp/env/ENGINEERINGDOC_WSTROVAINORGANIGRAMMA";
+  static private String       TROVAINORGANIGRAMMA_DISPATCH_METHOD   = "http://trovainorganigramma.webservices.repository2.auriga.eng.it";
+
+  static private String       BEARER_OAUTH2                         = "java:comp/env/ENGINEERINGDOC_BEARER_OAUTH2";
+
+  static private String       WSADDUD_URL_NOT_DEFINED               = "WSDM - indirizzo servizio di inserimento di una unita' documentaria non definito. ";
+  static private String       WSGETMETADATAUD_URL_NOT_DEFINED       = "WSDM - indirizzo servizio di estrazione dei metadati di una unita' documentaria non definito. ";
+  static private String       WSEXTRACTMULTI_URL_NOT_DEFINED        = "WSDM - indirizzo servizio di estrazione di tutti i file relativi ad una unita' documentaria non definito. ";
+  static private String       WSADDFOLDER_URL_NOT_DEFINED           = "WSDM - indirizzo servizio di creazione di un nuovo folder non definito. ";
+  static private String       WSGETMETADATAFOLDER_URL_NOT_DEFINED   = "WSDM - indirizzo servizio di estrazione dei metadati di un folder non definito. ";
+  static private String       WSTROVADOCFOLDER_URL_NOT_DEFINED      = "WSDM - indirizzo servizio di ricerca nel repository documentale non definito. ";
+  static private String       WSTROVAINORGANIGRAMMA_URL_NOT_DEFINED = "WSDM - indirizzo servizio di ricerca nell'organigramma non definito. ";
+
+  static private String       BEARER_OAUTH2_NOT_DEFINED             = "WSDM - codice di autenticazione BEARER OAUTH2 non definito. ";
+
+  static private String       CODICEAPPLICAZIONE                    = "java:comp/env/ENGINEERINGDOC_CODICEAPPLICAZIONE";
+  static private String       ISTANZAAPPLICAZIONE                   = "java:comp/env/ENGINEERINGDOC_ISTANZAAPPLICAZIONE";
 
   // Documentale - stati per l'oggetto BaseOutputWS
-  static private final String WSRESULT_SUCCESS                    = "1";
+  static private final String WSRESULT_SUCCESS                      = "1";
 
   // Documentale - tipo provenienza, indica se unità documentaria in entrata
   // (E), uscita (U) o interna (I)
-  static public final String  ENG_DOCUMENTALE_IN_ENTRATA          = "E";
-  static public final String  ENG_DOCUMENTALE_IN_USCITA           = "U";
-  static public final String  ENG_DOCUMENTALE_INTERNO             = "I";
+  static public final String  ENG_DOCUMENTALE_IN_ENTRATA            = "E";
+  static public final String  ENG_DOCUMENTALE_IN_USCITA             = "U";
+  static public final String  ENG_DOCUMENTALE_INTERNO               = "I";
 
   @Override
   public WSDMListaProfiliRes _listaProfili(String username, String password, String utenteApplicativo) {
@@ -178,53 +200,161 @@ public class EngineeringDocManager implements IWSDMManager {
   @Override
   public WSDMListaUfficiRes _listaUffici(String username, String password, WSDMLoginAttr loginAttr, String codiceAoo,
       String descrizioneUfficio, String utente) {
+
+    if ("NDEF".equals(password)) {
+      password = null;
+    }
+
     WSDMListaUfficiRes wsdmListaUfficiRes = new WSDMListaUfficiRes();
-    wsdmListaUfficiRes.setEsito(false);
-    wsdmListaUfficiRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+
+    try {
+      String xmlTrovaInOrganigramma = "";
+      xmlTrovaInOrganigramma += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+      xmlTrovaInOrganigramma += "<TrovaInOrganigramma>";
+      xmlTrovaInOrganigramma += "<TipoNodo>UO</TipoNodo>";
+      xmlTrovaInOrganigramma += "<FinalitaRicerca>ASSEGNAZIONE</FinalitaRicerca>";
+      xmlTrovaInOrganigramma += "<DesNodo>" + "*" + descrizioneUfficio + "*" + "</DesNodo>";
+      xmlTrovaInOrganigramma += "</TrovaInOrganigramma>";
+
+      // XML Hash
+      byte[] xmlTrovaInOrganigrammaHash = DigestUtils.sha(xmlTrovaInOrganigramma.getBytes("UTF-8"));
+      String xmlTrovaInOrganigrammaHashBase64 = Base64.encode(xmlTrovaInOrganigrammaHash);
+
+      // Servizio per la lettura dell'organigramma
+      String urlWsTrovaInOrganigramma = InitialContext.doLookup(WSTROVAINORGANIGRAMMA);
+      if (urlWsTrovaInOrganigramma == null || (urlWsTrovaInOrganigramma != null && "".equals(urlWsTrovaInOrganigramma.trim()))) {
+        throw new Exception(WSGETMETADATAFOLDER_URL_NOT_DEFINED);
+      }
+
+      SOAPMessage soapMessageOrganigramma = _sendRequestSOAP(username, password, xmlTrovaInOrganigramma, xmlTrovaInOrganigrammaHashBase64,
+          urlWsTrovaInOrganigramma, TROVAINORGANIGRAMMA_DISPATCH_METHOD, null);
+      BaseOutputWS baseOutputOrganigramma = _getBaseOutputWS(soapMessageOrganigramma);
+
+      // Lettura della risposta
+      if (WSRESULT_SUCCESS.equals(baseOutputOrganigramma.getWSResult())) {
+
+        Iterator<AttachmentPart> attachmentsOrganigramma = soapMessageOrganigramma.getAttachments();
+
+        while (attachmentsOrganigramma.hasNext()) {
+          AttachmentPart attOrganigramma = (AttachmentPart) attachmentsOrganigramma.next();
+          DataHandler handlerOrganigramma = attOrganigramma.getDataHandler();
+          ByteArrayOutputStream baosFolder = new ByteArrayOutputStream();
+          handlerOrganigramma.writeTo(baosFolder);
+          String datiOrganigrammaXMLEscape = baosFolder.toString();
+          String datiOrganigrammaXML = StringEscapeUtils.unescapeXml(datiOrganigrammaXMLEscape);
+          datiOrganigrammaXML = datiOrganigrammaXML.replace("\u00a0", " ");
+
+          if (logger.isDebugEnabled()) logger.debug("datiOrganigrammaXMLEscape: " + datiOrganigrammaXMLEscape);
+          if (logger.isDebugEnabled()) logger.debug("datiOrganigrammaXML: " + datiOrganigrammaXML);
+
+          JAXBContext jaxbContext = JAXBContext.newInstance(it.engineering.documentale.xsd.outputorganigramma.Lista.class);
+          Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+          StringBuffer stringBufferXML = new StringBuffer(datiOrganigrammaXML);
+          Object objectJAXB = unmarshaller.unmarshal(new StringReader(stringBufferXML.toString()));
+
+          it.engineering.documentale.xsd.outputorganigramma.Lista listaUO = (it.engineering.documentale.xsd.outputorganigramma.Lista) objectJAXB;
+
+          List<NodoOrganigrammaType> listaNodiOrganigramma = listaUO.getNodoOrganigramma();
+
+          if (listaNodiOrganigramma.size() > 0) {
+            wsdmListaUfficiRes.setEsito(true);
+            WSDMUfficio[] wsdmUffici = new WSDMUfficio[listaNodiOrganigramma.size()];
+            for (int n = 0; n < listaNodiOrganigramma.size(); n++) {
+              NodoOrganigrammaType nodoOrganigramma = listaNodiOrganigramma.get(n);
+              String desNodo = nodoOrganigramma.getDesEstesaNodo();
+              String codiceUO = nodoOrganigramma.getCodiceUO();
+              wsdmUffici[n] = new WSDMUfficio();
+              wsdmUffici[n].setDescrizioneUfficio(desNodo);
+              wsdmUffici[n].setCodiceUfficio(codiceUO);
+              wsdmListaUfficiRes.setListaUffici(wsdmUffici);
+            }
+            wsdmListaUfficiRes.setListaUffici(wsdmUffici);
+          } else {
+            wsdmListaUfficiRes.setEsito(false);
+            wsdmListaUfficiRes.setMessaggio("Nessun elemento trovato");
+          }
+        }
+
+      } else {
+        wsdmListaUfficiRes.setEsito(false);
+        String errorContext = baseOutputOrganigramma.getWSError().getErrorContext();
+        BigInteger errorNumber = baseOutputOrganigramma.getWSError().getErrorNumber();
+        String errorMessage = baseOutputOrganigramma.getWSError().getErrorMessage();
+        wsdmListaUfficiRes.setMessaggio(errorContext + ", " + errorNumber.toString() + ", " + errorMessage);
+      }
+
+    } catch (WebServiceException w) {
+      wsdmListaUfficiRes.setEsito(false);
+      wsdmListaUfficiRes.setMessaggio(WS_ERROR + " " + w.getMessage());
+      logger.error("Errore (_listaUffici)", w);
+    } catch (NamingException e) {
+      wsdmListaUfficiRes.setEsito(false);
+      wsdmListaUfficiRes.setMessaggio(NAMING_ERROR + " " + e.getMessage());
+      logger.error("Errore (_listaUffici)", e);
+    } catch (Throwable t) {
+      wsdmListaUfficiRes.setEsito(false);
+      wsdmListaUfficiRes.setMessaggio(t.getMessage());
+      logger.error("Errore (_listaUffici)", t);
+    }
+
     return wsdmListaUfficiRes;
+  }
+
+  @Override
+  public WSDMProtocolloDocumentoRes _documentoInserisci(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn) {
+    return _protocolloDocumentoInserisci(username, password, loginAttr, wsdmprotocolloDocumentoIn, false);
   }
 
   @Override
   public WSDMProtocolloDocumentoRes _protocolloInserisci(String username, String password, WSDMLoginAttr loginAttr,
       WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn) {
-    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
-    wsdmprotocolloDocumentoRes.setEsito(false);
-    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
-    return wsdmprotocolloDocumentoRes;
+    return _protocolloDocumentoInserisci(username, password, loginAttr, wsdmprotocolloDocumentoIn, true);
   }
 
   @Override
   public WSDMProtocolloDocumentoRes _protocolloLeggi(String username, String password, WSDMLoginAttr loginAttr, Long annoProtocollo,
       String numeroProtocollo) {
     WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
-    wsdmprotocolloDocumentoRes.setEsito(false);
-    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+
+    if ("NDEF".equals(password)) {
+      password = null;
+    }
+
+    try {
+
+      StringBuffer messaggioCtr = new StringBuffer();
+      if (EngineeringDocUtilityControllo.ctrProtocolloLeggi(loginAttr, annoProtocollo, numeroProtocollo, messaggioCtr)) {
+        wsdmprotocolloDocumentoRes = this.getMetadataUDExtractMulti(username, password, annoProtocollo, numeroProtocollo, null, true);
+      } else {
+        // Il controllo preliminare non ha dato esito positivo.
+        // Si segnala all'utente il problema.
+        wsdmprotocolloDocumentoRes.setEsito(false);
+        wsdmprotocolloDocumentoRes.setMessaggio(messaggioCtr.toString());
+      }
+
+    } catch (WebServiceException w) {
+      wsdmprotocolloDocumentoRes.setEsito(false);
+      wsdmprotocolloDocumentoRes.setMessaggio(WS_ERROR + " " + w.getMessage());
+      logger.error("Errore (_documentoLeggi)", w);
+    } catch (NamingException e) {
+      wsdmprotocolloDocumentoRes.setEsito(false);
+      wsdmprotocolloDocumentoRes.setMessaggio(NAMING_ERROR + " " + e.getMessage());
+      logger.error("Errore (_documentoLeggi)", e);
+    } catch (Throwable t) {
+      wsdmprotocolloDocumentoRes.setEsito(false);
+      wsdmprotocolloDocumentoRes.setMessaggio(t.getMessage());
+      logger.error("Errore (_documentoLeggi)", t);
+    }
     return wsdmprotocolloDocumentoRes;
   }
 
-  /**
-   * Lettura di una chiave (key) da un lista (entry) di una mappa (map).
-   * 
-   * @param mapName
-   * @param keyName
-   * @return
-   */
-  private static String _readKey(String mapName, String keyName) {
+  private WSDMProtocolloDocumentoRes _protocolloDocumentoInserisci(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn, boolean isProtocollo) {
 
-    String look = "java:comp/env/tab/ENGINEERINGDOC/" + mapName + "/" + keyName;
-    String keyValue = null;
-    try {
-      keyValue = InitialContext.doLookup(look);
-    } catch (NamingException e) {
-
+    if ("NDEF".equals(password)) {
+      password = null;
     }
-
-    return keyValue;
-  }
-
-  @Override
-  public WSDMProtocolloDocumentoRes _documentoInserisci(String username, String password, WSDMLoginAttr loginAttr,
-      WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn) {
 
     // Il file XML in input ha come root element l'elemento NewUD riportato
     // nell'XSD NewUD.xsd. Il file primario e i file
@@ -252,13 +382,7 @@ public class EngineeringDocManager implements IWSDMManager {
     try {
 
       StringBuffer messaggioCtr = new StringBuffer();
-      if (EngineeringDocUtilityControllo.ctrDocumentoInserisci(loginAttr, wsdmprotocolloDocumentoIn, messaggioCtr)) {
-
-        // Codice applicazione
-        String codiceApplicazione = InitialContext.doLookup(CODICEAPPLICAZIONE);
-
-        // Istanza applicazione
-        String istanzaApplicazione = InitialContext.doLookup(ISTANZAAPPLICAZIONE);
+      if (EngineeringDocUtilityControllo.ctrProtocolloDocumentoInserisci(loginAttr, wsdmprotocolloDocumentoIn, messaggioCtr)) {
 
         // Verifica indirizzi
         String urlWSAddUD = InitialContext.doLookup(WSADDUD);
@@ -266,15 +390,17 @@ public class EngineeringDocManager implements IWSDMManager {
           throw new Exception(WSADDUD_URL_NOT_DEFINED);
         }
 
-        // Servizio
-        WSAddUdService addUdService = new WSAddUdServiceLocator();
-        WSAddUd addUdPort = addUdService.getWSAddUd(new URL(urlWSAddUD));
-        WSAddUdSoapBindingStub addUdStub = (WSAddUdSoapBindingStub) addUdPort;
-
         NewUD newUD = new NewUD();
 
         // Oggetto unita' documentaria
         newUD.setOggettoUD(wsdmprotocolloDocumentoIn.getOggetto());
+
+        // Tipo di registrazione
+        if (isProtocollo == true) {
+          RegistrazioneDaDare registrazioneDaDare = new RegistrazioneDaDare();
+          registrazioneDaDare.setCategoriaReg("PG");
+          newUD.getRegistrazioneDaDare().add(registrazioneDaDare);
+        }
 
         // Note unita' documentaria
         newUD.setNoteUD(wsdmprotocolloDocumentoIn.getDescrizione());
@@ -298,37 +424,95 @@ public class EngineeringDocManager implements IWSDMManager {
         // del
         // nuovo protocollo.
         boolean esitoInserimentoFascicolo = true;
-        String idFolder = null;
+
+        Long annoFascicolo = null;
+        String numeroFascicolo = null;
+        String classificaFascicolo = null;
+        String codiceFascicolo = null;
+
         if (WSDMInserimentoInFascicolo.SI_FASCICOLO_ESISTENTE.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())) {
-          idFolder = wsdmprotocolloDocumentoIn.getFascicolo().getCodiceFascicolo();
+
           CollocazioneClassificazioneUD collocazioneClassificazioneUD = new CollocazioneClassificazioneUD();
           List<ClassifFascicoloType> listaClassifFascicolo = collocazioneClassificazioneUD.getClassifFascicolo();
           ClassifFascicoloType classifFascicolo = new ClassifFascicoloType();
-          EstremiXIdentificazioneFolderNoLibType estremiFolder = new EstremiXIdentificazioneFolderNoLibType();
-          estremiFolder.setIdFolder(BigInteger.valueOf(new Long(idFolder)));
-          classifFascicolo.setFolderCustom(estremiFolder);
+          ClassifUAType classifUA = new ClassifUAType();
+
+          // Codice fascicolo
+          codiceFascicolo = wsdmprotocolloDocumentoIn.getFascicolo().getCodiceFascicolo();
+
+          // Anno fascicolo
+          annoFascicolo = wsdmprotocolloDocumentoIn.getFascicolo().getAnnoFascicolo();
+          classifUA.setAnnoAperturaUA(annoFascicolo.intValue());
+
+          // Livelli di classificazione del fascicolo
+          if (wsdmprotocolloDocumentoIn.getFascicolo().getClassificaFascicolo() != null) {
+            classificaFascicolo = wsdmprotocolloDocumentoIn.getFascicolo().getClassificaFascicolo();
+            String[] classificaFascicoloSplit = classificaFascicolo.split("\\.");
+            if (classificaFascicoloSplit.length > 0) {
+              for (int c = 0; c < classificaFascicoloSplit.length; c++) {
+                it.engineering.documentale.xsd.newud.LivelloGerarchiaType livelloClassificazione = new it.engineering.documentale.xsd.newud.LivelloGerarchiaType();
+                livelloClassificazione.setNro(c + 1);
+                livelloClassificazione.setCodice(classificaFascicoloSplit[c]);
+                classifUA.getLivelloClassificazione().add(livelloClassificazione);
+              }
+            }
+          }
+
+          // Numero progressivo
+          numeroFascicolo = wsdmprotocolloDocumentoIn.getFascicolo().getNumeroFascicolo();
+          classifUA.setNroProgrUA(new BigInteger(numeroFascicolo));
+          classifFascicolo.setClassifUA(classifUA);
           listaClassifFascicolo.add(classifFascicolo);
           newUD.setCollocazioneClassificazioneUD(collocazioneClassificazioneUD);
+
         } else if (WSDMInserimentoInFascicolo.SI_FASCICOLO_NUOVO.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())) {
           String oggettoNuovoFascicolo = wsdmprotocolloDocumentoIn.getFascicolo().getOggettoFascicolo();
           String descrizioneNuovoFascicolo = wsdmprotocolloDocumentoIn.getFascicolo().getDescrizioneFascicolo();
+          String classificaNuovoFascicolo = wsdmprotocolloDocumentoIn.getFascicolo().getClassificaFascicolo();
+          String strutturaNuovoFascicolo = wsdmprotocolloDocumentoIn.getFascicolo().getStruttura();
           WSDMFascicoloIn wsdmNuovoFascicoloIn = new WSDMFascicoloIn();
           wsdmNuovoFascicoloIn.setOggettoFascicolo(oggettoNuovoFascicolo);
           wsdmNuovoFascicoloIn.setDescrizioneFascicolo(descrizioneNuovoFascicolo);
+          wsdmNuovoFascicoloIn.setClassificaFascicolo(classificaNuovoFascicolo);
+          wsdmNuovoFascicoloIn.setStruttura(strutturaNuovoFascicolo);
           WSDMFascicoloRes wsdmNuovoFascicoloRes = this._fascicoloInserisci(username, password, loginAttr, wsdmNuovoFascicoloIn);
           if (!wsdmNuovoFascicoloRes.isEsito()) {
             esitoInserimentoFascicolo = false;
             wsdmprotocolloDocumentoRes.setEsito(false);
-            wsdmprotocolloDocumentoRes.setMessaggio("L'inserimento del nuovo fascicolo ha restituito il messaggio: "
-                + wsdmNuovoFascicoloRes.getMessaggio());
+            wsdmprotocolloDocumentoRes.setMessaggio(
+                "L'inserimento del nuovo fascicolo ha restituito il messaggio: " + wsdmNuovoFascicoloRes.getMessaggio());
           } else {
-            idFolder = wsdmNuovoFascicoloRes.getFascicolo().getCodiceFascicolo();
+            WSDMFascicolo nuovoFascicolo = wsdmNuovoFascicoloRes.getFascicolo();
             CollocazioneClassificazioneUD collocazioneClassificazioneUD = new CollocazioneClassificazioneUD();
             List<ClassifFascicoloType> listaClassifFascicolo = collocazioneClassificazioneUD.getClassifFascicolo();
             ClassifFascicoloType classifFascicolo = new ClassifFascicoloType();
-            EstremiXIdentificazioneFolderNoLibType estremiFolder = new EstremiXIdentificazioneFolderNoLibType();
-            estremiFolder.setIdFolder(BigInteger.valueOf(new Long(idFolder)));
-            classifFascicolo.setFolderCustom(estremiFolder);
+            ClassifUAType classifUA = new ClassifUAType();
+
+            // Codice fascicolo
+            codiceFascicolo = nuovoFascicolo.getCodiceFascicolo();
+
+            // Anno fascicolo
+            annoFascicolo = nuovoFascicolo.getAnnoFascicolo();
+            classifUA.setAnnoAperturaUA(annoFascicolo.intValue());
+
+            // *** Livelli di classificazione del fascicolo
+            if (nuovoFascicolo.getClassificaFascicolo() != null) {
+              classificaFascicolo = wsdmprotocolloDocumentoIn.getFascicolo().getClassificaFascicolo();
+              String[] classificaFascicoloSplit = classificaFascicolo.split("\\.");
+              if (classificaFascicoloSplit.length > 0) {
+                for (int c = 0; c < classificaFascicoloSplit.length; c++) {
+                  it.engineering.documentale.xsd.newud.LivelloGerarchiaType livelloClassificazione = new it.engineering.documentale.xsd.newud.LivelloGerarchiaType();
+                  livelloClassificazione.setNro(c + 1);
+                  livelloClassificazione.setCodice(classificaFascicoloSplit[c]);
+                  classifUA.getLivelloClassificazione().add(livelloClassificazione);
+                }
+              }
+            }
+
+            // Numero progressivo
+            numeroFascicolo = nuovoFascicolo.getNumeroFascicolo();
+            classifUA.setNroProgrUA(new BigInteger(numeroFascicolo));
+            classifFascicolo.setClassifUA(classifUA);
             listaClassifFascicolo.add(classifFascicolo);
             newUD.setCollocazioneClassificazioneUD(collocazioneClassificazioneUD);
           }
@@ -339,24 +523,27 @@ public class EngineeringDocManager implements IWSDMManager {
           // Documento in entrata
           // Valorizzare i dati di acquisizione "DatiEntrata" con i mittenti
           // esterni
-          this._documentoInserisciIN(wsdmprotocolloDocumentoIn, newUD);
+          this._protocolloDocumentoInserisciIN(wsdmprotocolloDocumentoIn, newUD);
 
           // Documento interno (tra uffici)
           // Valorizzare "DatiEntrata" con l'identificativo dell'unita'
           // organizzativa destinataria (ricezione)
-          this._documentoInserisciINT(wsdmprotocolloDocumentoIn, newUD);
+          this._protocolloDocumentoInserisciINT(wsdmprotocolloDocumentoIn, newUD);
 
           // Documento in uscita
           // Valorizzare "DatiUscita" con i destinatari esterni e l'ufficio di
           // spedizione con l'identificativo mittente
           // Valorizzare "DatiProduzione" con l'identificativo dell'unita'
           // organizzativa mittente (produttore)
-          this._documentoInserisciOUT(wsdmprotocolloDocumentoIn, newUD);
+          this._protocolloDocumentoInserisciOUT(wsdmprotocolloDocumentoIn, newUD);
+
+          // Gestione invio mail
+          _protocolloDocumentoInserisciInviaMail(wsdmprotocolloDocumentoIn, newUD);
 
           // Allegati. Gli allegati devono essere gestiti in "attach".
           // All'interno dell'XML di richiesta deve essere indicato il numero di
           // attach.
-          this._documentoInserisciAggiungiAllegati(wsdmprotocolloDocumentoIn, addUdStub, newUD);
+          this._protocolloDocumentoInserisciAggiungiAllegati(wsdmprotocolloDocumentoIn, newUD);
 
           // Conversione in stringa XML
           StringWriter xmlNewUDStringWriter = new StringWriter();
@@ -365,47 +552,75 @@ public class EngineeringDocManager implements IWSDMManager {
           String xmlNewUDInput = xmlNewUDStringWriter.toString();
 
           // XML Hash
-          byte[] xmlNewUDHash = DigestUtils.sha(xmlNewUDInput);
+          byte[] xmlNewUDHash = DigestUtils.sha(xmlNewUDInput.getBytes("UTF-8"));
           String xmlNewUDHashBase64 = Base64.encode(xmlNewUDHash);
 
-          // Log della richiesta
-          if (logger.isDebugEnabled()) logger.debug("Richiesta inserimento documento: " + xmlNewUDInput);
-
-          String baseOutputAddUdBase = addUdPort.service(codiceApplicazione, istanzaApplicazione, username, password, xmlNewUDInput,
-              xmlNewUDHashBase64);
-          String baseOutputAddUdXML = new String(Base64.decode(baseOutputAddUdBase));
-          BaseOutputWS baseOutputAddUd = this.getBaseOutputWSFromXML(baseOutputAddUdXML);
+          WSDMProtocolloAllegato[] allegati = wsdmprotocolloDocumentoIn.getAllegati();
+          SOAPMessage soapMessageAddUdBase = _sendRequestSOAP(username, password, xmlNewUDInput, xmlNewUDHashBase64, urlWSAddUD,
+              ADDUD_DISPACH_METHOD, allegati);
+          BaseOutputWS baseOutputAddUd = _getBaseOutputWS(soapMessageAddUdBase);
 
           if (WSRESULT_SUCCESS.equals(baseOutputAddUd.getWSResult())) {
 
             WSDMProtocolloDocumento wsdmprotocolloDocumento = new WSDMProtocolloDocumento();
 
-            Object[] attachmentsAddUd = addUdStub.getAttachments();
-            if (attachmentsAddUd != null) {
-              if (attachmentsAddUd.length > 0) {
-                for (int i = 0; i < attachmentsAddUd.length; i++) {
-                  // Il primo allegato contiene il file XML descritto da
-                  // OutputUD
-                  if (i == 0) {
-                    org.apache.axis.attachments.AttachmentPart attachPart = (org.apache.axis.attachments.AttachmentPart) attachmentsAddUd[i];
-                    DataHandler handler = attachPart.getDataHandler();
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    handler.writeTo(baos);
-                    String datiOutputUDXML = baos.toString();
-                    OutputUD outputUD = this.getOutputUDFromXML(datiOutputUDXML);
-                    wsdmprotocolloDocumento.setNumeroDocumento(String.valueOf(outputUD.getIdUD()));
+            Iterator<AttachmentPart> attachmentsAddUd = soapMessageAddUdBase.getAttachments();
+
+            while (attachmentsAddUd.hasNext()) {
+              AttachmentPart attachPart = attachmentsAddUd.next();
+              DataHandler handler = attachPart.getDataHandler();
+              ByteArrayOutputStream baos = new ByteArrayOutputStream();
+              handler.writeTo(baos);
+              String datiOutputUDXMLEscape = baos.toString();
+              String datiOutputUDXML = StringEscapeUtils.unescapeXml(datiOutputUDXMLEscape);
+              datiOutputUDXML = datiOutputUDXML.replace("\u00a0", " ");
+
+              if (logger.isDebugEnabled()) logger.debug("datiOutputUDXMLEscape: " + datiOutputUDXMLEscape);
+              if (logger.isDebugEnabled()) logger.debug("datiOutputUDXML: " + datiOutputUDXML);
+
+              // <?xml version="1.0" encoding="ISO-8859-1"?>
+              // <Output_UD>
+              // <IdUD>274505</IdUD>
+              // <RegistrazioneDataUD>
+              // <CategoriaReg>PG</CategoriaReg>
+              // <SiglaReg></SiglaReg>
+              // <AnnoReg>2021</AnnoReg>
+              // <NumReg>249</NumReg>
+              // <DataOraReg>2021-05-31T10:15:27+02:00</DataOraReg>
+              // </RegistrazioneDataUD>
+
+              OutputUD outputUD = this.getOutputUDFromXML(datiOutputUDXML);
+              if (outputUD.getRegistrazioneDataUD() != null) {
+                List<it.engineering.documentale.xsd.outputud.EstremiRegNumType> listaRegistrazioneDataUD = outputUD.getRegistrazioneDataUD();
+                if (listaRegistrazioneDataUD != null && listaRegistrazioneDataUD.size() > 0) {
+                  it.engineering.documentale.xsd.outputud.EstremiRegNumType registrazioneDataUD = listaRegistrazioneDataUD.get(0);
+                  wsdmprotocolloDocumento.setSiglaRegistrazione(registrazioneDataUD.getSiglaReg());
+                  wsdmprotocolloDocumento.setAnnoRegistrazione(new Long(registrazioneDataUD.getAnnoReg()));
+                  wsdmprotocolloDocumento.setNumeroRegistrazione(new Long(registrazioneDataUD.getNumReg()));
+                  // wsdmprotocolloDocumento.setDataRegistrazione(registrazioneDataUD.getDataOraReg().toGregorianCalendar().getTime());
+
+                  if ("PG".equals(registrazioneDataUD.getCategoriaReg())) {
+                    wsdmprotocolloDocumento.setAnnoProtocollo(new Long(registrazioneDataUD.getAnnoReg()));
+                    wsdmprotocolloDocumento.setNumeroProtocollo(String.valueOf(registrazioneDataUD.getNumReg()));
+                  } else {
                     wsdmprotocolloDocumento.setAnnoProtocollo(null);
                     wsdmprotocolloDocumento.setNumeroProtocollo(null);
                   }
+
                 }
               }
+
+              wsdmprotocolloDocumento.setNumeroDocumento(String.valueOf(outputUD.getIdUD()));
+
             }
 
-            if (idFolder != null) {
+            if (WSDMInserimentoInFascicolo.SI_FASCICOLO_ESISTENTE.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())
+                || WSDMInserimentoInFascicolo.SI_FASCICOLO_NUOVO.equals(wsdmprotocolloDocumentoIn.getInserimentoInFascicolo())) {
               WSDMFascicolo wsdmFascicolo = new WSDMFascicolo();
-              wsdmFascicolo.setAnnoFascicolo(null);
-              wsdmFascicolo.setNumeroFascicolo(null);
-              wsdmFascicolo.setCodiceFascicolo(idFolder);
+              wsdmFascicolo.setAnnoFascicolo(annoFascicolo);
+              wsdmFascicolo.setNumeroFascicolo(numeroFascicolo);
+              wsdmFascicolo.setCodiceFascicolo(codiceFascicolo);
+              wsdmFascicolo.setClassificaFascicolo(classificaFascicolo);
               wsdmprotocolloDocumento.setFascicolo(wsdmFascicolo);
             }
 
@@ -420,8 +635,6 @@ public class EngineeringDocManager implements IWSDMManager {
             wsdmprotocolloDocumentoRes.setMessaggio(errorContext + ", " + errorNumber.toString() + ", " + errorMessage);
           }
 
-          // Log della risposta
-          if (logger.isDebugEnabled()) logger.debug("Risposta inserimento documento: " + baseOutputAddUdXML);
         }
       } else {
         // Il controllo preliminare non ha dato esito positivo.
@@ -448,12 +661,39 @@ public class EngineeringDocManager implements IWSDMManager {
   }
 
   /**
+   * 
+   * @param wsdmprotocolloDocumentoIn
+   * @param newUD
+   */
+  private void _protocolloDocumentoInserisciInviaMail(WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn, NewUD newUD) {
+    if (wsdmprotocolloDocumentoIn.getInviaMail() != null) {
+      AttributoAddizionaleType attributoEmail = new AttributoAddizionaleType();
+      attributoEmail.setNome("INDIRIZZO_EMAIL_DEST_Ud");
+      String[] destinatariMail = wsdmprotocolloDocumentoIn.getInviaMail().getDestinatariMail();
+      if (destinatariMail != null && destinatariMail.length > 0) {
+        it.engineering.documentale.xsd.newud.AttributoAddizionaleType.Lista _lista = new it.engineering.documentale.xsd.newud.AttributoAddizionaleType.Lista();
+        for (int m = 0; m < destinatariMail.length; m++) {
+          it.engineering.documentale.xsd.newud.AttributoAddizionaleType.Lista.Riga _riga = new it.engineering.documentale.xsd.newud.AttributoAddizionaleType.Lista.Riga();
+          List<it.engineering.documentale.xsd.newud.AttributoAddizionaleType.Lista.Riga.Colonna> _listaColonna = _riga.getColonna();
+          it.engineering.documentale.xsd.newud.AttributoAddizionaleType.Lista.Riga.Colonna _colonna = new it.engineering.documentale.xsd.newud.AttributoAddizionaleType.Lista.Riga.Colonna();
+          _colonna.setNro(new BigInteger("1"));
+          _colonna.setContent(destinatariMail[m]);
+          _listaColonna.add(_colonna);
+          _lista.getRiga().add(_riga);
+        }
+        attributoEmail.setLista(_lista);
+      }
+      newUD.getAttributoAddUD().add(attributoEmail);
+    }
+  }
+
+  /**
    * Gestione dei dati per unita' documentari in ingresso (IN).
    * 
    * @param wsdmprotocolloDocumentoIn
    * @param newUD
    */
-  private void _documentoInserisciIN(WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn, NewUD newUD) {
+  private void _protocolloDocumentoInserisciIN(WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn, NewUD newUD) {
     if (WSDMProtocolloInOut.IN.equals(wsdmprotocolloDocumentoIn.getInout())) {
       WSDMProtocolloAnagrafica[] mittenti = wsdmprotocolloDocumentoIn.getMittenti();
       DatiEntrata datiEntrata = new DatiEntrata();
@@ -473,13 +713,63 @@ public class EngineeringDocManager implements IWSDMManager {
           mittentiEsterni.add(mittenteEsterno);
         }
       }
+      newUD.setDatiEntrata(datiEntrata);
+
       // Ufficio ricezione
-      if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria() != null) {
-        UOType uoDestinataria = new UOType();
-        uoDestinataria.setIdUO(BigInteger.valueOf(new Long(wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria())));
-        datiEntrata.setUffRicezione(uoDestinataria);
-        newUD.setDatiEntrata(datiEntrata);
+      // if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria() != null
+      // &&
+      // !"".equals(wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria().trim()))
+      // {
+      // UOType uoDestinataria = new UOType();
+      // uoDestinataria.setIdUO(BigInteger.valueOf(new
+      // Long(wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria())));
+      // datiEntrata.setUffRicezione(uoDestinataria);
+      // }
+
+      // Ufficio ricezione
+      if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria() != null
+          && !"".equals(wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria().trim())) {
+        AssegnazioneInternaType assegnazioneInterna = new AssegnazioneInternaType();
+        UOType uo = new UOType();
+
+        String idUnita = wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria().trim();
+        String[] idUnitaSplit = idUnita.split("\\.");
+
+        if (idUnitaSplit.length > 0) {
+          for (int u = 0; u < idUnitaSplit.length; u++) {
+            it.engineering.documentale.xsd.newud.LivelloGerarchiaType livelloUO = new it.engineering.documentale.xsd.newud.LivelloGerarchiaType();
+            livelloUO.setNro(u + 1);
+            livelloUO.setCodice(idUnitaSplit[u]);
+            uo.getLivelloUO().add(livelloUO);
+          }
+        }
+        assegnazioneInterna.setUO(uo);
+        assegnazioneInterna.setFlagPerConoscenza("0");
+        newUD.getAssegnazioneInterna().add(assegnazioneInterna);
       }
+      
+      // Unita' operativa di competenza
+      if (wsdmprotocolloDocumentoIn.getGenericS31() != null
+          && !"".equals(wsdmprotocolloDocumentoIn.getGenericS31().trim())) {
+        AssegnazioneInternaType assegnazioneInterna = new AssegnazioneInternaType();
+        UOType uo = new UOType();
+
+        String idUnita = wsdmprotocolloDocumentoIn.getGenericS31().trim();
+        String[] idUnitaSplit = idUnita.split("\\.");
+
+        if (idUnitaSplit.length > 0) {
+          for (int u = 0; u < idUnitaSplit.length; u++) {
+            it.engineering.documentale.xsd.newud.LivelloGerarchiaType livelloUO = new it.engineering.documentale.xsd.newud.LivelloGerarchiaType();
+            livelloUO.setNro(u + 1);
+            livelloUO.setCodice(idUnitaSplit[u]);
+            uo.getLivelloUO().add(livelloUO);
+          }
+        }
+        assegnazioneInterna.setUO(uo);
+        assegnazioneInterna.setFlagPerConoscenza("0");
+        newUD.getAssegnazioneInterna().add(assegnazioneInterna);
+      }
+      
     }
   }
 
@@ -489,15 +779,85 @@ public class EngineeringDocManager implements IWSDMManager {
    * @param wsdmprotocolloDocumentoIn
    * @param newUD
    */
-  private void _documentoInserisciINT(WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn, NewUD newUD) {
+  private void _protocolloDocumentoInserisciINT(WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn, NewUD newUD) {
     if (WSDMProtocolloInOut.INT.equals(wsdmprotocolloDocumentoIn.getInout())) {
 
-      if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria() != null) {
-        UOType uoDestinataria = new UOType();
-        uoDestinataria.setIdUO(BigInteger.valueOf(new Long(wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria())));
-        DatiEntrata datiEntrata = new DatiEntrata();
-        datiEntrata.setUffRicezione(uoDestinataria);
-        newUD.setDatiEntrata(datiEntrata);
+      // Ufficio produttore
+      if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaMittente() != null
+          && !"".equals(wsdmprotocolloDocumentoIn.getIdUnitaOperativaMittente().trim())) {
+
+        DatiProduzione datiProduzione = new DatiProduzione();
+        UOType uffProduttore = new UOType();
+
+        String idUnita = wsdmprotocolloDocumentoIn.getIdUnitaOperativaMittente().trim();
+        String[] idUnitaSplit = idUnita.split("\\.");
+
+        if (idUnitaSplit.length > 0) {
+          for (int u = 0; u < idUnitaSplit.length; u++) {
+            it.engineering.documentale.xsd.newud.LivelloGerarchiaType livelloUO = new it.engineering.documentale.xsd.newud.LivelloGerarchiaType();
+            livelloUO.setNro(u + 1);
+            livelloUO.setCodice(idUnitaSplit[u]);
+            uffProduttore.getLivelloUO().add(livelloUO);
+          }
+        }
+        datiProduzione.getUffProduttore().add(uffProduttore);
+        newUD.setDatiProduzione(datiProduzione);
+
+      }
+
+      // Ufficio ricezione
+      if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria() != null
+          && !"".equals(wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria().trim())) {
+        AssegnazioneInternaType assegnazioneInterna = new AssegnazioneInternaType();
+        UOType uo = new UOType();
+
+        String idUnita = wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria().trim();
+        String[] idUnitaSplit = idUnita.split("\\.");
+
+        if (idUnitaSplit.length > 0) {
+          for (int u = 0; u < idUnitaSplit.length; u++) {
+            it.engineering.documentale.xsd.newud.LivelloGerarchiaType livelloUO = new it.engineering.documentale.xsd.newud.LivelloGerarchiaType();
+            livelloUO.setNro(u + 1);
+            livelloUO.setCodice(idUnitaSplit[u]);
+            uo.getLivelloUO().add(livelloUO);
+          }
+        }
+        assegnazioneInterna.setUO(uo);
+        assegnazioneInterna.setFlagPerConoscenza("0");
+        newUD.getAssegnazioneInterna().add(assegnazioneInterna);
+      }
+
+      // if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria() != null
+      // &&
+      // !"".equals(wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria().trim()))
+      // {
+      // UOType uoDestinataria = new UOType();
+      // uoDestinataria.setIdUO(BigInteger.valueOf(new
+      // Long(wsdmprotocolloDocumentoIn.getIdUnitaOperativaDestinataria())));
+      // DatiEntrata datiEntrata = new DatiEntrata();
+      // datiEntrata.setUffRicezione(uoDestinataria);
+      // newUD.setDatiEntrata(datiEntrata);
+      // }
+      
+      if (wsdmprotocolloDocumentoIn.getGenericS31() != null
+          && !"".equals(wsdmprotocolloDocumentoIn.getGenericS31().trim())) {
+        AssegnazioneInternaType assegnazioneInterna = new AssegnazioneInternaType();
+        UOType uo = new UOType();
+
+        String idUnita = wsdmprotocolloDocumentoIn.getGenericS31().trim();
+        String[] idUnitaSplit = idUnita.split("\\.");
+
+        if (idUnitaSplit.length > 0) {
+          for (int u = 0; u < idUnitaSplit.length; u++) {
+            it.engineering.documentale.xsd.newud.LivelloGerarchiaType livelloUO = new it.engineering.documentale.xsd.newud.LivelloGerarchiaType();
+            livelloUO.setNro(u + 1);
+            livelloUO.setCodice(idUnitaSplit[u]);
+            uo.getLivelloUO().add(livelloUO);
+          }
+        }
+        assegnazioneInterna.setUO(uo);
+        assegnazioneInterna.setFlagPerConoscenza("0");
+        newUD.getAssegnazioneInterna().add(assegnazioneInterna);
       }
 
     }
@@ -509,7 +869,7 @@ public class EngineeringDocManager implements IWSDMManager {
    * @param wsdmprotocolloDocumentoIn
    * @param newUD
    */
-  private void _documentoInserisciOUT(WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn, NewUD newUD) {
+  private void _protocolloDocumentoInserisciOUT(WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn, NewUD newUD) {
     if (WSDMProtocolloInOut.OUT.equals(wsdmprotocolloDocumentoIn.getInout())) {
       DatiUscita datiUscita = new DatiUscita();
       WSDMProtocolloAnagrafica[] destinatari = wsdmprotocolloDocumentoIn.getDestinatari();
@@ -530,19 +890,61 @@ public class EngineeringDocManager implements IWSDMManager {
         newUD.setDatiUscita(datiUscita);
       }
 
-      if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaMittente() != null) {
-        // Mittente
-        UOType uoMittente = new UOType();
-        uoMittente.setIdUO(BigInteger.valueOf(new Long(wsdmprotocolloDocumentoIn.getIdUnitaOperativaMittente())));
+      // Ufficio produttore
+      if (wsdmprotocolloDocumentoIn.getIdUnitaOperativaMittente() != null
+          && !"".equals(wsdmprotocolloDocumentoIn.getIdUnitaOperativaMittente().trim())) {
 
-        // Identificativo ufficio di spedizione in "DatiUscita"
-        newUD.getDatiUscita().setUffSpedizione(uoMittente);
-
-        // Identificativo dell'unita' operativo del produttore
         DatiProduzione datiProduzione = new DatiProduzione();
-        List<UOType> listaUffProduttore = datiProduzione.getUffProduttore();
-        listaUffProduttore.add(uoMittente);
+        UOType uffProduttore = new UOType();
+
+        String idUnita = wsdmprotocolloDocumentoIn.getIdUnitaOperativaMittente().trim();
+        String[] idUnitaSplit = idUnita.split("\\.");
+
+        if (idUnitaSplit.length > 0) {
+          for (int u = 0; u < idUnitaSplit.length; u++) {
+            it.engineering.documentale.xsd.newud.LivelloGerarchiaType livelloUO = new it.engineering.documentale.xsd.newud.LivelloGerarchiaType();
+            livelloUO.setNro(u + 1);
+            livelloUO.setCodice(idUnitaSplit[u]);
+            uffProduttore.getLivelloUO().add(livelloUO);
+          }
+        }
+        datiProduzione.getUffProduttore().add(uffProduttore);
         newUD.setDatiProduzione(datiProduzione);
+
+        // // Mittente
+        // UOType uoMittente = new UOType();
+        // uoMittente.setIdUO(BigInteger.valueOf(new
+        // Long(wsdmprotocolloDocumentoIn.getIdUnitaOperativaMittente())));
+        //
+        // // Identificativo ufficio di spedizione in "DatiUscita"
+        // newUD.getDatiUscita().setUffSpedizione(uoMittente);
+        //
+        // // Identificativo dell'unita' operativo del produttore
+        // DatiProduzione datiProduzione = new DatiProduzione();
+        // List<UOType> listaUffProduttore = datiProduzione.getUffProduttore();
+        // listaUffProduttore.add(uoMittente);
+        // newUD.setDatiProduzione(datiProduzione);
+      }
+      
+      if (wsdmprotocolloDocumentoIn.getGenericS31() != null
+          && !"".equals(wsdmprotocolloDocumentoIn.getGenericS31().trim())) {
+        AssegnazioneInternaType assegnazioneInterna = new AssegnazioneInternaType();
+        UOType uo = new UOType();
+
+        String idUnita = wsdmprotocolloDocumentoIn.getGenericS31().trim();
+        String[] idUnitaSplit = idUnita.split("\\.");
+
+        if (idUnitaSplit.length > 0) {
+          for (int u = 0; u < idUnitaSplit.length; u++) {
+            it.engineering.documentale.xsd.newud.LivelloGerarchiaType livelloUO = new it.engineering.documentale.xsd.newud.LivelloGerarchiaType();
+            livelloUO.setNro(u + 1);
+            livelloUO.setCodice(idUnitaSplit[u]);
+            uo.getLivelloUO().add(livelloUO);
+          }
+        }
+        assegnazioneInterna.setUO(uo);
+        assegnazioneInterna.setFlagPerConoscenza("0");
+        newUD.getAssegnazioneInterna().add(assegnazioneInterna);
       }
 
     }
@@ -555,8 +957,7 @@ public class EngineeringDocManager implements IWSDMManager {
    * @param addUdStub
    * @param newUD
    */
-  private void _documentoInserisciAggiungiAllegati(WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn, WSAddUdSoapBindingStub addUdStub,
-      NewUD newUD) {
+  private void _protocolloDocumentoInserisciAggiungiAllegati(WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn, NewUD newUD) {
     WSDMProtocolloAllegato[] allegati = wsdmprotocolloDocumentoIn.getAllegati();
     if (allegati != null && allegati.length > 0) {
 
@@ -572,8 +973,6 @@ public class EngineeringDocManager implements IWSDMManager {
         versioneElettronica.setNroAttachmentAssociato(BigInteger.valueOf(ai + 1));
         schedaAllegatoUD.setVersioneElettronica(versioneElettronica);
         listaAllegatiUD.add(schedaAllegatoUD);
-        DataHandler attachPart = new DataHandler(new ByteArrayDataSource(allegati[ai].getContenuto(), "application/octet-stream"));
-        addUdStub.addAttachment(attachPart);
       }
     }
   }
@@ -587,11 +986,15 @@ public class EngineeringDocManager implements IWSDMManager {
   public WSDMProtocolloDocumentoRes _documentoLeggi(String username, String password, WSDMLoginAttr loginAttr, String numeroDocumento) {
     WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
 
+    if ("NDEF".equals(password)) {
+      password = null;
+    }
+
     try {
 
       StringBuffer messaggioCtr = new StringBuffer();
       if (EngineeringDocUtilityControllo.ctrDocumentoLeggi(loginAttr, numeroDocumento, messaggioCtr)) {
-        wsdmprotocolloDocumentoRes = this.getMetadataUDExtractMulti(username, password, numeroDocumento, true);
+        wsdmprotocolloDocumentoRes = this.getMetadataUDExtractMulti(username, password, null, null, numeroDocumento, true);
       } else {
         // Il controllo preliminare non ha dato esito positivo.
         // Si segnala all'utente il problema.
@@ -625,11 +1028,15 @@ public class EngineeringDocManager implements IWSDMManager {
       String numeroDocumento) {
     WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
 
+    if ("NDEF".equals(password)) {
+      password = null;
+    }
+
     try {
 
       StringBuffer messaggioCtr = new StringBuffer();
       if (EngineeringDocUtilityControllo.ctrDocumentoLeggi(loginAttr, numeroDocumento, messaggioCtr)) {
-        wsdmprotocolloDocumentoRes = this.getMetadataUDExtractMulti(username, password, numeroDocumento, false);
+        wsdmprotocolloDocumentoRes = this.getMetadataUDExtractMulti(username, password, null, null, numeroDocumento, false);
       } else {
         // Il controllo preliminare non ha dato esito positivo.
         // Si segnala all'utente il problema.
@@ -671,21 +1078,30 @@ public class EngineeringDocManager implements IWSDMManager {
    * @throws SOAPException
    * @throws IOException
    */
-  private WSDMProtocolloDocumentoRes getMetadataUDExtractMulti(String username, String password, String numeroDocumento,
-      boolean extractMulti) throws NamingException, JAXBException, Exception, ServiceException, MalformedURLException, RemoteException,
-      WSSecurityException, SOAPException, IOException {
+  private WSDMProtocolloDocumentoRes getMetadataUDExtractMulti(String username, String password, Long annoProtocollo,
+      String numeroProtocollo, String numeroDocumento, boolean extractMulti) throws NamingException, JAXBException, Exception,
+      ServiceException, MalformedURLException, RemoteException, WSSecurityException, SOAPException, IOException {
+
+    if ("NDEF".equals(password)) {
+      password = null;
+    }
 
     WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
 
-    // Codice applicazione
-    String codiceApplicazione = InitialContext.doLookup(CODICEAPPLICAZIONE);
+    EstremiXIdentificazioneUD estremiUD = new EstremiXIdentificazioneUD();
 
-    // Istanza applicazione
-    String istanzaApplicazione = InitialContext.doLookup(ISTANZAAPPLICAZIONE);
+    // Identificazione del protocollo
+    if (annoProtocollo != null && numeroProtocollo != null) {
+      EstremiRegNumType estremiRegNum = new EstremiRegNumType();
+      estremiRegNum.setAnnoReg(annoProtocollo.intValue());
+      estremiRegNum.setNumReg(new Long(numeroProtocollo).intValue());
+      estremiUD.setEstremiRegNum(estremiRegNum);
+    }
 
     // Identificazione unita' documentaria
-    EstremiXIdentificazioneUD estremiUD = new EstremiXIdentificazioneUD();
-    estremiUD.setIdUD(new BigInteger(numeroDocumento));
+    if (numeroDocumento != null) {
+      estremiUD.setIdUD(new BigInteger(numeroDocumento));
+    }
 
     // Conversione in stringa XML
     StringWriter xmlEstremiUDStringWriter = new StringWriter();
@@ -694,7 +1110,7 @@ public class EngineeringDocManager implements IWSDMManager {
     String xmlEstremiUDInput = xmlEstremiUDStringWriter.toString();
 
     // XML Hash
-    byte[] xmlEstremiUDHash = DigestUtils.sha(xmlEstremiUDInput);
+    byte[] xmlEstremiUDHash = DigestUtils.sha(xmlEstremiUDInput.getBytes("UTF-8"));
     String xmlEstremiUDHashBase64 = Base64.encode(xmlEstremiUDHash);
 
     // Log della richiesta
@@ -705,15 +1121,10 @@ public class EngineeringDocManager implements IWSDMManager {
     if (urlWsGetMetadataUd == null || (urlWsGetMetadataUd != null && "".equals(urlWsGetMetadataUd.trim()))) {
       throw new Exception(WSGETMETADATAUD_URL_NOT_DEFINED);
     }
-    WSGetMetadataUdService getMetadataUdservice = new WSGetMetadataUdServiceLocator();
-    WSGetMetadataUd getMetadataUdport = getMetadataUdservice.getWSGetMetadataUd(new URL(urlWsGetMetadataUd));
-
-    String urlExtractMulti = InitialContext.doLookup(WSEXTRACTMULTI);
-    if (urlExtractMulti == null || (urlExtractMulti != null && "".equals(urlExtractMulti.trim()))) {
+    String urlWsExtractMulti = InitialContext.doLookup(WSEXTRACTMULTI);
+    if (urlWsExtractMulti == null || (urlWsExtractMulti != null && "".equals(urlWsExtractMulti.trim()))) {
       throw new Exception(WSEXTRACTMULTI_URL_NOT_DEFINED);
     }
-    WSExtractMultiService extractMultiService = new WSExtractMultiServiceLocator();
-    WSExtractMulti extractMultiPort = extractMultiService.getWSExtractMulti(new URL(urlExtractMulti));
 
     // Il file XML in input con gli estremi per individuare l'unita'
     // documentaria di cui estrarre i metadati ha come root element
@@ -724,129 +1135,173 @@ public class EngineeringDocManager implements IWSDMManager {
     // unico attachment XML (tracciato in allegato Output_DatiUD.xsd) che
     // contiene i metadati dell'unità documentaria. I metadati relativi a
     // tag non presenti sono metadati non valorizzati in DB.
-    String baseOutputMetadataUdBase = getMetadataUdport.service(codiceApplicazione, istanzaApplicazione, username, password,
-        xmlEstremiUDInput, xmlEstremiUDHashBase64);
-    String baseOutputMetadataUdXML = new String(Base64.decode(baseOutputMetadataUdBase));
-    BaseOutputWS baseOutputMetadataUd = this.getBaseOutputWSFromXML(baseOutputMetadataUdXML);
+    SOAPMessage soapMessageMetadataUd = _sendRequestSOAP(username, password, xmlEstremiUDInput, xmlEstremiUDHashBase64, urlWsGetMetadataUd,
+        GETMETADATAUD_DISPATCH_METHOD, null);
+    BaseOutputWS baseOutputMetadataUd = _getBaseOutputWS(soapMessageMetadataUd);
 
     if (WSRESULT_SUCCESS.equals(baseOutputMetadataUd.getWSResult())) {
-
-      WSGetMetadataUdSoapBindingStub getMetadataUdStub = (WSGetMetadataUdSoapBindingStub) getMetadataUdport;
-      Object[] attachmentsMetadataUd = getMetadataUdStub.getAttachments();
-
+      Iterator<AttachmentPart> attachmentsMetadataUd = soapMessageMetadataUd.getAttachments();
       WSDMProtocolloDocumento wsdmprotocolloDocumento = new WSDMProtocolloDocumento();
 
-      if (attachmentsMetadataUd != null) {
-        if (attachmentsMetadataUd.length > 0) {
-          for (int i = 0; i < attachmentsMetadataUd.length; i++) {
-            // Il primo allegato contiene il file XML descritto da
-            // "Output_DatiUD.xsd"
-            if (i == 0) {
-              org.apache.axis.attachments.AttachmentPart attachPart = (org.apache.axis.attachments.AttachmentPart) attachmentsMetadataUd[i];
-              DataHandler handler = attachPart.getDataHandler();
-              ByteArrayOutputStream baos = new ByteArrayOutputStream();
-              handler.writeTo(baos);
-              String datiUDXML = baos.toString();
-              DatiUD datiUD = this.getDatiUDFromXML(datiUDXML);
+      int iUd = 0;
+      while (attachmentsMetadataUd.hasNext()) {
+        iUd++;
+        // Il primo allegato contiene il file XML descritto da
+        // "Output_DatiUD.xsd"
+        if (iUd == 1) {
+          AttachmentPart attMetadataUd = (AttachmentPart) attachmentsMetadataUd.next();
+          DataHandler handlerMetadataUd = attMetadataUd.getDataHandler();
+          ByteArrayOutputStream baosMetadataUd = new ByteArrayOutputStream();
+          handlerMetadataUd.writeTo(baosMetadataUd);
+          String datiMetadataUdXMLEscape = baosMetadataUd.toString();
+          String datiMetadataUdXML = StringEscapeUtils.unescapeXml(datiMetadataUdXMLEscape);
+          datiMetadataUdXML = datiMetadataUdXML.replace("\u00a0", " ");
 
-              // Lettura numero documento
-              wsdmprotocolloDocumento.setNumeroDocumento(String.valueOf(datiUD.getIdUD()));
-              wsdmprotocolloDocumento.setAnnoProtocollo(null);
-              wsdmprotocolloDocumento.setNumeroProtocollo(null);
+          if (logger.isDebugEnabled()) logger.debug("datiMetadataUdXMLEscape: " + datiMetadataUdXMLEscape);
+          if (logger.isDebugEnabled()) logger.debug("datiMetadataUdXML: " + datiMetadataUdXML);
 
-              // Lettura del nome e dell'oggetto
-              wsdmprotocolloDocumento.setOggetto(datiUD.getNomeUD().getValue());
-              wsdmprotocolloDocumento.setDescrizione(datiUD.getOggettoUD().getValue());
+          DatiUD datiUD = this.getDatiUDFromXML(datiMetadataUdXML);
 
-              // Indica se unita' documentaria in entrata (E), uscita (U) o
-              // interna (I)
-              if (ENG_DOCUMENTALE_IN_ENTRATA.equals(datiUD.getTipoProvenienza())) {
-                wsdmprotocolloDocumento.setInout(WSDMProtocolloInOut.IN);
-              } else if (ENG_DOCUMENTALE_IN_USCITA.equals(datiUD.getTipoProvenienza())) {
-                wsdmprotocolloDocumento.setInout(WSDMProtocolloInOut.OUT);
-              } else if (ENG_DOCUMENTALE_INTERNO.equals(datiUD.getTipoProvenienza())) {
-                wsdmprotocolloDocumento.setInout(WSDMProtocolloInOut.INT);
-              }
+          // Lettura numero documento
+          wsdmprotocolloDocumento.setNumeroDocumento(String.valueOf(datiUD.getIdUD()));
+          wsdmprotocolloDocumento.setAnnoProtocollo(null);
+          wsdmprotocolloDocumento.setNumeroProtocollo(null);
 
-              // Lettura del fascicolo
-              if (datiUD.getCollocazioneClassificazioneUD() != null) {
-                List<ClassifFascicoloEstesoType> listaClassifFascicolo = datiUD.getCollocazioneClassificazioneUD().getClassifFascicolo();
-                if (listaClassifFascicolo != null && listaClassifFascicolo.size() > 0) {
-                  ClassifFascicoloEstesoType cfe = listaClassifFascicolo.get(0);
-                  if (cfe != null) {
-                    if (cfe.getFolderCustom() != null) {
-                      BigInteger idFolder = cfe.getFolderCustom().getIdFolder();
-                      WSDMFascicolo wsdmFascicolo = new WSDMFascicolo();
-                      wsdmFascicolo.setAnnoFascicolo(null);
-                      wsdmFascicolo.setNumeroFascicolo(null);
-                      wsdmFascicolo.setCodiceFascicolo(idFolder.toString());
-                      wsdmprotocolloDocumento.setFascicolo(wsdmFascicolo);
-                    }
-                  }
-                }
-              }
+          // Lettura del nome e dell'oggetto
+          wsdmprotocolloDocumento.setOggetto(datiUD.getNomeUD().getValue());
+          wsdmprotocolloDocumento.setDescrizione(datiUD.getOggettoUD().getValue());
 
-              // Lettura informazioni di registrazione
-              // Estremi di registrazione/numerazione dell'unità documentaria
-              // (se ne ha più di una viene presa la prima
-              // registrazione/numerazione presente andando nel seguente ordine:
-              // Protocollo Generale, Repertorio, Registrazione d'Emergenza,
-              // Altra numerazione esterna al sistema, Numerazione interna al
-              // sistema)
+          // Indica se unita' documentaria in entrata (E), uscita (U) o
+          // interna (I)
+          if (ENG_DOCUMENTALE_IN_ENTRATA.equals(datiUD.getTipoProvenienza())) {
+            wsdmprotocolloDocumento.setInout(WSDMProtocolloInOut.IN);
+          } else if (ENG_DOCUMENTALE_IN_USCITA.equals(datiUD.getTipoProvenienza())) {
+            wsdmprotocolloDocumento.setInout(WSDMProtocolloInOut.OUT);
+          } else if (ENG_DOCUMENTALE_INTERNO.equals(datiUD.getTipoProvenienza())) {
+            wsdmprotocolloDocumento.setInout(WSDMProtocolloInOut.INT);
+          } else {
+            wsdmprotocolloDocumento.setInout(WSDMProtocolloInOut.INT);
+          }
 
-              // <xs:element name="CategoriaReg">
-              // <xs:annotation>
-              // <xs:documentation>Categoria di registrazione / numerazione;
-              // valori ammessi
-              // PG=Protocollo Generale;
-              // PP=Protocollo Particolare;
-              // R=Repertorio;
-              // E=Registrazione d'emergenza;
-              // A=Altra numerazione data esternamente al sistema documentale;
-              // I=Altra numerazione data internamente al sistema documentale
-              // </xs:documentation>
-              // </xs:annotation>
-              // <xs:simpleType>
-              // <xs:restriction base="xs:string">
-              // <xs:enumeration value="PG"/>
-              // <xs:enumeration value="PP"/>
-              // <xs:enumeration value="R"/>
-              // <xs:enumeration value="E"/>
-              // <xs:enumeration value="A"/>
-              // <xs:enumeration value="I"/>
-              // </xs:restriction>
-              // </xs:simpleType>
-              // </xs:element>
-
-              if (datiUD.getRegistrazioneData() != null) {
-                List<it.engineering.documentale.xsd.outputdatiud.RegistrazioneNumerazioneType> listaRegistrazioneData = datiUD.getRegistrazioneData();
-                if (listaRegistrazioneData != null && listaRegistrazioneData.size() > 0) {
-                  boolean registrazioneTrovata = false;
-                  registrazioneTrovata = this.getRegistrazione(wsdmprotocolloDocumento, listaRegistrazioneData, "PG");
-                  if (registrazioneTrovata == false) {
-                    registrazioneTrovata = this.getRegistrazione(wsdmprotocolloDocumento, listaRegistrazioneData, "PP");
-                  }
-                  if (registrazioneTrovata == false) {
-                    registrazioneTrovata = this.getRegistrazione(wsdmprotocolloDocumento, listaRegistrazioneData, "R");
-                  }
-                  if (registrazioneTrovata == false) {
-                    registrazioneTrovata = this.getRegistrazione(wsdmprotocolloDocumento, listaRegistrazioneData, "E");
-                  }
-                  if (registrazioneTrovata == false) {
-                    registrazioneTrovata = this.getRegistrazione(wsdmprotocolloDocumento, listaRegistrazioneData, "A");
-                  }
-                  if (registrazioneTrovata == false) {
-                    registrazioneTrovata = this.getRegistrazione(wsdmprotocolloDocumento, listaRegistrazioneData, "I");
-                  }
+          // Lettura del fascicolo
+          if (datiUD.getCollocazioneClassificazioneUD() != null) {
+            List<ClassifFascicoloEstesoType> listaClassifFascicolo = datiUD.getCollocazioneClassificazioneUD().getClassifFascicolo();
+            if (listaClassifFascicolo != null && listaClassifFascicolo.size() > 0) {
+              ClassifFascicoloEstesoType cfe = listaClassifFascicolo.get(0);
+              if (cfe != null) {
+                if (cfe.getFolderCustom() != null) {
+                  BigInteger idFolder = cfe.getFolderCustom().getIdFolder();
+                  WSDMFascicolo wsdmFascicolo = new WSDMFascicolo();
+                  wsdmFascicolo.setAnnoFascicolo(null);
+                  wsdmFascicolo.setNumeroFascicolo(null);
+                  wsdmFascicolo.setCodiceFascicolo(idFolder.toString());
+                  wsdmprotocolloDocumento.setFascicolo(wsdmFascicolo);
                 }
               }
             }
-
-            wsdmprotocolloDocumentoRes.setEsito(true);
-            wsdmprotocolloDocumentoRes.setProtocolloDocumento(wsdmprotocolloDocumento);
-
           }
+
+          // Lettura informazioni di registrazione
+          // Estremi di registrazione/numerazione dell'unità documentaria
+          // (se ne ha più di una viene presa la prima
+          // registrazione/numerazione presente andando nel seguente ordine:
+          // Protocollo Generale, Repertorio, Registrazione d'Emergenza,
+          // Altra numerazione esterna al sistema, Numerazione interna al
+          // sistema)
+
+          // <xs:element name="CategoriaReg">
+          // <xs:annotation>
+          // <xs:documentation>Categoria di registrazione / numerazione;
+          // valori ammessi
+          // PG=Protocollo Generale;
+          // PP=Protocollo Particolare;
+          // R=Repertorio;
+          // E=Registrazione d'emergenza;
+          // A=Altra numerazione data esternamente al sistema documentale;
+          // I=Altra numerazione data internamente al sistema documentale
+          // </xs:documentation>
+          // </xs:annotation>
+          // <xs:simpleType>
+          // <xs:restriction base="xs:string">
+          // <xs:enumeration value="PG"/>
+          // <xs:enumeration value="PP"/>
+          // <xs:enumeration value="R"/>
+          // <xs:enumeration value="E"/>
+          // <xs:enumeration value="A"/>
+          // <xs:enumeration value="I"/>
+          // </xs:restriction>
+          // </xs:simpleType>
+          // </xs:element>
+
+          if (datiUD.getRegistrazioneData() != null) {
+            List<it.engineering.documentale.xsd.outputdatiud.RegistrazioneNumerazioneType> listaRegistrazioneData = datiUD.getRegistrazioneData();
+            if (listaRegistrazioneData != null && listaRegistrazioneData.size() > 0) {
+              boolean registrazioneTrovata = false;
+              registrazioneTrovata = this.getRegistrazione(wsdmprotocolloDocumento, listaRegistrazioneData, "PG");
+              if (registrazioneTrovata == false) {
+                registrazioneTrovata = this.getRegistrazione(wsdmprotocolloDocumento, listaRegistrazioneData, "PP");
+              }
+              if (registrazioneTrovata == false) {
+                registrazioneTrovata = this.getRegistrazione(wsdmprotocolloDocumento, listaRegistrazioneData, "R");
+              }
+              if (registrazioneTrovata == false) {
+                registrazioneTrovata = this.getRegistrazione(wsdmprotocolloDocumento, listaRegistrazioneData, "E");
+              }
+              if (registrazioneTrovata == false) {
+                registrazioneTrovata = this.getRegistrazione(wsdmprotocolloDocumento, listaRegistrazioneData, "A");
+              }
+              if (registrazioneTrovata == false) {
+                registrazioneTrovata = this.getRegistrazione(wsdmprotocolloDocumento, listaRegistrazioneData, "I");
+              }
+            }
+          }
+
+          // Lettura destinatari esterni per le protocollazioni in uscita
+          if (ENG_DOCUMENTALE_IN_USCITA.equals(datiUD.getTipoProvenienza())) {
+            if (datiUD.getDatiUscita() != null) {
+              if (datiUD.getDatiUscita().getDestinatarioEsterno() != null) {
+                List<it.engineering.documentale.xsd.outputdatiud.DestinatarioEsternoType> listaDestinatariEsterni = datiUD.getDatiUscita().getDestinatarioEsterno();
+                if (listaDestinatariEsterni.size() > 0) {
+                  WSDMProtocolloAnagrafica destinatari[] = new WSDMProtocolloAnagrafica[listaDestinatariEsterni.size()];
+                  for (int d = 0; d < listaDestinatariEsterni.size(); d++) {
+                    it.engineering.documentale.xsd.outputdatiud.DestinatarioEsternoType destinatarioEsterno = listaDestinatariEsterni.get(
+                        d);
+                    destinatari[d] = new WSDMProtocolloAnagrafica();
+                    destinatari[d].setCognomeointestazione(destinatarioEsterno.getDenominazioneCognome());
+                    destinatari[d].setNome(destinatarioEsterno.getNome());
+                    destinatari[d].setCodiceFiscale(destinatarioEsterno.getCodiceFiscale());
+                  }
+                  wsdmprotocolloDocumento.setDestinatari(destinatari);
+                }
+              }
+            }
+          }
+
+          // Lettura mittenti esterni per le protocollazioni in entrata
+          if (ENG_DOCUMENTALE_IN_ENTRATA.equals(datiUD.getTipoProvenienza())) {
+            if (datiUD.getDatiEntrata() != null) {
+              if (datiUD.getDatiEntrata().getMittenteEsterno() != null) {
+                List<it.engineering.documentale.xsd.outputdatiud.SoggettoEsternoType> listaSoggettiEsterni = datiUD.getDatiEntrata().getMittenteEsterno();
+                if (listaSoggettiEsterni.size() > 0) {
+                  WSDMProtocolloAnagrafica mittenti[] = new WSDMProtocolloAnagrafica[listaSoggettiEsterni.size()];
+                  for (int m = 0; m < listaSoggettiEsterni.size(); m++) {
+                    it.engineering.documentale.xsd.outputdatiud.SoggettoEsternoType soggettoEsterno = listaSoggettiEsterni.get(m);
+                    mittenti[m] = new WSDMProtocolloAnagrafica();
+                    mittenti[m].setCognomeointestazione(soggettoEsterno.getDenominazioneCognome());
+                    mittenti[m].setNome(soggettoEsterno.getNome());
+                    mittenti[m].setCodiceFiscale(soggettoEsterno.getCodiceFiscale());
+                  }
+                  wsdmprotocolloDocumento.setMittenti(mittenti);
+                }
+              }
+            }
+          }
+
         }
+
+        wsdmprotocolloDocumentoRes.setEsito(true);
+        wsdmprotocolloDocumentoRes.setProtocolloDocumento(wsdmprotocolloDocumento);
+
       }
 
       if (extractMulti) {
@@ -866,62 +1321,64 @@ public class EngineeringDocManager implements IWSDMManager {
         // del
         // documento stesso. Il file estratti sono restituiti come attachment
         // successivi (dal secondo in poi) del messaggio SOAP.
-        String baseOutputExtractMultiBase = extractMultiPort.service(codiceApplicazione, istanzaApplicazione, username, password,
-            xmlEstremiUDInput, xmlEstremiUDHashBase64);
-        String baseOutputExtractMultiXML = new String(Base64.decode(baseOutputExtractMultiBase));
-        BaseOutputWS baseOutputExtractMulti = this.getBaseOutputWSFromXML(baseOutputExtractMultiXML);
+        SOAPMessage soapMessageExtractMulti = _sendRequestSOAP(username, password, xmlEstremiUDInput, xmlEstremiUDHashBase64,
+            urlWsExtractMulti, EXTRACTMULTI_DISPATCH_METHOD, null);
+        BaseOutputWS baseOutputExtractMulti = _getBaseOutputWS(soapMessageMetadataUd);
 
         if (WSRESULT_SUCCESS.equals(baseOutputExtractMulti.getWSResult())) {
-          WSExtractMultiSoapBindingStub extractMultiStub = (WSExtractMultiSoapBindingStub) extractMultiPort;
-          Object[] attachmentsExtractMulti = extractMultiStub.getAttachments();
-          if (attachmentsExtractMulti != null) {
-            if (attachmentsExtractMulti.length > 0) {
-              for (int iEM = 0; iEM < attachmentsExtractMulti.length; iEM++) {
-                if (iEM == 0) {
-                  // Il primo attachment contiene il file XML di tipo
-                  // "OutputFilesUD"
-                  // con la lista ed i metadati dei file allegati.
-                  // I file allegati sono memorizzati dal secondo attachment
-                  // in
-                  // poi.
-                  org.apache.axis.attachments.AttachmentPart attachPartOutputFilesUD = (org.apache.axis.attachments.AttachmentPart) attachmentsExtractMulti[iEM];
-                  DataHandler handlerOutputFilesUD = attachPartOutputFilesUD.getDataHandler();
-                  ByteArrayOutputStream baosOutputFilesUD = new ByteArrayOutputStream();
-                  handlerOutputFilesUD.writeTo(baosOutputFilesUD);
-                  String outputFilesUDXML = baosOutputFilesUD.toString();
-                  OutputFilesUD outputFilesUD = this.getOutputFilesUDFromXML(outputFilesUDXML);
-                  List<DatiFileEstratto> datiFilesEstratti = outputFilesUD.getDatiFileEstratto();
+          Iterator<AttachmentPart> attachmentsExtractMulti = soapMessageExtractMulti.getAttachments();
 
-                  if (!datiFilesEstratti.isEmpty() && datiFilesEstratti.size() > 0) {
-                    WSDMProtocolloAllegato[] allegati = new WSDMProtocolloAllegato[datiFilesEstratti.size()];
-                    for (int iFE = 0; iFE < datiFilesEstratti.size(); iFE++) {
+          int iEM = 0;
+          while (attachmentsExtractMulti.hasNext()) {
+            // Il primo allegato contiene il file XML descritto da
+            // "Output_DatiUD.xsd"
+            if (iEM == 0) {
+              iEM++;
+              // Il primo attachment contiene il file XML di tipo
+              // "OutputFilesUD"
+              // con la lista ed i metadati dei file allegati.
+              // I file allegati sono memorizzati dal secondo attachment
+              // in
+              // poi.
+              AttachmentPart attachPartOutputFilesUD = (AttachmentPart) attachmentsExtractMulti.next();
+              DataHandler handlerOutputFilesUD = attachPartOutputFilesUD.getDataHandler();
+              ByteArrayOutputStream baosOutputFilesUD = new ByteArrayOutputStream();
+              handlerOutputFilesUD.writeTo(baosOutputFilesUD);
+              String outputFilesUDXMLEscape = baosOutputFilesUD.toString();
+              String outputFilesUDXML = StringEscapeUtils.unescapeXml(outputFilesUDXMLEscape);
+              outputFilesUDXML = outputFilesUDXML.replace("\u00a0", " ");
 
-                      DatiFileEstratto datiFE = datiFilesEstratti.get(iFE);
-                      // String nomeFile = "";
-                      // ElementNSImpl datiFENomeFile = (ElementNSImpl) datiFE.getNomeFile();
-                      // if (datiFENomeFile != null) nomeFile = datiFENomeFile.getTextContent();
-                      String nomeFile = datiFE.getNomeFile();
-                      String datiFEDesOggetto = datiFE.getDesOggetto();
-                      BigInteger datiFENroAttachment = datiFE.getNroAttachment();
+              if (logger.isDebugEnabled()) logger.debug("outputFilesUDXMLEscape: " + outputFilesUDXMLEscape);
+              if (logger.isDebugEnabled()) logger.debug("outputFilesUDXML: " + outputFilesUDXML);
 
-                      // Lettura del attachment
-                      // Al numero di attachment bisogna togliere "1" perche'
-                      // la
-                      // numerazione degli attachment inizia da "0"
-                      org.apache.axis.attachments.AttachmentPart attachPartAllegato = (org.apache.axis.attachments.AttachmentPart) attachmentsExtractMulti[datiFENroAttachment.intValue() - 1];
-                      DataHandler handlerAllegato = attachPartAllegato.getDataHandler();
-                      ByteArrayOutputStream baosAllegato = new ByteArrayOutputStream();
-                      handlerAllegato.writeTo(baosAllegato);
+              OutputFilesUD outputFilesUD = this.getOutputFilesUDFromXML(outputFilesUDXML);
+              List<DatiFileEstratto> datiFilesEstratti = outputFilesUD.getDatiFileEstratto();
 
-                      allegati[iFE] = new WSDMProtocolloAllegato();
-                      allegati[iFE].setContenuto(baosAllegato.toByteArray());
-                      allegati[iFE].setNome(nomeFile);
-                      allegati[iFE].setIDBase(new Long(datiFENroAttachment.longValue()));
-                      allegati[iFE].setTitolo(datiFEDesOggetto);
-                    }
-                    wsdmprotocolloDocumento.setAllegati(allegati);
+              if (!datiFilesEstratti.isEmpty() && datiFilesEstratti.size() > 0) {
+                WSDMProtocolloAllegato[] allegati = new WSDMProtocolloAllegato[datiFilesEstratti.size()];
+                for (int iFE = 0; iFE < datiFilesEstratti.size(); iFE++) {
+
+                  DatiFileEstratto datiFE = datiFilesEstratti.get(iFE);
+                  String nomeFile = (String) datiFE.getNomeFile();
+
+                  String datiFEDesOggetto = datiFE.getDesOggetto();
+                  BigInteger datiFENroAttachment = datiFE.getNroAttachment();
+
+                  // Lettura del attachment
+                  allegati[iFE] = new WSDMProtocolloAllegato();
+
+                  if (attachmentsExtractMulti.hasNext()) {
+                    AttachmentPart attachPartAllegato = (AttachmentPart) attachmentsExtractMulti.next();
+                    DataHandler handlerAllegato = attachPartAllegato.getDataHandler();
+                    ByteArrayOutputStream baosAllegato = new ByteArrayOutputStream();
+                    handlerAllegato.writeTo(baosAllegato);
+                    allegati[iFE].setContenuto(baosAllegato.toByteArray());
+                    allegati[iFE].setNome(nomeFile);
+                    allegati[iFE].setIDBase(new Long(datiFENroAttachment.longValue()));
+                    allegati[iFE].setTitolo(datiFEDesOggetto);
                   }
                 }
+                wsdmprotocolloDocumento.setAllegati(allegati);
               }
             }
           }
@@ -935,8 +1392,6 @@ public class EngineeringDocManager implements IWSDMManager {
       String errorMessage = baseOutputMetadataUd.getWSError().getErrorMessage();
       wsdmprotocolloDocumentoRes.setMessaggio(errorContext + ", " + errorNumber.toString() + ", " + errorMessage);
     }
-
-    if (logger.isDebugEnabled()) logger.debug("Risposta lettura documento: " + baseOutputMetadataUdXML);
 
     return wsdmprotocolloDocumentoRes;
 
@@ -961,6 +1416,12 @@ public class EngineeringDocManager implements IWSDMManager {
         wsdmprotocolloDocumento.setAnnoRegistrazione(new Long(registrazioneData.getAnnoReg()));
         wsdmprotocolloDocumento.setNumeroRegistrazione(new Long(registrazioneData.getNumReg()));
         wsdmprotocolloDocumento.setDataRegistrazione(registrazioneData.getDataOraReg().toGregorianCalendar().getTime());
+
+        if ("PG".equals(categoriaReg)) {
+          wsdmprotocolloDocumento.setAnnoProtocollo(new Long(registrazioneData.getAnnoReg()));
+          wsdmprotocolloDocumento.setNumeroProtocollo(String.valueOf(registrazioneData.getNumReg()));
+        }
+
       }
     }
     return registrazioneTrovata;
@@ -1066,25 +1527,152 @@ public class EngineeringDocManager implements IWSDMManager {
   public WSDMFascicoloRes _fascicoloInserisci(String username, String password, WSDMLoginAttr loginAttr, WSDMFascicoloIn wsdmfascicoloIn) {
     WSDMFascicoloRes wsdmFascicoloRes = new WSDMFascicoloRes();
 
+    if ("NDEF".equals(password)) {
+      password = null;
+    }
+
+    // Esempio creazione nuovo fascicolo classificato
+    // <?xml version="1.0" encoding="UTF-8"?>
+    // <NewFolder>
+    // <DatiFascDiTitolario>
+    // <FlagTipo>F</FlagTipo>
+    // <Classificazione>
+    // <LivelloClassificazione Nro="1" Codice="6"/>
+    // <LivelloClassificazione Nro="2" Codice="5"/>
+    // <LivelloClassificazione Nro="3" Codice="7"/>
+    // </Classificazione>
+    // <NroSecondario>XXXX 23448-2020</NroSecondario>
+    // <!-- opzionale ma utile da settare con un codice/n.ro identificativo
+    // parlante della pratica nel sistema chiamante -->
+    // </DatiFascDiTitolario>
+    // <Oggetto>DESCRIZIONE FASCICOLO TEST DA WS</Oggetto>
+    // <TipoDiDettaglio>
+    // <Decodifica_Nome>Tipologia XXX</Decodifica_Nome>
+    // <!-- da settare opzionalmente se si è stabilita una tipologia di
+    // fascicolo censita in Auriga -->
+    // </TipoDiDettaglio>
+    // <InCaricoA>
+    // <UO>
+    // <LivelloUO Nro="1" Codice="118"/>
+    // <LivelloUO Nro="2" Codice="22"/>
+    // </UO>
+    // </InCaricoA>
+    // <Note>NOTE PROVA TEST DA WS</Note>
+    // </NewFolder>
+
     try {
       StringBuffer messaggioCtr = new StringBuffer();
       if (EngineeringDocUtilityControllo.ctrFascicoloInserisci(loginAttr, wsdmfascicoloIn, messaggioCtr)) {
 
-        // Codice applicazione
-        String codiceApplicazione = InitialContext.doLookup(CODICEAPPLICAZIONE);
-
-        // Istanza applicazione
-        String istanzaApplicazione = InitialContext.doLookup(ISTANZAAPPLICAZIONE);
-
-        // Dati del nuovo folder
+        // Dati del fascicolo
         NewFolder newFolder = new NewFolder();
+
+        // Oggetto
         newFolder.setOggetto(wsdmfascicoloIn.getOggettoFascicolo());
+
+        // Eventuale descrizione --> note
         if (wsdmfascicoloIn.getDescrizioneFascicolo() != null) {
           newFolder.setNote(wsdmfascicoloIn.getDescrizioneFascicolo());
         }
-        DatiFolderCustom datiFolderCustom = new DatiFolderCustom();
-        datiFolderCustom.setNomeFolder(wsdmfascicoloIn.getOggettoFascicolo());
-        newFolder.setDatiFolderCustom(datiFolderCustom);
+
+        // Titolario di classificazione
+        try {
+          if (wsdmfascicoloIn.getClassificaFascicolo() != null) {
+            FascDiTitolarioType titolario = new FascDiTitolarioType();
+            // Flag tipo (indica se si tratta di Fascicolo [F], Sottofascicolo
+            // [SF])
+            titolario.setFlagTipo("F");
+
+            // Identificativo classificazione
+            String classificaFascicolo = wsdmfascicoloIn.getClassificaFascicolo().trim();
+            String[] classificaFascicoloSplit = classificaFascicolo.split("\\.");
+            if (classificaFascicoloSplit.length > 0) {
+              ClassificazioneType classificazione = new ClassificazioneType();
+              for (int c = 0; c < classificaFascicoloSplit.length; c++) {
+                LivelloGerarchiaType livelloClassificazione = new LivelloGerarchiaType();
+                livelloClassificazione.setNro(c + 1);
+                livelloClassificazione.setCodice(classificaFascicoloSplit[c]);
+                classificazione.getLivelloClassificazione().add(livelloClassificazione);
+              }
+              titolario.setClassificazione(classificazione);
+            }
+
+            // Numero secondario - GENERICS11
+            if (wsdmfascicoloIn.getGenericS11() != null && !"".equals(wsdmfascicoloIn.getGenericS11().trim())) {
+              titolario.setNroSecondario(wsdmfascicoloIn.getGenericS11());
+            }
+
+            newFolder.setDatiFascDiTitolario(titolario);
+
+          }
+        } catch (Exception e) {
+
+        }
+
+        // Oggetto
+        newFolder.setOggetto(wsdmfascicoloIn.getOggettoFascicolo());
+
+        // Tipo di dettaglio,
+        // da settare se e' definita una tipologia di fascicolo censita in
+        // Auriga
+        // Puo' essere assegnato dal client mediante l'elemento GENERICS12
+        // oppure di default con la configurazione (context.xml)
+        // ADDFOLDER_GENERICS12
+
+        try {
+          String genericS12 = null;
+          if (wsdmfascicoloIn.getGenericS12() != null && !"".equals(wsdmfascicoloIn.getGenericS12().trim())) {
+            genericS12 = wsdmfascicoloIn.getGenericS12();
+          } else {
+            genericS12 = InitialContext.doLookup(ADDFOLDER_GENERICS12);
+          }
+
+          if (genericS12 != null) {
+            it.engineering.documentale.xsd.newfolder.OggDiTabDiSistemaType tipoDiDettaglio = new it.engineering.documentale.xsd.newfolder.OggDiTabDiSistemaType();
+            tipoDiDettaglio.setDecodificaNome(genericS12);
+            newFolder.setTipoDiDettaglio(tipoDiDettaglio);
+          }
+
+        } catch (Exception e) {
+
+        }
+
+        // In carico A
+        // Puo' essere assegnato dal client mediante l'elemento STRUTTURA
+        // oppure di default con la configurazione (context.xml)
+        // ADDFOLDER_STRUTTURA
+        try {
+          String struttura = null;
+          if (wsdmfascicoloIn.getStruttura() != null && !"".equals(wsdmfascicoloIn.getStruttura().trim())) {
+            struttura = wsdmfascicoloIn.getStruttura().trim();
+          } else {
+            struttura = InitialContext.doLookup(ADDFOLDER_STRUTTURA);
+          }
+
+          if (struttura != null) {
+            String[] strutturaSplit = struttura.split("\\.");
+            if (strutturaSplit.length > 0) {
+              AssegnatarioEffType inCaricoA = new AssegnatarioEffType();
+              it.engineering.documentale.xsd.newfolder.UOType uo = new it.engineering.documentale.xsd.newfolder.UOType();
+              for (int i = 0; i < strutturaSplit.length; i++) {
+                LivelloGerarchiaType livelloUO = new LivelloGerarchiaType();
+                livelloUO.setNro(i + 1);
+                livelloUO.setCodice(strutturaSplit[i]);
+                uo.getLivelloUO().add(livelloUO);
+              }
+              inCaricoA.setUO(uo);
+              newFolder.setInCaricoA(inCaricoA);
+
+              it.engineering.documentale.xsd.newfolder.NewFolder.Apertura aperturaFolder = new it.engineering.documentale.xsd.newfolder.NewFolder.Apertura();
+              aperturaFolder.setUO(uo);
+              newFolder.setApertura(aperturaFolder);
+
+            }
+          }
+
+        } catch (Exception e) {
+
+        }
 
         // Conversione in stringa XML
         StringWriter xmlNewFolderStringWriter = new StringWriter();
@@ -1093,7 +1681,7 @@ public class EngineeringDocManager implements IWSDMManager {
         String xmlNewFolderInput = xmlNewFolderStringWriter.toString();
 
         // XML Hash
-        byte[] xmlNewFolderHash = DigestUtils.sha(xmlNewFolderInput);
+        byte[] xmlNewFolderHash = DigestUtils.sha(xmlNewFolderInput.getBytes("UTF-8"));
         String xmlNewFolderHashBase64 = Base64.encode(xmlNewFolderHash);
 
         // Log della richiesta
@@ -1105,39 +1693,35 @@ public class EngineeringDocManager implements IWSDMManager {
           throw new Exception(WSADDFOLDER_URL_NOT_DEFINED);
         }
 
-        WSAddFolderService wsAddFolderService = new WSAddFolderServiceLocator();
-        WSAddFolder wsAddFolderPort = wsAddFolderService.getWSAddFolder(new URL(urlWsAddFolder));
-        String baseOutputAddFolderBase64 = wsAddFolderPort.service(codiceApplicazione, istanzaApplicazione, username, password,
-            xmlNewFolderInput, xmlNewFolderHashBase64);
-        String baseOutputAddFolderXML = new String(Base64.decode(baseOutputAddFolderBase64));
-        BaseOutputWS baseOutputAddFolder = this.getBaseOutputWSFromXML(baseOutputAddFolderXML);
+        SOAPMessage soapMessageAddFolder = _sendRequestSOAP(username, password, xmlNewFolderInput, xmlNewFolderHashBase64, urlWsAddFolder,
+            WSADDFOLDER_DISPATCH_METHOD, null);
+        BaseOutputWS baseOutputAddFolder = _getBaseOutputWS(soapMessageAddFolder);
 
         if (WSRESULT_SUCCESS.equals(baseOutputAddFolder.getWSResult())) {
-          WSAddFolderSoapBindingStub wsAddFolderStud = (WSAddFolderSoapBindingStub) wsAddFolderPort;
-          Object[] attachmentAddFolder = wsAddFolderStud.getAttachments();
+
+          Iterator<AttachmentPart> attachmentAddFolder = soapMessageAddFolder.getAttachments();
 
           WSDMFascicolo wsdmFascicolo = new WSDMFascicolo();
 
-          if (attachmentAddFolder != null) {
-            if (attachmentAddFolder.length > 0) {
-              for (int i = 0; i < attachmentAddFolder.length; i++) {
-                // Il primo allegato contiene il file XML descritto da con il
-                // solo attributo IdFolder
-                if (i == 0) {
-                  org.apache.axis.attachments.AttachmentPart attachPart = (org.apache.axis.attachments.AttachmentPart) attachmentAddFolder[i];
-                  DataHandler handler = attachPart.getDataHandler();
-                  ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                  handler.writeTo(baos);
-                  String addFolderXML = baos.toString();
-                  int idfolder_i = addFolderXML.indexOf("<IdFolder>");
-                  int idfolder_f = addFolderXML.indexOf("</IdFolder>");
-                  int idfolder_i_len = ("<IdFolder>").length();
-                  String idFolder = addFolderXML.substring(idfolder_i + idfolder_i_len, idfolder_f);
-                  wsdmFascicolo.setCodiceFascicolo(idFolder);
-                }
-                wsdmFascicoloRes.setEsito(true);
-                wsdmFascicoloRes.setFascicolo(wsdmFascicolo);
-              }
+          while (attachmentAddFolder.hasNext()) {
+            AttachmentPart attAddFolder = (AttachmentPart) attachmentAddFolder.next();
+            DataHandler handlerFolder = attAddFolder.getDataHandler();
+            ByteArrayOutputStream baosFolder = new ByteArrayOutputStream();
+            handlerFolder.writeTo(baosFolder);
+            String datiAddFolderXMLEscape = baosFolder.toString();
+            String datiAddFolderXML = StringEscapeUtils.unescapeXml(datiAddFolderXMLEscape);
+
+            if (logger.isDebugEnabled()) logger.debug("datiAddFolderXMLEscape: " + datiAddFolderXMLEscape);
+            if (logger.isDebugEnabled()) logger.debug("datiAddFolderXML: " + datiAddFolderXML);
+
+            if (datiAddFolderXML != null) {
+              String idFolder = getXMLElementValue(datiAddFolderXML, "IdFolder");
+              WSDMFascicoloRes wsdmFascicoloLeggiRes = _fascicoloLeggi(username, password, loginAttr, idFolder, null, null, null, null);
+              wsdmFascicoloRes.setEsito(true);
+              wsdmFascicoloRes.setFascicolo(wsdmFascicoloLeggiRes.getFascicolo());
+            } else {
+              wsdmFascicoloRes.setEsito(true);
+              wsdmFascicoloRes.setFascicolo(wsdmFascicolo);
             }
           }
         } else {
@@ -1178,9 +1762,12 @@ public class EngineeringDocManager implements IWSDMManager {
     return wsdmfascicoloRes;
   }
 
-  @Override
-  public WSDMFascicoloRes _fascicoloLeggi(String username, String password, WSDMLoginAttr loginAttr, String codiceFascicolo,
-      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo) {
+  private WSDMFascicoloRes _fascicoloLeggiGeneric(String username, String password, WSDMLoginAttr loginAttr, String codiceFascicolo,
+      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo, boolean leggiDocumentiFascicolo) {
+
+    if ("NDEF".equals(password)) {
+      password = "";
+    }
 
     WSDMFascicoloRes wsdmFascicoloRes = new WSDMFascicoloRes();
 
@@ -1196,187 +1783,296 @@ public class EngineeringDocManager implements IWSDMManager {
 
     try {
       StringBuffer messaggioCtr = new StringBuffer();
-      if (EngineeringDocUtilityControllo.ctrFascicoloLeggi(loginAttr, codiceFascicolo, annoFascicolo, numeroFascicolo, messaggioCtr)) {
+      if (EngineeringDocUtilityControllo.ctrFascicoloLeggi(loginAttr, codiceFascicolo, annoFascicolo, numeroFascicolo, classificaFascicolo,
+          messaggioCtr)) {
 
-        // Codice applicazione
-        String codiceApplicazione = InitialContext.doLookup(CODICEAPPLICAZIONE);
+        boolean nuovaModalitaRicercaFascicolo = false;
 
-        // Istanza applicazione
-        String istanzaApplicazione = InitialContext.doLookup(ISTANZAAPPLICAZIONE);
+        String xmlEstremiFolderInput = "";
 
-        // Identificazione folder
-        String xmlEstremiFolderInput = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><EstremiXIdentificazioneFolder><IdFolder>"
-            + codiceFascicolo
-            + "</IdFolder></EstremiXIdentificazioneFolder>";
+        if (nuovaModalitaRicercaFascicolo) {
+          xmlEstremiFolderInput += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+          xmlEstremiFolderInput += "<TrovaDocFolder>";
+          xmlEstremiFolderInput += "<FiltriPrincipali>";
+          xmlEstremiFolderInput += "<TipoOggettiDaCercare>F</TipoOggettiDaCercare>";
+          xmlEstremiFolderInput += "<ClassifUA>";
+          xmlEstremiFolderInput += "<AnnoAperturaUA>" + annoFascicolo.toString() + "</AnnoAperturaUA>";
+
+          String[] classificaFascicoloSplit = classificaFascicolo.split("\\.");
+          if (classificaFascicoloSplit.length > 0) {
+            for (int c = 0; c < classificaFascicoloSplit.length; c++) {
+              xmlEstremiFolderInput += "<LivelloClassificazione Nro=\"" + (c + 1) + "\"Codice=\"" + classificaFascicoloSplit[c] + "\"/>";
+            }
+          }
+
+          xmlEstremiFolderInput += "<NroProgrUA>" + numeroFascicolo + "</NroProgrUA>";
+          xmlEstremiFolderInput += "</ClassifUA>";
+          xmlEstremiFolderInput += "</FiltriPrincipali>";
+          xmlEstremiFolderInput += "<LimitaEstrazioneAlCampo>2</LimitaEstrazioneAlCampo>";
+          xmlEstremiFolderInput += "</TrovaDocFolder>";
+        } else {
+          xmlEstremiFolderInput = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><EstremiXIdentificazioneFolder><IdFolder>"
+              + codiceFascicolo
+              + "</IdFolder></EstremiXIdentificazioneFolder>";
+        }
 
         // XML Hash
-        byte[] xmlEstremiFolderHash = DigestUtils.sha(xmlEstremiFolderInput);
+        byte[] xmlEstremiFolderHash = DigestUtils.sha(xmlEstremiFolderInput.getBytes("UTF-8"));
         String xmlEstremiFolderHashBase64 = Base64.encode(xmlEstremiFolderHash);
 
-        // Log della richiesta
-        if (logger.isDebugEnabled()) logger.debug("Richiesta lettura fascicolo/folder: " + xmlEstremiFolderInput);
-
-        // Verifica indirizzi e gestione servizi per lettura metadati del
-        // folder/fascicolo e ricerca documenti
+        // Servizio di lettura dei metadati
         String urlWsGetMetadataFolder = InitialContext.doLookup(WSGETMETADATAFOLDER);
         if (urlWsGetMetadataFolder == null || (urlWsGetMetadataFolder != null && "".equals(urlWsGetMetadataFolder.trim()))) {
           throw new Exception(WSGETMETADATAFOLDER_URL_NOT_DEFINED);
         }
 
-        WSGetMetadataFolderService getMetadataFolderService = new WSGetMetadataFolderServiceLocator();
-        WSGetMetadataFolder getMetadataFolderPort = getMetadataFolderService.getWSGetMetadataFolder(new URL(urlWsGetMetadataFolder));
-
+        // Servizio di lettura del documenti del fascicolo
         String urlWsTrovaDocFolder = InitialContext.doLookup(WSTROVADOCFOLDER);
         if (urlWsTrovaDocFolder == null || (urlWsTrovaDocFolder != null && "".equals(urlWsTrovaDocFolder.trim()))) {
           throw new Exception(WSTROVADOCFOLDER_URL_NOT_DEFINED);
         }
 
-        WSTrovaDocFolderService wsTrovaDocService = new WSTrovaDocFolderServiceLocator();
-        WSTrovaDocFolder wsTrovaDocFolderPort = wsTrovaDocService.getWSTrovaDocFolder(new URL(urlWsTrovaDocFolder));
+        SOAPMessage soapMessageMetadataFolder = _sendRequestSOAP(username, password, xmlEstremiFolderInput, xmlEstremiFolderHashBase64,
+            urlWsGetMetadataFolder, GETMETADATAFOLDER_DISPATCH_METHOD, null);
+        BaseOutputWS baseOutputMetadataFolder = _getBaseOutputWS(soapMessageMetadataFolder);
 
-        // Lettura dei metadati del folder/fascicolo
-        String baseOutputMetadataFolderBase64 = getMetadataFolderPort.service(codiceApplicazione, istanzaApplicazione, username, password,
-            xmlEstremiFolderInput, xmlEstremiFolderHashBase64);
-        String baseOutputMetadataFolderXML = new String(Base64.decode(baseOutputMetadataFolderBase64));
-        BaseOutputWS baseOutputMetadataFolder = this.getBaseOutputWSFromXML(baseOutputMetadataFolderXML);
-
+        // Lettura della risposta dei metadati del fascicolo
         if (WSRESULT_SUCCESS.equals(baseOutputMetadataFolder.getWSResult())) {
 
-          WSGetMetadataFolderSoapBindingStub getMetadataFolderStub = (WSGetMetadataFolderSoapBindingStub) getMetadataFolderPort;
-          Object[] attachmentMetadataFolder = getMetadataFolderStub.getAttachments();
+          Iterator<AttachmentPart> attachmentsMetadataFolder = soapMessageMetadataFolder.getAttachments();
 
           WSDMFascicolo wsdmFascicolo = new WSDMFascicolo();
 
-          if (attachmentMetadataFolder != null && attachmentMetadataFolder.length > 0) {
-            org.apache.axis.attachments.AttachmentPart attachPart = (org.apache.axis.attachments.AttachmentPart) attachmentMetadataFolder[0];
-            DataHandler handler = attachPart.getDataHandler();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            handler.writeTo(baos);
-            String datiFolderXML = baos.toString();
+          while (attachmentsMetadataFolder.hasNext()) {
+            AttachmentPart attMetadataFolder = (AttachmentPart) attachmentsMetadataFolder.next();
+            DataHandler handlerFolder = attMetadataFolder.getDataHandler();
+            ByteArrayOutputStream baosFolder = new ByteArrayOutputStream();
+            handlerFolder.writeTo(baosFolder);
+            String datiFolderXMLEscape = baosFolder.toString();
+            String datiFolderXML = StringEscapeUtils.unescapeXml(datiFolderXMLEscape);
+            datiFolderXML = datiFolderXML.replace("\u00a0", " ");
+
+            if (logger.isDebugEnabled()) logger.debug("datiFolderXMLEscape: " + datiFolderXMLEscape);
+            if (logger.isDebugEnabled()) logger.debug("datiFolderXML: " + datiFolderXML);
+
             DatiFolder datiFolder = this.getDatiFolderFromXML(datiFolderXML);
+
+            // Codice del fascicolo
+            wsdmFascicolo.setCodiceFascicolo(codiceFascicolo);
 
             // Nome ed oggetto
             String oggetto = "";
             String nomeFolder = datiFolder.getNomeFolder();
             String oggettoFolder = datiFolder.getOggetto();
             if (nomeFolder != null) oggetto = nomeFolder;
-            if (!nomeFolder.equals(oggettoFolder) && oggettoFolder != null && !"".equals(oggettoFolder.trim())) {
-              if ("".equals(oggetto)) {
-                oggetto = oggettoFolder;
-              } else {
-                oggetto += " - " + oggettoFolder;
+            if (nomeFolder == null && oggettoFolder != null) {
+              oggetto = oggettoFolder;
+            }
+            wsdmFascicolo.setOggettoFascicolo(oggetto);
+
+            // Classifica, descrizione classifica, numero del fascicolo
+            if (datiFolder.getDatiFascDiTitolario() != null) {
+              if (datiFolder.getDatiFascDiTitolario().getClassificazione() != null) {
+
+                it.engineering.documentale.xsd.outputdatifolder.ClassificazioneType classificazione = datiFolder.getDatiFascDiTitolario().getClassificazione();
+                if (classificazione != null) {
+                  // Lista di classificazione per ricavare il valore numerico di
+                  // classificazione (es. 6.5.7)
+                  List<it.engineering.documentale.xsd.outputdatifolder.LivelloGerarchiaType> listaLivelloClassificazione = classificazione.getLivelloClassificazione();
+                  String classifica = "";
+                  for (int c = 0; c < listaLivelloClassificazione.size(); c++) {
+                    if (c > 0) classifica += ".";
+                    classifica += listaLivelloClassificazione.get(c).getCodice();
+                  }
+                  wsdmFascicolo.setClassificaFascicolo(classifica);
+
+                  // Descrizione della classificazione
+                  if (classificazione.getDescrizioneClassificazione() != null) {
+                    wsdmFascicolo.setClassificaFascicoloDescrizione(classificazione.getDescrizioneClassificazione());
+                  }
+                }
+
+                // Numero del fascicolo
+                if (datiFolder.getDatiFascDiTitolario().getNroFascicolo() != null) {
+                  wsdmFascicolo.setNumeroFascicolo(datiFolder.getDatiFascDiTitolario().getNroFascicolo().toString());
+                }
+
               }
             }
 
-            wsdmFascicolo.setAnnoFascicolo(null);
-            wsdmFascicolo.setNumeroFascicolo(null);
-            wsdmFascicolo.setCodiceFascicolo(codiceFascicolo);
-            wsdmFascicolo.setOggettoFascicolo(oggetto);
-
+            // Data apertura e ano del fascicolo
             Apertura aperturaFolder = datiFolder.getApertura();
             if (aperturaFolder != null) {
               wsdmFascicolo.setDataFascicolo(aperturaFolder.getDataOra().toGregorianCalendar().getTime());
+              int annoAperturaFascicolo = aperturaFolder.getDataOra().toGregorianCalendar().getTime().getYear() + 1900;
+              wsdmFascicolo.setAnnoFascicolo(new Long(annoAperturaFascicolo));
             }
+
+            // Numero secondario - GENERICS11
+            if (datiFolder.getDatiFascDiTitolario() != null) {
+              if (datiFolder.getDatiFascDiTitolario().getNroSecondario() != null) {
+                String numeroSecondario = datiFolder.getDatiFascDiTitolario().getNroSecondario();
+                wsdmFascicolo.setGenericS11(numeroSecondario);
+              }
+            }
+
+            // Tipologia censita in Auriga - GENERICS12
+            if (datiFolder.getTipoDiDettaglio() != null) {
+              if (datiFolder.getTipoDiDettaglio().getDecodificaNome() != null) {
+                wsdmFascicolo.setGenericS12(datiFolder.getTipoDiDettaglio().getDecodificaNome());
+              }
+            }
+
+            // In carico A - Struttura
+            if (datiFolder.getInCaricoA() != null) {
+              it.engineering.documentale.xsd.outputdatifolder.AssegnatarioEffType inCaricoA = datiFolder.getInCaricoA();
+              if (inCaricoA.getUO() != null) {
+                List<it.engineering.documentale.xsd.outputdatifolder.LivelloGerarchiaType> listaLivelloUO = inCaricoA.getUO().getLivelloUO();
+                String struttura = "";
+                for (int u = 0; u < listaLivelloUO.size(); u++) {
+                  if (u > 0) struttura += ".";
+                  struttura += listaLivelloUO.get(u).getCodice();
+                }
+                wsdmFascicolo.setStruttura(struttura);
+              }
+            }
+
+            // Note
             wsdmFascicolo.setDescrizioneFascicolo(datiFolder.getNote());
 
             wsdmFascicoloRes.setEsito(true);
             wsdmFascicoloRes.setFascicolo(wsdmFascicolo);
 
-          }
+            if (leggiDocumentiFascicolo == true) {
+              // Ricerca delle unita' documentarie contenute nel
+              // folder/fascicolo
+              String xmlTrovaDocFolderInput = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+              xmlTrovaDocFolderInput += "<TrovaDocFolder>";
+              xmlTrovaDocFolderInput += "<FiltriPrincipali>";
+              xmlTrovaDocFolderInput += "<TipoOggettiDaCercare>D</TipoOggettiDaCercare>";
+              xmlTrovaDocFolderInput += "<CercaInFolder>";
+              xmlTrovaDocFolderInput += "<IdFolder>" + codiceFascicolo + "</IdFolder>";
+              xmlTrovaDocFolderInput += "<IncludiSubFolder>1</IncludiSubFolder>";
+              xmlTrovaDocFolderInput += "</CercaInFolder>";
+              xmlTrovaDocFolderInput += "</FiltriPrincipali>";
+              xmlTrovaDocFolderInput += "<LimitaEstrazioneAlCampo>1</LimitaEstrazioneAlCampo>";
+              xmlTrovaDocFolderInput += "<LimitaEstrazioneAlCampo>2</LimitaEstrazioneAlCampo>";
+              xmlTrovaDocFolderInput += "<LimitaEstrazioneAlCampo>3</LimitaEstrazioneAlCampo>";
+              xmlTrovaDocFolderInput += "<LimitaEstrazioneAlCampo>20</LimitaEstrazioneAlCampo>";
+              xmlTrovaDocFolderInput += "<EstraiAncheAttributoCustom>String</EstraiAncheAttributoCustom>";
+              xmlTrovaDocFolderInput += "<Ordinamento>";
+              xmlTrovaDocFolderInput += "<PerCampo>4</PerCampo>";
+              xmlTrovaDocFolderInput += "</Ordinamento>";
+              // xmlTrovaDocFolderInput += "<EstrazionePaginata>";
+              // xmlTrovaDocFolderInput += "<NroPagina>1</NroPagina>";
+              // xmlTrovaDocFolderInput +=
+              // "<NroRecordInPagina>100</NroRecordInPagina>";
+              // xmlTrovaDocFolderInput += "</EstrazionePaginata>";
+              xmlTrovaDocFolderInput += "</TrovaDocFolder>";
 
-          // Ricerca delle unita' documentarie contenute nel folder/fascicolo
-          TrovaDocFolder trovaDocFolder = new TrovaDocFolder();
-          CercaInFolder cercaInFolder = new CercaInFolder();
-          cercaInFolder.setIdFolder(BigInteger.valueOf(new Long(codiceFascicolo)));
-          cercaInFolder.setIncludiSubFolder("0");
-          FiltriPrincipali filtriPrincipali = new FiltriPrincipali();
-          filtriPrincipali.setTipoOggettiDaCercare("D");
-          filtriPrincipali.setCercaInFolder(cercaInFolder);
-          trovaDocFolder.setFiltriPrincipali(filtriPrincipali);
+              // XML Hash
+              byte[] xmlTrovaDocFolderHash = DigestUtils.sha(xmlTrovaDocFolderInput.getBytes("UTF-8"));
+              String xmlTrovaDocFolderHashBase64 = Base64.encode(xmlTrovaDocFolderHash);
 
-          // Conversione in stringa XML
-          StringWriter xmlTrovaDocFolderStringWriter = new StringWriter();
-          JAXBContext jaxbLocalContext = JAXBContext.newInstance(TrovaDocFolder.class);
-          jaxbLocalContext.createMarshaller().marshal(trovaDocFolder, xmlTrovaDocFolderStringWriter);
-          String xmlTrovaDocFolderInput = xmlTrovaDocFolderStringWriter.toString();
+              // Log della richiesta di lettura della lista dei documenti del
+              // fascicolo
+              if (logger.isDebugEnabled()) logger.debug("Richiesta lettura documento: " + xmlTrovaDocFolderInput);
 
-          // XML Hash
-          byte[] xmlTrovaDocFolderHash = DigestUtils.sha(xmlTrovaDocFolderInput);
-          String xmlTrovaDocFolderHashBase64 = Base64.encode(xmlTrovaDocFolderHash);
+              SOAPMessage soapMessageTrovaDocFolder = _sendRequestSOAP(username, password, xmlTrovaDocFolderInput,
+                  xmlTrovaDocFolderHashBase64, urlWsTrovaDocFolder, TROVADOCFOLDER_DISPATCH_METHOD, null);
+              BaseOutputWS baseOutputTrovaDocFolder = _getBaseOutputWS(soapMessageMetadataFolder);
 
-          // Log della richiesta
-          if (logger.isDebugEnabled()) logger.debug("Richiesta lettura documento: " + xmlTrovaDocFolderInput);
+              // Risposta della richiesta di lettura della lista dei documenti
+              // del
+              // fascicolo
+              if (WSRESULT_SUCCESS.equals(baseOutputTrovaDocFolder.getWSResult())) {
 
-          String baseOutputTrovaDocFolderBase64 = wsTrovaDocFolderPort.service(codiceApplicazione, istanzaApplicazione, username, password,
-              xmlTrovaDocFolderInput, xmlTrovaDocFolderHashBase64);
-          String baseOutputTrovaDocFolderXML = new String(Base64.decode(baseOutputTrovaDocFolderBase64));
-          BaseOutputWS baseOutputTrovaDocFolder = this.getBaseOutputWSFromXML(baseOutputTrovaDocFolderXML);
-
-          if (WSRESULT_SUCCESS.equals(baseOutputTrovaDocFolder.getWSResult())) {
-
-            WSTrovaDocFolderSoapBindingStub wsTrovaDocFolderStub = (WSTrovaDocFolderSoapBindingStub) wsTrovaDocFolderPort;
-            Object[] attachmentDocFolder = wsTrovaDocFolderStub.getAttachments();
-
-            if (attachmentDocFolder != null && attachmentDocFolder.length > 0) {
-              org.apache.axis.attachments.AttachmentPart attachPart = (org.apache.axis.attachments.AttachmentPart) attachmentDocFolder[0];
-              DataHandler handler = attachPart.getDataHandler();
-              ByteArrayOutputStream baos = new ByteArrayOutputStream();
-              handler.writeTo(baos);
-              String searchOutputSTDXML = baos.toString();
-              Lista lista = this.getSearchOutputSTDFromXML(searchOutputSTDXML);
-              if (lista.getRiga() != null && lista.getRiga().size() > 0) {
-
-                List<Riga> righe = lista.getRiga();
-                WSDMFascicoloDocumento[] wsdmFascicoloDocumento = new WSDMFascicoloDocumento[righe.size()];
-
-                for (int r = 0; r < righe.size(); r++) {
-
-                  Riga riga = righe.get(r);
-                  wsdmFascicoloDocumento[r] = new WSDMFascicoloDocumento();
-
-                  String flag_FU = null;
-                  String id_ud = null;
-                  String oggetto_ud = null;
-                  String provenienza_ud = null;
-
-                  List<Colonna> colonne = riga.getColonna();
-                  for (int c = 0; c < colonne.size(); c++) {
-                    Colonna colonna = colonne.get(c);
-                    BigInteger nro = colonna.getNro();
-                    // Nro 1 Flag F/U che indica se si tratta di unita'
-                    // documentaria o folder
-                    // Nro 2 Identificativo dell'unita' documentaria o folder
-                    // Nro 3 Nome dell'unità documentaria o folder
-                    // Nro 20 Tipo di provenienza dell'unità documentaria: E =
-                    // in Entrata, U = in Uscita, I = tra uffici
-                    if (nro.intValue() == 1) flag_FU = colonna.getContent();
-                    if (nro.intValue() == 2) id_ud = colonna.getContent();
-                    if (nro.intValue() == 3) oggetto_ud = colonna.getContent();
-                    if (nro.intValue() == 20) provenienza_ud = colonna.getContent();
+                Iterator<AttachmentPart> attachmentsTrovaDocFolder = soapMessageTrovaDocFolder.getAttachments();
+                while (attachmentsTrovaDocFolder.hasNext()) {
+                  AttachmentPart attTrovaDocFolder = (AttachmentPart) attachmentsTrovaDocFolder.next();
+                  DataHandler handlerDoc = attTrovaDocFolder.getDataHandler();
+                  ByteArrayOutputStream baosDoc = new ByteArrayOutputStream();
+                  handlerDoc.writeTo(baosDoc);
+                  String searchOutputSTDXMLEscape = baosDoc.toString();
+                  String searchOutputSTDXML = StringEscapeUtils.unescapeXml(searchOutputSTDXMLEscape);
+                  searchOutputSTDXML = searchOutputSTDXML.replace("\u00a0", " ");
+                  int posWarning = searchOutputSTDXML.indexOf("<WarningMessage>");
+                  if (posWarning > 0) {
+                    searchOutputSTDXML = searchOutputSTDXML.substring(0, posWarning);
                   }
 
-                  if ("U".equals(flag_FU)) {
-                    wsdmFascicoloDocumento[r].setNumeroDocumento(id_ud);
-                    wsdmFascicoloDocumento[r].setOggetto(oggetto_ud);
+                  if (logger.isDebugEnabled()) logger.debug("searchOutputSTDXMLEscape: " + searchOutputSTDXMLEscape);
+                  if (logger.isDebugEnabled()) logger.debug("searchOutputSTDXML: " + searchOutputSTDXML);
 
-                    if (ENG_DOCUMENTALE_IN_ENTRATA.equals(provenienza_ud)) {
-                      wsdmFascicoloDocumento[r].setInout(WSDMProtocolloInOut.IN);
-                    } else if (ENG_DOCUMENTALE_IN_USCITA.equals(provenienza_ud)) {
-                      wsdmFascicoloDocumento[r].setInout(WSDMProtocolloInOut.OUT);
-                    } else if (ENG_DOCUMENTALE_INTERNO.equals(provenienza_ud)) {
-                      wsdmFascicoloDocumento[r].setInout(WSDMProtocolloInOut.INT);
+                  Lista lista = this.getSearchOutputSTDFromXML(searchOutputSTDXML);
+
+                  if (lista.getRiga() != null && lista.getRiga().size() > 0) {
+
+                    List<Riga> righe = lista.getRiga();
+                    WSDMFascicoloDocumento[] wsdmFascicoloDocumento = new WSDMFascicoloDocumento[righe.size()];
+
+                    for (int r = 0; r < righe.size(); r++) {
+
+                      Riga riga = righe.get(r);
+                      wsdmFascicoloDocumento[r] = new WSDMFascicoloDocumento();
+
+                      String flag_FU = null;
+                      String id_ud = null;
+                      String oggetto_ud = null;
+                      String provenienza_ud = null;
+
+                      List<Colonna> colonne = riga.getColonna();
+                      for (int c = 0; c < colonne.size(); c++) {
+                        Colonna colonna = colonne.get(c);
+                        BigInteger nro = colonna.getNro();
+                        // Nro 1 Flag F/U che indica se si tratta di unita'
+                        // documentaria o folder
+                        // Nro 2 Identificativo dell'unita' documentaria o
+                        // folder
+                        // Nro 3 Nome dell'unità documentaria o folder
+                        // Nro 20 Tipo di provenienza dell'unità documentaria: E
+                        // =
+                        // in Entrata, U = in Uscita, I = tra uffici
+                        if (nro.intValue() == 1) flag_FU = colonna.getContent();
+                        if (nro.intValue() == 2) id_ud = colonna.getContent();
+                        if (nro.intValue() == 3) oggetto_ud = colonna.getContent();
+                        if (nro.intValue() == 20) provenienza_ud = colonna.getContent();
+                      }
+
+                      if ("U".equals(flag_FU)) {
+                        wsdmFascicoloDocumento[r].setNumeroDocumento(id_ud);
+                        wsdmFascicoloDocumento[r].setOggetto(oggetto_ud);
+
+                        // Ricavo altri dati interrogando la lettura del
+                        // documento
+                        // WSDMProtocolloDocumentoRes altriDatiRes =
+                        // this.getMetadataUDExtractMulti(username, password,
+                        // null, null, id_ud,
+                        // false);
+                        // if (altriDatiRes != null) {
+                        // if (altriDatiRes.getProtocolloDocumento() != null) {
+                        // wsdmFascicoloDocumento[r].setAnnoProtocollo(altriDatiRes.getProtocolloDocumento().getAnnoProtocollo());
+                        // wsdmFascicoloDocumento[r].setNumeroProtocollo(altriDatiRes.getProtocolloDocumento().getNumeroProtocollo());
+                        // }
+                        // }
+
+                        if (ENG_DOCUMENTALE_IN_ENTRATA.equals(provenienza_ud)) {
+                          wsdmFascicoloDocumento[r].setInout(WSDMProtocolloInOut.IN);
+                        } else if (ENG_DOCUMENTALE_IN_USCITA.equals(provenienza_ud)) {
+                          wsdmFascicoloDocumento[r].setInout(WSDMProtocolloInOut.OUT);
+                        } else if (ENG_DOCUMENTALE_INTERNO.equals(provenienza_ud)) {
+                          wsdmFascicoloDocumento[r].setInout(WSDMProtocolloInOut.INT);
+                        } else {
+                          wsdmFascicoloDocumento[r].setInout(WSDMProtocolloInOut.INT);
+                        }
+                      }
                     }
+                    wsdmFascicoloRes.getFascicolo().setDocumenti(wsdmFascicoloDocumento);
                   }
-
                 }
-
-                wsdmFascicoloRes.getFascicolo().setDocumenti(wsdmFascicoloDocumento);
-
               }
             }
-
           }
-
         } else {
           wsdmFascicoloRes.setEsito(false);
           String errorContext = baseOutputMetadataFolder.getWSError().getErrorContext();
@@ -1385,8 +2081,6 @@ public class EngineeringDocManager implements IWSDMManager {
           wsdmFascicoloRes.setMessaggio(errorContext + ", " + errorNumber.toString() + ", " + errorMessage);
         }
 
-        // Log della risposta
-        if (logger.isDebugEnabled()) logger.debug("Risposta lettura fascicolo/folder: " + baseOutputMetadataFolderXML);
       } else {
 
         wsdmFascicoloRes.setEsito(false);
@@ -1410,10 +2104,72 @@ public class EngineeringDocManager implements IWSDMManager {
     return wsdmFascicoloRes;
   }
 
+  /**
+   * Estrae il valore di un elemento da un XML-
+   * 
+   * @param datiXML
+   * @param elementName
+   * @return
+   */
+  private String getXMLElementValue(String datiXML, String elementName) {
+    int _p_in = datiXML.indexOf("<" + elementName + ">");
+    int _p_out = datiXML.indexOf("</" + elementName + ">", _p_in);
+    if (_p_out < 0) {
+      _p_out = datiXML.indexOf("</>", _p_in);
+    }
+    int _len_in = ("<" + elementName + ">").length();
+    String _v = datiXML.substring(_p_in + _len_in, _p_out);
+    return StringEscapeUtils.unescapeXml(_v);
+  }
+
+  /**
+   * Lettura del bearer oauth2 e creazione header.
+   * 
+   * @return
+   * @throws Exception
+   */
+  private Hashtable<String, String> _getBearerOauth2() throws Exception {
+    String bearerOauth2 = InitialContext.doLookup(BEARER_OAUTH2);
+    if (bearerOauth2 == null || (bearerOauth2 != null && "".equals(bearerOauth2.trim()))) {
+      throw new Exception(BEARER_OAUTH2_NOT_DEFINED);
+    }
+    Hashtable<String, String> headers = new Hashtable<String, String>();
+    headers.put("Authorization", "Bearer " + bearerOauth2);
+    return headers;
+  }
+
+  @Override
+  public WSDMFascicoloRes _fascicoloLeggi(String username, String password, WSDMLoginAttr loginAttr, String codiceFascicolo,
+      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo, String oggettoFascicolo) {
+    return _fascicoloLeggiGeneric(username, password, loginAttr, codiceFascicolo, annoFascicolo, numeroFascicolo, classificaFascicolo,
+        true);
+  }
+
   @Override
   public WSDMFascicoloRes _fascicoloMetadatiLeggi(String username, String password, WSDMLoginAttr loginAttr, String codiceFascicolo,
-      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo) {
-    return _fascicoloLeggi(username, password, loginAttr, codiceFascicolo, annoFascicolo, numeroFascicolo, classificaFascicolo);
+      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo, String oggettoFascicolo) {
+    return _fascicoloLeggiGeneric(username, password, loginAttr, codiceFascicolo, annoFascicolo, numeroFascicolo, classificaFascicolo,
+        false);
+  }
+
+  /**
+   * Lettura di una chiave (key) da un lista (entry) di una mappa (map).
+   * 
+   * @param mapName
+   * @param keyName
+   * @return
+   */
+  private static String _readKey(String mapName, String keyName) {
+
+    String look = "java:comp/env/tab/ENGINEERINGDOC/" + mapName + "/" + keyName;
+    String keyValue = null;
+    try {
+      keyValue = InitialContext.doLookup(look);
+    } catch (NamingException e) {
+
+    }
+
+    return keyValue;
   }
 
   @Override
@@ -1421,24 +2177,20 @@ public class EngineeringDocManager implements IWSDMManager {
       String organo, Long anno, String numero) {
     WSDMProtocolloDocumentoRes wsdmProtocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
 
+    if ("NDEF".equals(password)) {
+      password = "";
+    }
+
     try {
 
       StringBuffer messaggioCtr = new StringBuffer();
-      if (EngineeringDocUtilityControllo.ctrAttoLeggi(loginAttr, tipo, organo, anno, numero, messaggioCtr)) {
-
-        // Codice applicazione
-        String codiceApplicazione = InitialContext.doLookup(CODICEAPPLICAZIONE);
-
-        // Istanza applicazione
-        String istanzaApplicazione = InitialContext.doLookup(ISTANZAAPPLICAZIONE);
+      if (EngineeringDocUtilityControlloLegacy.ctrAttoLeggi(loginAttr, tipo, organo, anno, numero, messaggioCtr)) {
 
         // Verifica indirizzi e gestione servizi per la ricerca documenti
         String urlWsTrovaDocFolder = InitialContext.doLookup(WSTROVADOCFOLDER);
         if (urlWsTrovaDocFolder == null || (urlWsTrovaDocFolder != null && "".equals(urlWsTrovaDocFolder.trim()))) {
           throw new Exception(WSTROVADOCFOLDER_URL_NOT_DEFINED);
         }
-        WSTrovaDocFolderService wsTrovaDocService = new WSTrovaDocFolderServiceLocator();
-        WSTrovaDocFolder wsTrovaDocFolderPort = wsTrovaDocService.getWSTrovaDocFolder(new URL(urlWsTrovaDocFolder));
 
         TrovaDocFolder trovaDocFolder = new TrovaDocFolder();
 
@@ -1516,28 +2268,36 @@ public class EngineeringDocManager implements IWSDMManager {
         String xmlTrovaDocFolderInput = xmlTrovaDocFolderStringWriter.toString();
 
         // XML Hash
-        byte[] xmlTrovaDocFolderHash = DigestUtils.sha(xmlTrovaDocFolderInput);
+        byte[] xmlTrovaDocFolderHash = DigestUtils.sha(xmlTrovaDocFolderInput.getBytes("UTF-8"));
         String xmlTrovaDocFolderHashBase64 = Base64.encode(xmlTrovaDocFolderHash);
 
         // Log della richiesta
         if (logger.isDebugEnabled()) logger.debug("Richiesta lettura atto/contratto: " + xmlTrovaDocFolderInput);
 
-        String baseOutputTrovaDocFolderBase64 = wsTrovaDocFolderPort.service(codiceApplicazione, istanzaApplicazione, username, password,
-            xmlTrovaDocFolderInput, xmlTrovaDocFolderHashBase64);
-        String baseOutputTrovaDocFolderXML = new String(Base64.decode(baseOutputTrovaDocFolderBase64));
-        BaseOutputWS baseOutputTrovaDocFolder = this.getBaseOutputWSFromXML(baseOutputTrovaDocFolderXML);
+        SOAPMessage soapMessageMetadataFolder = _sendRequestSOAP(username, password, xmlTrovaDocFolderInput, xmlTrovaDocFolderHashBase64,
+            urlWsTrovaDocFolder, TROVADOCFOLDER_DISPATCH_METHOD, null);
+        BaseOutputWS baseOutputTrovaDocFolder = _getBaseOutputWS(soapMessageMetadataFolder);
 
         if (WSRESULT_SUCCESS.equals(baseOutputTrovaDocFolder.getWSResult())) {
 
-          WSTrovaDocFolderSoapBindingStub wsTrovaDocFolderStub = (WSTrovaDocFolderSoapBindingStub) wsTrovaDocFolderPort;
-          Object[] attachmentDocFolder = wsTrovaDocFolderStub.getAttachments();
+          Iterator<AttachmentPart> attachmentsTrovaDocFolder = soapMessageMetadataFolder.getAttachments();
 
-          if (attachmentDocFolder != null && attachmentDocFolder.length > 0) {
-            org.apache.axis.attachments.AttachmentPart attachPart = (org.apache.axis.attachments.AttachmentPart) attachmentDocFolder[0];
-            DataHandler handler = attachPart.getDataHandler();
+          while (attachmentsTrovaDocFolder.hasNext()) {
+            AttachmentPart attTrovaDocFolder = (AttachmentPart) attachmentsTrovaDocFolder.next();
+            DataHandler handler = attTrovaDocFolder.getDataHandler();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             handler.writeTo(baos);
-            String searchOutputSTDXML = baos.toString();
+            String searchOutputSTDXMLEscape = baos.toString();
+            String searchOutputSTDXML = StringEscapeUtils.unescapeXml(searchOutputSTDXMLEscape);
+            searchOutputSTDXML = searchOutputSTDXML.replace("\u00a0", " ");
+            int posWarning = searchOutputSTDXML.indexOf("<WarningMessage>");
+            if (posWarning > 0) {
+              searchOutputSTDXML = searchOutputSTDXML.substring(0, posWarning);
+            }
+
+            if (logger.isDebugEnabled()) logger.debug("searchOutputSTDXMLEscape: " + searchOutputSTDXMLEscape);
+            if (logger.isDebugEnabled()) logger.debug("searchOutputSTDXML: " + searchOutputSTDXML);
+
             Lista lista = this.getSearchOutputSTDFromXML(searchOutputSTDXML);
             if (lista.getRiga() != null && lista.getRiga().size() > 0) {
 
@@ -1559,7 +2319,7 @@ public class EngineeringDocManager implements IWSDMManager {
               }
 
               if ("U".equals(flag_FU) && numeroDocumento != null && !"".equals(numeroDocumento.trim())) {
-                wsdmProtocolloDocumentoRes = this.getMetadataUDExtractMulti(username, password, numeroDocumento, true);
+                wsdmProtocolloDocumentoRes = this.getMetadataUDExtractMulti(username, password, null, null, numeroDocumento, true);
               }
 
             } else {
@@ -1623,22 +2383,19 @@ public class EngineeringDocManager implements IWSDMManager {
   public WSDMAttoContrattoRes _attoContrattoRicerca(String username, String password, WSDMLoginAttr loginAttr, String tipo, String organo,
       Long anno, String numeroDa, String numeroA, Date dataDa, Date dataA) {
 
+    if ("NDEF".equals(password)) {
+      password = "";
+    }
+
     WSDMAttoContrattoRes wsdmAttoContrattoRes = new WSDMAttoContrattoRes();
 
     try {
-      // Codice applicazione
-      String codiceApplicazione = InitialContext.doLookup(CODICEAPPLICAZIONE);
-
-      // Istanza applicazione
-      String istanzaApplicazione = InitialContext.doLookup(ISTANZAAPPLICAZIONE);
 
       // Verifica indirizzi e gestione servizi per la ricerca documenti
       String urlWsTrovaDocFolder = InitialContext.doLookup(WSTROVADOCFOLDER);
       if (urlWsTrovaDocFolder == null || (urlWsTrovaDocFolder != null && "".equals(urlWsTrovaDocFolder.trim()))) {
         throw new Exception(WSTROVADOCFOLDER_URL_NOT_DEFINED);
       }
-      WSTrovaDocFolderService wsTrovaDocService = new WSTrovaDocFolderServiceLocator();
-      WSTrovaDocFolder wsTrovaDocFolderPort = wsTrovaDocService.getWSTrovaDocFolder(new URL(urlWsTrovaDocFolder));
 
       TrovaDocFolder trovaDocFolder = new TrovaDocFolder();
 
@@ -1732,28 +2489,36 @@ public class EngineeringDocManager implements IWSDMManager {
       String xmlTrovaDocFolderInput = xmlTrovaDocFolderStringWriter.toString();
 
       // XML Hash
-      byte[] xmlTrovaDocFolderHash = DigestUtils.sha(xmlTrovaDocFolderInput);
+      byte[] xmlTrovaDocFolderHash = DigestUtils.sha(xmlTrovaDocFolderInput.getBytes("UTF-8"));
       String xmlTrovaDocFolderHashBase64 = Base64.encode(xmlTrovaDocFolderHash);
 
       // Log della richiesta
       if (logger.isDebugEnabled()) logger.debug("Richiesta ricerca atto/contratto: " + xmlTrovaDocFolderInput);
 
-      String baseOutputTrovaDocFolderBase64 = wsTrovaDocFolderPort.service(codiceApplicazione, istanzaApplicazione, username, password,
-          xmlTrovaDocFolderInput, xmlTrovaDocFolderHashBase64);
-      String baseOutputTrovaDocFolderXML = new String(Base64.decode(baseOutputTrovaDocFolderBase64));
-      BaseOutputWS baseOutputTrovaDocFolder = this.getBaseOutputWSFromXML(baseOutputTrovaDocFolderXML);
+      SOAPMessage soapMessageMetadataFolder = _sendRequestSOAP(username, password, xmlTrovaDocFolderInput, xmlTrovaDocFolderHashBase64,
+          urlWsTrovaDocFolder, TROVADOCFOLDER_DISPATCH_METHOD, null);
+      BaseOutputWS baseOutputTrovaDocFolder = _getBaseOutputWS(soapMessageMetadataFolder);
 
       if (WSRESULT_SUCCESS.equals(baseOutputTrovaDocFolder.getWSResult())) {
 
-        WSTrovaDocFolderSoapBindingStub wsTrovaDocFolderStub = (WSTrovaDocFolderSoapBindingStub) wsTrovaDocFolderPort;
-        Object[] attachmentDocFolder = wsTrovaDocFolderStub.getAttachments();
+        Iterator<AttachmentPart> attachmentsTrovaDocFolder = soapMessageMetadataFolder.getAttachments();
 
-        if (attachmentDocFolder != null && attachmentDocFolder.length > 0) {
-          org.apache.axis.attachments.AttachmentPart attachPart = (org.apache.axis.attachments.AttachmentPart) attachmentDocFolder[0];
-          DataHandler handler = attachPart.getDataHandler();
+        while (attachmentsTrovaDocFolder.hasNext()) {
+          AttachmentPart attTrovaDocFolder = (AttachmentPart) attachmentsTrovaDocFolder.next();
+          DataHandler handler = attTrovaDocFolder.getDataHandler();
           ByteArrayOutputStream baos = new ByteArrayOutputStream();
           handler.writeTo(baos);
-          String searchOutputSTDXML = baos.toString();
+          String searchOutputSTDXMLEscape = baos.toString();
+          String searchOutputSTDXML = StringEscapeUtils.unescapeXml(searchOutputSTDXMLEscape);
+          searchOutputSTDXML = searchOutputSTDXML.replace("\u00a0", " ");
+          int posWarning = searchOutputSTDXML.indexOf("<WarningMessage>");
+          if (posWarning > 0) {
+            searchOutputSTDXML = searchOutputSTDXML.substring(0, posWarning);
+          }
+
+          if (logger.isDebugEnabled()) logger.debug("searchOutputSTDXMLEscape: " + searchOutputSTDXMLEscape);
+          if (logger.isDebugEnabled()) logger.debug("searchOutputSTDXML: " + searchOutputSTDXML);
+
           Lista lista = this.getSearchOutputSTDFromXML(searchOutputSTDXML);
           if (lista.getRiga() != null && lista.getRiga().size() > 0) {
 
@@ -1890,7 +2655,6 @@ public class EngineeringDocManager implements IWSDMManager {
     return wsdmTrasmissioneRes;
   }
 
-  
   @Override
   public WSDMAggiungiAllegatiRes _aggiungiAllegati(String username, String password, WSDMLoginAttr loginAttr,
       WSDMAggiungiAllegatiIn aggiungiAllegatiIn) {
@@ -1899,14 +2663,237 @@ public class EngineeringDocManager implements IWSDMManager {
     wsdmAggiungiAllegatiRes.setMessaggio(OPERATION_NOT_SUPPORTED);
     return wsdmAggiungiAllegatiRes;
   }
-  
+
   @Override
-  public WSDMListaAccountEmailRes _listaAccountEmail(String username, String password, WSDMLoginAttr loginAttr, WSDMRicercaAccountEmail ricercaAccountEmail) {
+  public WSDMListaAccountEmailRes _listaAccountEmail(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMRicercaAccountEmail ricercaAccountEmail) {
     WSDMListaAccountEmailRes wsdmListaAccountEmailRes = new WSDMListaAccountEmailRes();
     wsdmListaAccountEmailRes.setEsito(false);
     wsdmListaAccountEmailRes.setMessaggio(OPERATION_NOT_SUPPORTED);
     return wsdmListaAccountEmailRes;
   }
+
+  /**
+   * Lettura del bearer e restituzione in stringa.
+   * 
+   * @return
+   * @throws Exception
+   */
+  private String _getBearerOauth2String() throws Exception {
+    String bearerOauth2 = InitialContext.doLookup(BEARER_OAUTH2);
+    if (bearerOauth2 == null || (bearerOauth2 != null && "".equals(bearerOauth2.trim()))) {
+      throw new Exception(BEARER_OAUTH2_NOT_DEFINED);
+    }
+    return bearerOauth2;
+  }
+
+  /**
+   * 
+   * @param testo
+   * @return
+   */
+  private static String conversioneCaratteriXML(String testo) {
+    String result = null;
+
+    StringTokenizer tokenizer = new StringTokenizer(testo, "&<>\"%", true);
+    int tokenCount = tokenizer.countTokens();
+
+    if (tokenCount == 1)
+      result = testo.trim();
+    else {
+      /*
+       * text.length + (tokenCount * 6) Creo il buffer grande in modo da non
+       * richiedere un'espansione del buffer che è molto costosa in termini
+       * d'utilizzo del processore
+       */
+      StringBuffer buffer = new StringBuffer(testo.length() + tokenCount * 6);
+      while (tokenizer.hasMoreTokens()) {
+        String token = tokenizer.nextToken();
+        if (token.length() == 1) {
+          switch (token.charAt(0)) {
+          case '&':
+            buffer.append("&amp;");
+            break;
+          case '<':
+            buffer.append("&lt;");
+            break;
+          case '>':
+            buffer.append("&gt;");
+            break;
+          case '"':
+            buffer.append("&quot;");
+            break;
+          default:
+            buffer.append(token);
+          }
+        } else {
+          buffer.append(token);
+        }
+      }
+
+      result = buffer.toString().trim();
+    }
+
+    return result;
+  }
+
+  /**
+   * Restituisce l'oggetto baseOutputWS estraendolo da soapMessage.
+   * 
+   * @param soapMessage
+   * @return
+   * @throws SOAPException
+   * @throws WSSecurityException
+   * @throws JAXBException
+   */
+  private BaseOutputWS _getBaseOutputWS(SOAPMessage soapMessage) throws SOAPException, WSSecurityException, JAXBException {
+    BaseOutputWS baseOutputWS = new BaseOutputWS();
+    SOAPBody body = soapMessage.getSOAPPart().getEnvelope().getBody();
+    NodeList baseOutputNodeList = body.getElementsByTagName("serviceReturn");
+    if (baseOutputNodeList != null && baseOutputNodeList.item(0) != null) {
+      String baseOutputEncoded = baseOutputNodeList.item(0).getFirstChild().getTextContent();
+      String baseOutputDecoded = new String(Base64.decode(baseOutputEncoded));
+      logger.debug("baseOutputEncoded: " + baseOutputEncoded);
+      logger.debug("baseOutputDecoded: " + baseOutputDecoded);
+      baseOutputWS = this.getBaseOutputWSFromXML(baseOutputDecoded);
+    }
+    return baseOutputWS;
+  }
+
+  /**
+   * Invia la richiesta al servizio e legge la risposta.
+   * 
+   * @param username
+   * @param password
+   * @param xmlInput
+   * @param xmlHashBase64
+   * @param wsurl
+   * @param dispatch_method
+   * @param allegati
+   * @return
+   * @throws MalformedURLException
+   * @throws IOException
+   * @throws UnsupportedEncodingException
+   * @throws ProtocolException
+   * @throws Exception
+   * @throws SOAPException
+   * @throws WSSecurityException
+   * @throws JAXBException
+   */
+  private SOAPMessage _sendRequestSOAP(String username, String password, String xmlInput, String xmlHashBase64, String wsurl,
+      String dispatch_method, WSDMProtocolloAllegato[] allegati) throws MalformedURLException, IOException, UnsupportedEncodingException,
+      ProtocolException, Exception, SOAPException, WSSecurityException, JAXBException {
+
+    // Codice applicazione
+    String codiceApplicazione = InitialContext.doLookup(CODICEAPPLICAZIONE);
+
+    // Istanza applicazione
+    String istanzaApplicazione = InitialContext.doLookup(ISTANZAAPPLICAZIONE);
+
+    // Apertura envelope con il primo boundary multipart
+    StringBuffer requestString = new StringBuffer();
+    requestString.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    requestString.append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" ");
+    requestString.append("xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
+    requestString.append("xmlns:ns1=\"" + dispatch_method + "\">\n");
+
+    // Apertura body
+    requestString.append("<soapenv:Body>\n");
+
+    // Specifica servizio
+    requestString.append("<ns1:service soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n");
+
+    // Dati di richiesta
+    requestString.append("<codApplicazione xsi:type=\"xsd:string\">" + codiceApplicazione + "</codApplicazione>\n");
+    requestString.append("<istanzaApplicazione xsi:type=\"xsd:string\">" + istanzaApplicazione + "</istanzaApplicazione>\n");
+    requestString.append("<userName xsi:type=\"xsd:string\">" + username + "</userName>\n");
+    if (password == null) {
+      requestString.append("<password xsi:type=\"xsd:string\" xsi:nil=\"true\"></password>\n");
+    } else {
+      requestString.append("<password xsi:type=\"xsd:string\">" + password + "</password>\n");
+    }
+    requestString.append("<xml xsi:type=\"xsd:string\">" + conversioneCaratteriXML(xmlInput) + "</xml>\n");
+
+    // requestString.append("<xml xsi:type=\"xsd:string\"><![CDATA[" + xmlInput
+    // + "]]></xml>");
+
+    requestString.append("<hash xsi:type=\"xsd:string\">" + xmlHashBase64 + "</hash>\n");
+
+    // Chiusura servizio
+    requestString.append("</ns1:service>\n");
+
+    // Chiusura body
+    requestString.append("</soapenv:Body>\n");
+
+    // Chiusura envelope
+    requestString.append("</soapenv:Envelope>\n\n");
+
+    // Log dell'intera busta SOAP
+    logger.debug("Messaggio SOAP di richiesta: " + requestString);
+
+    MessageFactory msgFactory = MessageFactory.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
+    SOAPMessage requestSOAPMessage = msgFactory.createMessage();
+
+    SOAPPart requestSOAPPart = requestSOAPMessage.getSOAPPart();
+    javax.xml.transform.stream.StreamSource _msg = new javax.xml.transform.stream.StreamSource(
+        new java.io.StringReader(requestString.toString()));
+    requestSOAPPart.setContent(_msg);
+
+    // Header di autorizzazione
+    MimeHeaders headers = requestSOAPMessage.getMimeHeaders();
+    headers.addHeader("Authorization", "Bearer " + _getBearerOauth2String());
+
+    // Allegati
+    if (allegati != null && allegati.length > 0) {
+      for (int ai = 0; ai < allegati.length; ai++) {
+        AttachmentPart attachment = requestSOAPMessage.createAttachmentPart();
+        InputStream targetStream = new ByteArrayInputStream(allegati[ai].getContenuto());
+        attachment.setRawContent(targetStream, allegati[ai].getNome());
+        attachment.setContentId(allegati[ai].getNome());
+        requestSOAPMessage.addAttachmentPart(attachment);
+      }
+    }
+
+    requestSOAPMessage.saveChanges();
+
+    SOAPConnectionFactory factory2 = SOAPConnectionFactory.newInstance();
+    SOAPConnection soapConnection = factory2.createConnection();
+    SOAPMessage message = soapConnection.call(requestSOAPMessage, wsurl);
+
+    return message;
+  }
+
+  @Override
+  public WSDMRicercaFascicoloRes _fascicoloRicerca(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMRicercaFascicolo ricercaFascicolo) {
+    WSDMRicercaFascicoloRes wsdmRicercaFascicoloRes = new WSDMRicercaFascicoloRes();
+    wsdmRicercaFascicoloRes.setEsito(false);
+    wsdmRicercaFascicoloRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmRicercaFascicoloRes;
+  }
+
+  @Override
+  public WSDMProtocolloDocumentoRes _firmaInserisci(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
+
+  @Override
+  public WSDMProtocolloDocumentoRes _firmaVerifica(String username, String password, WSDMLoginAttr loginAttr, String numeroDocumento) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
   
-  
+  @Override
+  public WSDMProtocolloDocumentoRes _protocolloAsincronoEsito(String username, String password, WSDMLoginAttr loginAttr, String id) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
 }

@@ -36,6 +36,8 @@ import it.maggioli.eldasoft.ws.dm.WSDMProtocolloInOut;
 import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaIn;
 import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaRes;
 import it.maggioli.eldasoft.ws.dm.WSDMRicercaAccountEmail;
+import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicolo;
+import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicoloRes;
 import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneIn;
 import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneRes;
 import it.maggioli.eldasoft.ws.dm.WSDMVerificaMailRes;
@@ -333,7 +335,7 @@ public class ProtServiceManager implements IWSDMManager {
 
   @Override
   public WSDMFascicoloRes _fascicoloLeggi(String username, String password, WSDMLoginAttr loginAttr, String codiceFascicolo,
-      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo) {
+      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo, String oggettoFascicolo) {
     WSDMFascicoloRes retval = new WSDMFascicoloRes();
     retval.setEsito(false);
     retval.setMessaggio(OPERATION_NOT_SUPPORTED);
@@ -342,7 +344,7 @@ public class ProtServiceManager implements IWSDMManager {
 
   @Override
   public WSDMFascicoloRes _fascicoloMetadatiLeggi(String username, String password, WSDMLoginAttr loginAttr, String codiceFascicolo,
-      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo) {
+      Long annoFascicolo, String numeroFascicolo, String classificaFascicolo, String oggettoFascicolo) {
     WSDMFascicoloRes retval = new WSDMFascicoloRes();
     retval.setEsito(false);
     retval.setMessaggio(OPERATION_NOT_SUPPORTED);
@@ -470,5 +472,38 @@ public class ProtServiceManager implements IWSDMManager {
     return wsdmListaAccountEmailRes;
   }
   
+  @Override
+  public WSDMRicercaFascicoloRes _fascicoloRicerca(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMRicercaFascicolo ricercaFascicolo) {
+    WSDMRicercaFascicoloRes wsdmRicercaFascicoloRes = new WSDMRicercaFascicoloRes();
+    wsdmRicercaFascicoloRes.setEsito(false);
+    wsdmRicercaFascicoloRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmRicercaFascicoloRes;
+  }
+  
+  @Override
+  public WSDMProtocolloDocumentoRes _firmaInserisci(String username, String password, WSDMLoginAttr loginAttr,
+      WSDMProtocolloDocumentoIn wsdmprotocolloDocumentoIn) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
+
+  @Override
+  public WSDMProtocolloDocumentoRes _firmaVerifica(String username, String password, WSDMLoginAttr loginAttr, String numeroDocumento) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
+  
+  @Override
+  public WSDMProtocolloDocumentoRes _protocolloAsincronoEsito(String username, String password, WSDMLoginAttr loginAttr, String id) {
+    WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
+    wsdmprotocolloDocumentoRes.setEsito(false);
+    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmprotocolloDocumentoRes;
+  }
   
 }

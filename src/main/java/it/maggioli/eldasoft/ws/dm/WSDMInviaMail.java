@@ -3,7 +3,7 @@ package it.maggioli.eldasoft.ws.dm;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(name = "WSDMInviaMailType", propOrder = { "numeroDocumento", "annoProtocollo", "numeroProtocollo", "oggettoMail", "testoMail",
-    "mittenteMail", "destinatariMail", "destinatariMailCC", "formatoMail", "mailChannelCode", "mailConfigurationCode", "allegati" })
+    "mittenteMail", "destinatariMail", "destinatariMailCC", "formatoMail", "mailChannelCode", "mailConfigurationCode", "allegati", "codiceRegistro" })
 public class WSDMInviaMail {
 
   private String                   numeroDocumento;
@@ -18,7 +18,8 @@ public class WSDMInviaMail {
   private String                   mailChannelCode;
   private String                   mailConfigurationCode;
   private WSDMProtocolloAllegato[] allegati;
-
+  private String                   codiceRegistro;
+  
   public String getMailChannelCode() {
     return mailChannelCode;
   }
@@ -113,6 +114,14 @@ public class WSDMInviaMail {
 
   public void setAllegati(WSDMProtocolloAllegato[] allegati) {
     this.allegati = allegati;
+  }
+  
+  public String getCodiceRegistro() {
+    return codiceRegistro;
+  }
+  
+  public void setCodiceRegistro(String codiceRegistro) {
+    this.codiceRegistro = codiceRegistro;
   }
 
 }

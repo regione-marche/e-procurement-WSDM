@@ -80,6 +80,12 @@ public class ProWsProtocolloPortTypeProxy implements it.italprot.prowsprotocollo
     proWsProtocolloPortType.getProtocollo(token, anno, numero, tipo, segnatura, items, messageResult);
   }
   
+  public void checkDocumentoAllaFirma(java.lang.String token, java.lang.String numeroDocumento, it.italprot.prowsprotocollo.holders.ItemEsitoFirmaHolder items, it.italprot.prowsprotocollo.holders.MessageResultHolder messageResult) throws java.rmi.RemoteException{
+    if (proWsProtocolloPortType == null)
+      _initProWsProtocolloPortTypeProxy();
+    proWsProtocolloPortType.checkDocumentoAllaFirma(token, numeroDocumento, items, messageResult);
+  }
+  
   public void getProtocolloFattura(java.lang.String token, java.lang.String fileFattura, it.italprot.prowsprotocollo.holders.ItemProtocolloHolder items, it.italprot.prowsprotocollo.holders.MessageResultHolder messageResult) throws java.rmi.RemoteException{
     if (proWsProtocolloPortType == null)
       _initProWsProtocolloPortTypeProxy();
@@ -98,10 +104,22 @@ public class ProWsProtocolloPortTypeProxy implements it.italprot.prowsprotocollo
     proWsProtocolloPortType.putAllegato(token, anno, numero, tipo, tipoFile, nomeFile, estensione, stream, note, marcaDocumento, mettiAllaFirma, allegati, messageResult);
   }
   
+  public void putAllegatoDocumentoAllaFirma(java.lang.String token, java.lang.String numero, java.lang.String tipoFile, java.lang.String nomeFile, java.lang.String estensione, java.lang.String stream, java.lang.String note, java.lang.String marcaDocumento, java.lang.String mettiAllaFirma, it.italprot.prowsprotocollo.holders.AllegatiHolder allegati, it.italprot.prowsprotocollo.holders.MessageResultHolder messageResult) throws java.rmi.RemoteException{
+    if (proWsProtocolloPortType == null)
+      _initProWsProtocolloPortTypeProxy();
+    proWsProtocolloPortType.putAllegatoDocumentoAllaFirma(token, numero, tipoFile, nomeFile, estensione, stream, note, marcaDocumento, mettiAllaFirma, allegati, messageResult);
+  }
+  
   public void putProtocollo(java.lang.String token, it.italprot.prowsprotocollo.DatiProtocollo datiProtocollo, it.italprot.prowsprotocollo.holders.RetProtocolloHolder datiProtocollo2, it.italprot.prowsprotocollo.holders.MessageResultHolder messageResult) throws java.rmi.RemoteException{
     if (proWsProtocolloPortType == null)
       _initProWsProtocolloPortTypeProxy();
     proWsProtocolloPortType.putProtocollo(token, datiProtocollo, datiProtocollo2, messageResult);
+  }
+  
+  public void putDocumentoAllaFirma(java.lang.String token, it.italprot.prowsprotocollo.DatiDocumento datiDocumento, it.italprot.prowsprotocollo.holders.RetDocumentoHolder datiDocumento2, it.italprot.prowsprotocollo.holders.MessageResultHolder messageResult) throws java.rmi.RemoteException{
+    if (proWsProtocolloPortType == null)
+      _initProWsProtocolloPortTypeProxy();
+    proWsProtocolloPortType.putDocumentoAllaFirma(token, datiDocumento, datiDocumento2, messageResult);
   }
   
   public void notificaMailProtocollo(java.lang.String token, java.lang.String anno, java.lang.String numero, java.lang.String tipo, java.lang.String oggettoCustom, java.lang.String bodyCustom, it.italprot.prowsprotocollo.holders.StatoNotificaHolder statoNotifica, it.italprot.prowsprotocollo.holders.MessageResultHolder messageResult) throws java.rmi.RemoteException{

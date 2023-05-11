@@ -45,7 +45,7 @@ public class PrismaUtilityControllo {
   static private final String CTR_MESSAGE_LEGGI_FASCICOLO_NUMERO      = "valorizzare il numero del fascicolo";
   static private final String CTR_MESSAGE_LEGGI_FASCICOLO_CLASSIFICA  = "valorizzare la classifica del fascicolo";
 
-  static private final String CTR_MESSAGE_MAIL_RIFERIMENTI            = "valorizzare il numero documento oppure l'anno ed il numero protocollo (inviaMail.numeroDocumento oppure inviaMail.annoProtocollo e inviaMail.numeroProtocollo";
+  static private final String CTR_MESSAGE_MAIL_RIFERIMENTI            = "valorizzare il numero documento oppure l'anno ed il numero protocollo (inviaMail.numeroDocumento oppure inviaMail.annoProtocollo e inviaMail.numeroProtocollo)";
   static private final String CTR_MESSAGE_MAIL_DESTINATARI            = "valorizzare almeno un destinatario (inviaMail.destinatariMail)";
 
   static private final String CTR_MESSAGE_LEGGI_CLASSIFICHE           = "indicare almeno un parametro di ricerca (codice o descrizione)";

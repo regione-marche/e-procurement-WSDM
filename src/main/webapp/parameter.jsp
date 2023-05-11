@@ -55,6 +55,10 @@
 	Object JIRIDE_ESTREMIPROVVAUT = "";
 	Object JIRIDE_ACCOUNT_EMAIL_WS = "";
 	Object JIRIDE_TICKET = "";
+	Object JIRIDE_DOWNLOAD_ALLEGATI_REPWSSGATEWAY = "";
+	Object JIRIDE_REPWSSGATEWAY_WS = "";
+	Object JIRIDE_REPWSSGATEWAY_ALIAS = "";
+	Object JIRIDE_PROTOCOLLO_MODO_FASCICOLAZIONE = "";
 	
 	if (REMOTEWSDM.equals("JIRIDE")) {
 		try {
@@ -123,6 +127,29 @@
 
 		}
 		
+		try {
+		  JIRIDE_DOWNLOAD_ALLEGATI_REPWSSGATEWAY = ctx.lookup("JIRIDE_DOWNLOAD_ALLEGATI_REPWSSGATEWAY");
+		} catch (Throwable ex) {
+		  JIRIDE_DOWNLOAD_ALLEGATI_REPWSSGATEWAY = "S";
+		}
+		
+		try {
+		  JIRIDE_REPWSSGATEWAY_WS = ctx.lookup("JIRIDE_REPWSSGATEWAY_WS");
+		} catch (Throwable ex) {
+
+		}
+		
+		try {
+		  JIRIDE_REPWSSGATEWAY_ALIAS = ctx.lookup("JIRIDE_REPWSSGATEWAY_ALIAS");
+		} catch (Throwable ex) {
+
+		}
+		
+		try {
+		  JIRIDE_PROTOCOLLO_MODO_FASCICOLAZIONE = ctx.lookup("JIRIDE_PROTOCOLLO_MODO_FASCICOLAZIONE");
+		} catch (Throwable ex) {
+		  JIRIDE_PROTOCOLLO_MODO_FASCICOLAZIONE = "DIRETTA";
+		}
 		
 	}
 	
@@ -182,6 +209,10 @@
 	Object ENGINEERINGDOC_WSADDFOLDER = "";
 	Object ENGINEERINGDOC_WSGETMETADATAFOLDER = "";
 	Object ENGINEERINGDOC_WSTROVADOCFOLDER = "";
+	Object ENGINEERINGDOC_WSTROVAINORGANIGRAMMA = "";
+	
+	Object ENGINEERINGDOC_ADDFOLDER_GENERICS12 = "";
+	Object ENGINEERINGDOC_ADDFOLDER_STRUTTURA = "";
 	
 	Object ENGINEERINGDOC_CODICEAPPLICAZIONE = "";
 	Object ENGINEERINGDOC_ISTANZAAPPLICAZIONE = "";
@@ -195,8 +226,27 @@
 			ENGINEERINGDOC_WSGETMETADATAFOLDER = ctx.lookup("ENGINEERINGDOC_WSGETMETADATAFOLDER");
 			ENGINEERINGDOC_WSTROVADOCFOLDER = ctx.lookup("ENGINEERINGDOC_WSTROVADOCFOLDER");
 			
+			try {
+			ENGINEERINGDOC_WSTROVAINORGANIGRAMMA = ctx.lookup("ENGINEERINGDOC_WSTROVAINORGANIGRAMMA");
+			} catch (Throwable ex) {
+
+			}
+			
 			ENGINEERINGDOC_CODICEAPPLICAZIONE = ctx.lookup("ENGINEERINGDOC_CODICEAPPLICAZIONE");
 			ENGINEERINGDOC_ISTANZAAPPLICAZIONE = ctx.lookup("ENGINEERINGDOC_ISTANZAAPPLICAZIONE");
+			
+			try {
+			  ENGINEERINGDOC_ADDFOLDER_GENERICS12 = ctx.lookup("ENGINEERINGDOC_ADDFOLDER_GENERICS12");
+			} catch (Throwable ex) {
+
+			}
+			
+			try {
+			  ENGINEERINGDOC_ADDFOLDER_STRUTTURA = ctx.lookup("ENGINEERINGDOC_ADDFOLDER_STRUTTURA");
+			} catch (Throwable ex) {
+
+			}
+			
 		} catch (Throwable ex) {
 			ERRORERILEVATO = ERRORERILEVATO + "<br>" + ex.toString();
 		}
@@ -486,6 +536,7 @@
 	}
 	
 	Object ITALPROT_PROWSPROTOCOLLO = "";
+	Object ITALPROT_PROWSFASCICOLO = "";
 	Object ITALPROT_CODICEENTE = "";
 	Object ITALPROT_PARTENZA_CODICE_UFFICIO_OPERATORE = "";
 	Object ITALPROT_ARRIVO_CODICE_UFFICIO_OPERATORE = "";
@@ -500,6 +551,7 @@
 	if (REMOTEWSDM.equals("ITALPROT")) {
 		try {
 		  ITALPROT_PROWSPROTOCOLLO = ctx.lookup("ITALPROT_PROWSPROTOCOLLO");
+		  ITALPROT_PROWSFASCICOLO = ctx.lookup("ITALPROT_PROWSFASCICOLO");
 		  ITALPROT_CODICEENTE = ctx.lookup("ITALPROT_CODICEENTE");
 		  ITALPROT_PARTENZA_CODICE_UFFICIO_OPERATORE = ctx.lookup("ITALPROT_PARTENZA_CODICE_UFFICIO_OPERATORE");
 		  ITALPROT_ARRIVO_CODICE_UFFICIO_OPERATORE = ctx.lookup("ITALPROT_ARRIVO_CODICE_UFFICIO_OPERATORE");
@@ -525,6 +577,9 @@
 	Object JDOC_PROTOCOLLO_C11 = "";  
 	Object JDOC_PROTOCOLLO_C01 = "";   
 	Object JDOC_FASCICOLO_C01 = "";
+	Object JDOC_CONTRATTO_C01 = "";
+	Object JDOC_CONTRATTO_C11 = "";
+	Object JDOC_CONTRATTO_C16 = "";
 	
 
 	if (REMOTEWSDM.equals("JDOC")) {
@@ -538,11 +593,191 @@
 		  JDOC_PROTOCOLLO_C11 = ctx.lookup("JDOC_PROTOCOLLO_C11"); 
 		  JDOC_PROTOCOLLO_C01 = ctx.lookup("JDOC_PROTOCOLLO_C01");  
 		  JDOC_FASCICOLO_C01 = ctx.lookup("JDOC_FASCICOLO_C01");
+		  JDOC_CONTRATTO_C01 = ctx.lookup("JDOC_CONTRATTO_C01");
+		  JDOC_CONTRATTO_C11 = ctx.lookup("JDOC_CONTRATTO_C11");
+		  JDOC_CONTRATTO_C16 = ctx.lookup("JDOC_CONTRATTO_C16");
 		  
 		} catch (Throwable ex) {
 			ERRORERILEVATO = ERRORERILEVATO + "<br>" + ex.toString();
 		}
 	}
+	
+	Object FOLIUMAGORA_WS_FASCICOLO = "";
+	Object FOLIUMAGORA_WS_PROTOCOLLO = "";
+	Object FOLIUMAGORA_AOO = "";
+	Object FOLIUMAGORA_APPLICAZIONE = "";
+	Object FOLIUMAGORA_ENTE = "";
+	
+	if (REMOTEWSDM.equals("FOLIUMAGORA")) {
+		try {
+		  FOLIUMAGORA_WS_FASCICOLO = ctx.lookup("FOLIUMAGORA_WS_FASCICOLO");
+		  FOLIUMAGORA_WS_PROTOCOLLO = ctx.lookup("FOLIUMAGORA_WS_PROTOCOLLO");
+		  FOLIUMAGORA_AOO = ctx.lookup("FOLIUMAGORA_AOO");
+		  FOLIUMAGORA_APPLICAZIONE = ctx.lookup("FOLIUMAGORA_APPLICAZIONE");
+		  FOLIUMAGORA_ENTE = ctx.lookup("FOLIUMAGORA_ENTE");
+		  
+		} catch (Throwable ex) {
+			ERRORERILEVATO = ERRORERILEVATO + "<br>" + ex.toString();
+		}
+	}
+
+	Object DOCER_AUTHENTICATION = "";
+	Object DOCER_WS_DOCER = "";
+	Object DOCER_WS_PROTOCOLLAZIONE = "";
+	Object DOCER_WS_FASCICOLAZIONE = "";
+	Object DOCER_AMMINISTRAZIONE_CODICE = "";
+	Object DOCER_AMMINISTRAZIONE_DENOMINAZIONE = "";
+	Object DOCER_AMMINISTRAZIONE_INDIRIZZO_TELEMATICO = "";
+	Object DOCER_AOO_CODICE = "";
+	Object DOCER_AOO_DENOMINAZIONE = "";
+	Object DOCER_AOO_INDIRIZZO_TELEMATICO = "";
+	Object DOCER_AOO_MITTENTE_CODICE = "";
+	Object DOCER_AOO_MITTENTE_DENOMINAZIONE = "";
+	Object DOCER_AOO_MITTENTE_INDIRIZZO_TELEMATICO = "";
+	Object DOCER_APPLICATION = "";
+	Object DOCER_ACL = "";
+	
+	if (REMOTEWSDM.equals("DOCER")) {
+		try {
+		  DOCER_AUTHENTICATION = ctx.lookup("DOCER_AUTHENTICATION");
+		  DOCER_WS_DOCER = ctx.lookup("DOCER_WS_DOCER");
+		  DOCER_WS_PROTOCOLLAZIONE = ctx.lookup("DOCER_WS_PROTOCOLLAZIONE");
+		  DOCER_WS_FASCICOLAZIONE = ctx.lookup("DOCER_WS_FASCICOLAZIONE");
+		  DOCER_AMMINISTRAZIONE_CODICE = ctx.lookup("DOCER_AMMINISTRAZIONE_CODICE");
+		  DOCER_AMMINISTRAZIONE_DENOMINAZIONE = ctx.lookup("DOCER_AMMINISTRAZIONE_DENOMINAZIONE");
+		  DOCER_AMMINISTRAZIONE_INDIRIZZO_TELEMATICO = ctx.lookup("DOCER_AMMINISTRAZIONE_INDIRIZZO_TELEMATICO");
+		  DOCER_AOO_CODICE = ctx.lookup("DOCER_AOO_CODICE");
+		  DOCER_AOO_DENOMINAZIONE = ctx.lookup("DOCER_AOO_DENOMINAZIONE");
+		  DOCER_AOO_INDIRIZZO_TELEMATICO = ctx.lookup("DOCER_AOO_INDIRIZZO_TELEMATICO");
+		  DOCER_AOO_MITTENTE_CODICE = ctx.lookup("DOCER_AOO_MITTENTE_CODICE");
+		  DOCER_AOO_MITTENTE_DENOMINAZIONE = ctx.lookup("DOCER_AOO_MITTENTE_DENOMINAZIONE");
+		  DOCER_AOO_MITTENTE_INDIRIZZO_TELEMATICO = ctx.lookup("DOCER_AOO_MITTENTE_INDIRIZZO_TELEMATICO");
+		  DOCER_APPLICATION = ctx.lookup("DOCER_APPLICATION");
+		  DOCER_ACL = ctx.lookup("DOCER_ACL");
+		} catch (Throwable ex) {
+			ERRORERILEVATO = ERRORERILEVATO + "<br>" + ex.toString();
+		}
+	}	
+	
+	
+	Object NUMIX_WS = "";
+	Object NUMIX_ORGCODE = "";
+    Object NUMIX_REGISTRY_TYPE_PROTOCOL = "";
+    Object NUMIX_REGISTRY_TYPE_DOCUMENT = "";
+    Object NUMIX_IN_SENDER_ID = "";
+    Object NUMIX_OUT_SENDER_ID = "";
+    Object NUMIX_INT_SENDER_ID = "";
+    
+	if (REMOTEWSDM.equals("NUMIX")) {
+		try {
+		  NUMIX_WS = ctx.lookup("NUMIX_WS");
+		  NUMIX_ORGCODE = ctx.lookup("NUMIX_ORGCODE");
+		  NUMIX_REGISTRY_TYPE_PROTOCOL = ctx.lookup("NUMIX_REGISTRY_TYPE_PROTOCOL");
+		  NUMIX_REGISTRY_TYPE_DOCUMENT = ctx.lookup("NUMIX_REGISTRY_TYPE_DOCUMENT");
+		  NUMIX_IN_SENDER_ID = ctx.lookup("NUMIX_IN_SENDER_ID");
+		  NUMIX_OUT_SENDER_ID = ctx.lookup("NUMIX_OUT_SENDER_ID");
+		  NUMIX_INT_SENDER_ID = ctx.lookup("NUMIX_INT_SENDER_ID");
+		  
+		} catch (Throwable ex) {
+			ERRORERILEVATO = ERRORERILEVATO + "<br>" + ex.toString();
+		}
+	}	
+	
+	Object GENERIC01_LOGIN_WS = "";
+	Object GENERIC01_LOGIN_GRANT_TYPE = "";
+	Object GENERIC01_LOGIN_SCOPE = "";
+	Object GENERIC01_PROTOCOLLO_WS = "";
+	Object GENERIC01_DOCUMENTALE_WS = "";
+	Object GENERIC01_PROTOCOLLO_SERVICE_PROVIDER_CODE = "";
+	Object GENERIC01_PROTOCOLLO_PROTOCOLLO_CLIENT_ID = "";
+	Object GENERIC01_PROTOCOLLO_PROTOCOLLO_USER_ID = "";
+	Object GENERIC01_SYSLOGIN = "";
+	if (REMOTEWSDM.equals("GENERIC01")) {
+		try {
+		  GENERIC01_LOGIN_WS = ctx.lookup("GENERIC01_LOGIN_WS");
+		  GENERIC01_LOGIN_GRANT_TYPE = ctx.lookup("GENERIC01_LOGIN_GRANT_TYPE");
+		  GENERIC01_LOGIN_SCOPE = ctx.lookup("GENERIC01_LOGIN_SCOPE");
+		  GENERIC01_PROTOCOLLO_WS = ctx.lookup("GENERIC01_PROTOCOLLO_WS");
+		  GENERIC01_DOCUMENTALE_WS = ctx.lookup("GENERIC01_DOCUMENTALE_WS");
+		  GENERIC01_PROTOCOLLO_SERVICE_PROVIDER_CODE = ctx.lookup("GENERIC01_PROTOCOLLO_SERVICE_PROVIDER_CODE");
+		  GENERIC01_PROTOCOLLO_PROTOCOLLO_CLIENT_ID = ctx.lookup("GENERIC01_PROTOCOLLO_PROTOCOLLO_CLIENT_ID");
+		  GENERIC01_PROTOCOLLO_PROTOCOLLO_USER_ID = ctx.lookup("GENERIC01_PROTOCOLLO_PROTOCOLLO_USER_ID");
+		  GENERIC01_SYSLOGIN = ctx.lookup("GENERIC01_SYSLOGIN");
+		} catch (Throwable ex) {
+			ERRORERILEVATO = ERRORERILEVATO + "<br>" + ex.toString();
+		}
+	}
+	
+	Object DATAGRAPH_DOCAREAPROTO = "";
+	Object DATAGRAPH_DENOMINAZIONE_AMMINISTRAZIONE = "";
+	Object DATAGRAPH_CODICE_AMMINISTRAZIONE = "";
+	Object DATAGRAPH_CODICE_AOO = "";
+	Object DATAGRAPH_NOME_APPLICATIVO = "";
+	Object DATAGRAPH_TIPO_SMISTAMENTO = "";
+	
+	if (REMOTEWSDM.equals("DATAGRAPH") || REMOTEWSDM.equals("DATAGRAPH.PRISMA")) {
+		try {
+		  DATAGRAPH_DOCAREAPROTO = ctx.lookup("DATAGRAPH_DOCAREAPROTO");
+		  DATAGRAPH_DENOMINAZIONE_AMMINISTRAZIONE = ctx.lookup("DATAGRAPH_DENOMINAZIONE_AMMINISTRAZIONE");
+		  DATAGRAPH_CODICE_AMMINISTRAZIONE = ctx.lookup("DATAGRAPH_CODICE_AMMINISTRAZIONE");
+		  DATAGRAPH_CODICE_AOO = ctx.lookup("DATAGRAPH_CODICE_AOO");
+		  DATAGRAPH_NOME_APPLICATIVO = ctx.lookup("DATAGRAPH_NOME_APPLICATIVO");
+		  DATAGRAPH_TIPO_SMISTAMENTO = ctx.lookup("DATAGRAPH_TIPO_SMISTAMENTO");
+		} catch (Throwable ex) {
+			ERRORERILEVATO = ERRORERILEVATO + "<br>" + ex.toString();
+		}
+	}
+
+	Object FOLIUM2_WS_PROTOCOLLO = "";
+	Object FOLIUM2_AOO = "";
+	Object FOLIUM2_APPLICAZIONE = "";
+	Object FOLIUM2_ENTE = "";
+	Object FOLIUM2_REGISTRO = "";
+	Object FOLIUM2_ESEGUI_SALVA_DOCUMENTO = "SI";
+	
+	if (REMOTEWSDM.equals("FOLIUM2") || REMOTEWSDM.equals("FOLIUM2.FOLIUM")) {
+		try {
+		  FOLIUM2_WS_PROTOCOLLO = ctx.lookup("FOLIUM2_WS_PROTOCOLLO");
+		  FOLIUM2_AOO = ctx.lookup("FOLIUM2_AOO");
+		  FOLIUM2_APPLICAZIONE = ctx.lookup("FOLIUM2_APPLICAZIONE");
+		  FOLIUM2_ENTE = ctx.lookup("FOLIUM2_ENTE");
+		  FOLIUM2_REGISTRO = ctx.lookup("FOLIUM2_REGISTRO");
+		  
+		  try {
+		    FOLIUM2_ESEGUI_SALVA_DOCUMENTO = ctx.lookup("FOLIUM2_ESEGUI_SALVA_DOCUMENTO");
+			} catch (Throwable ex) {
+
+			}
+		  
+		} catch (Throwable ex) {
+			ERRORERILEVATO = ERRORERILEVATO + "<br>" + ex.toString();
+		}
+	}
+	
+	Object INFOR2_JPROTOCOLLO_ENDPOINT = "";
+	Object INFOR2_JPROTOCOLLOGEN_ENDPOINT = "";
+	if (REMOTEWSDM.equals("INFOR2") || REMOTEWSDM.equals("INFOR2.INFOR")) {
+		try {
+		  INFOR2_JPROTOCOLLO_ENDPOINT = ctx.lookup("INFOR2_JPROTOCOLLO_ENDPOINT");
+		  INFOR2_JPROTOCOLLOGEN_ENDPOINT = ctx.lookup("INFOR2_JPROTOCOLLOGEN_ENDPOINT");
+		} catch (Throwable ex) {
+			ERRORERILEVATO = ERRORERILEVATO + "<br>" + ex.toString();
+		}
+	}
+	
+	Object LAPIS_PROTOCOLLO_URL = "";
+	Object OPERA_DOCUMENTALE_URL = "";
+	Object LAPIS_CODICE_APPLICATIVO = "";
+	if (REMOTEWSDM.equals("LAPISOPERA")) {
+		try {
+		  LAPIS_PROTOCOLLO_URL = ctx.lookup("LAPIS_PROTOCOLLO_URL");
+		  OPERA_DOCUMENTALE_URL = ctx.lookup("OPERA_DOCUMENTALE_URL");
+		  LAPIS_CODICE_APPLICATIVO = ctx.lookup("LAPIS_CODICE_APPLICATIVO");
+		} catch (Throwable ex) {
+			ERRORERILEVATO = ERRORERILEVATO + "<br>" + ex.toString();
+		}
+	}
+	
 	
 	Object ELDASOFTWSDM_VER = "";
 	try {
@@ -556,6 +791,9 @@
 	        sb.append(line+"\n");
 	    }
 	    ELDASOFTWSDM_VER = sb.toString();
+	    
+	    reader.close();
+	    
 	} catch (Throwable ex) {
 	  
 	}
@@ -566,6 +804,9 @@
   	<c:set var="remotewsdm" value="<%=REMOTEWSDM%>" />
 
 	<table class="contenitore">
+		<tr>
+			<th id="thremotewsdm"></th>
+		</tr>
 		<tr class="titolo">
 			<td>
 				Eldasoft WSDM <%=ELDASOFTWSDM_VER%>
@@ -573,9 +814,13 @@
 		</tr>
 		<tr>
 			<td>
-				<table class="griglia">
+				<table class="griglia" id="configurazioni">
+					<caption>Configurazioni</caption>
+					<tr>
+						<th id="thconfigurazioni"></th>
+					</tr>
 					<tr class="intestazione">
-						<th colspan="2">
+						<th colspan="2" id="thconfigurazionintestazione">
 							Configurazioni del server per l'inoltro delle richieste al sistema remoto di protocollazione
 							<br><span style="color: #FF2222"><%=ERRORERILEVATO%></span>
 						</th>
@@ -585,12 +830,59 @@
 							Sistemi remoti di protocollazione e di gestione documentale supportati
 						</td>
 						<td>
-							<b>IRIDE, JIRIDE, PALEO, ENGINEERING, ENGINEERINGDOC, ARCHIFLOW, TITULUS, SMAT, FOLIUM, ARCHIFLOWFA, EASYDOC, SISPI, PRISMA, INFOR, URBI, PROTSERVICE, JPROTOCOL, ITALPROT, JDOC</b>
+							<table class="griglia" id="listaprotocollisupportati">
+							<caption>Lista protocolli supportati</caption>
+								<tr>
+									<th id="thprotocollisupportati"></th>
+								</tr>
+								<tr>
+									<td>IRIDE</td>
+									<td>JIRIDE</td>
+									<td>PALEO</td>
+									<td>ENGINEERING</td>
+									<td>ENGINEERINGDOC</td>
+								</tr>
+								<tr>
+									<td>ARCHIFLOW</td>
+									<td>TITULUS</td>
+									<td>SMAT</td>
+									<td>FOLIUM</td>
+									<td>ARCHIFLOWFA</td>
+								</tr>
+								<tr>
+									<td>EASYDOC</td>
+									<td>SISPI</td>
+									<td>PRISMA</td>
+									<td>INFOR</td>
+									<td>URBI</td>
+								</tr>
+								<tr>
+									<td>PROTSERVICE</td>
+									<td>JPROTOCOL</td>
+									<td>ITALPROT</td>
+									<td>JDOC</td>
+									<td>FOLIUMAGORA</td>
+								</tr>
+								<tr>
+									<td>DOCER</td>
+									<td>NUMIX</td>
+									<td>GENERIC01</td>
+									<td>DATAGRAPH<br>DATAGRAPH.PRISMA restituito ai client come PRISMA</td>
+									<td>FOLIUM2<br>FOLIUM2.FOLIUM restituito ai client come FOLIUM</td>
+								</tr>
+								<tr>
+									<td>INFOR2<br>INFOR2.INFOR restituito ai client come INFOR</td>
+									<td>LAPISOPERA</td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+							</table>
 						</td>
 					</tr>
-					<tr class="intestazione">
-						<th>Configurazione</th>
-						<th>Valore</th>
+					<tr class="intestazione" id="parametriprotocollo">
+						<th id="configurazione">Configurazione</th>
+						<th id="valore">Valore</th>
 					</tr>
 					<tr>
 						<td class="etichetta">Sistema remoto di protocollazione</td>
@@ -677,6 +969,22 @@
 								<td class="etichetta">Indirizzo servizio di lettura della lista degli account email</td>
 								<td><%=JIRIDE_ACCOUNT_EMAIL_WS%></td>
 							</tr>
+							<tr>
+								<td class="etichetta">Download allegati mediante servizio REPWSSGATEWAY (S/N)</td>
+								<td><%=JIRIDE_DOWNLOAD_ALLEGATI_REPWSSGATEWAY%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo servizio RESWSSGATEWAY</td>
+								<td><%=JIRIDE_REPWSSGATEWAY_WS%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Alias di accesso al servizio RESWSSGATEWAY</td>
+								<td><%=JIRIDE_REPWSSGATEWAY_ALIAS%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Modalita' di fascicolazione del protocollo/documento</td>
+								<td><%=JIRIDE_PROTOCOLLO_MODO_FASCICOLAZIONE%></td>
+							</tr>
 						</c:when>
 						<c:when test="${remotewsdm eq 'PALEO'}">
 							<tr>
@@ -704,8 +1012,8 @@
 								<td>
 									<table class="griglia">
 										<tr class="intestazione">
-											<th>Attributo</th>
-											<th>Valore</th>
+											<th id="attributo">Attributo</th>
+											<th id="valore">Valore</th>
 										</tr>
 										<tr>
 											<td class="etichetta">Ruolo</td>
@@ -771,6 +1079,16 @@
 								<td><%=ENGINEERINGDOC_WSADDFOLDER%></td>
 							</tr>
 							<tr>
+								<td class="etichetta">Inserimento fascicolo, tipo di dettaglio del fascicolo, da settare opzionalmente se e' definita una tipologia di fascicolo censita in AURIGA</td>
+								<td><%=ENGINEERINGDOC_ADDFOLDER_GENERICS12%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Inserimento fascicolo, default 'InCaricoA/Struttura'</td>
+								<td><%=ENGINEERINGDOC_ADDFOLDER_STRUTTURA%></td>
+							</tr>
+							
+							
+							<tr>
 								<td class="etichetta">Indirizzo servizio di estrazione dei metadati di un folder</td>
 								<td><%=ENGINEERINGDOC_WSGETMETADATAFOLDER%></td>
 							</tr>														
@@ -778,7 +1096,10 @@
 								<td class="etichetta">Indirizzo servizio di ricerca sul repository documentale</td>
 								<td><%=ENGINEERINGDOC_WSTROVADOCFOLDER%></td>
 							</tr>
-														
+							<tr>
+								<td class="etichetta">Indirizzo servizio di ricerca organigramma</td>
+								<td><%=ENGINEERINGDOC_WSTROVAINORGANIGRAMMA%></td>
+							</tr>
 							<tr>
 								<td class="etichetta">Codice applicazione</td>
 								<td><%=ENGINEERINGDOC_CODICEAPPLICAZIONE%></td>
@@ -991,8 +1312,7 @@
 								<td class="etichetta">Ricerca documenti nel fascicolo, profondita' in giorni</td>
 								<td><%=PRISMA_RICERCA_DOCUMENTI_FASCICOLO_GIORNI%></td>
 							</tr>								
-							</tr>	
-								<tr>
+							<tr>
 								<td class="etichetta">Ricerca documenti nel fascicolo, numero massimo di documenti per i quali leggere i dettagli</td>
 								<td><%=PRISMA_RICERCA_DOCUMENTI_NUMERO_MASSIMO%></td>
 							</tr>	
@@ -1176,6 +1496,10 @@
 								<td><%=ITALPROT_PROWSPROTOCOLLO%></td>
 							</tr>
 							<tr>
+								<td class="etichetta">Indirizzo servizio fascicolo</td>
+								<td><%=ITALPROT_PROWSFASCICOLO%></td>
+							</tr>							
+							<tr>
 								<td class="etichetta">Codice dell'ente (domainCode) per l'accesso al servizio protocollo</td>
 								<td><%=ITALPROT_CODICEENTE%></td>
 							</tr>
@@ -1231,18 +1555,6 @@
 								<td><%=JDOC_WS_OPERAZIONI%></td>
 							</tr>
 							<tr>
-								<td class="etichetta">Tipo documento (ingresso/entrata)</td>
-								<td><%=JDOC_DOCTYPE_ENTRATA%></td>
-							</tr>
-							<tr>
-								<td class="etichetta">Tipo documento (fascicolo)</td>
-								<td><%=JDOC_DOCTYPE_FASCICOLO%></td>
-							</tr>
-							<tr>
-								<td class="etichetta">Testo dell'allegato di creazione fascicolo</td>
-								<td><%=JDOC_FASCICOLO_TESTO_ALLEGATO%></td>
-							</tr>
-							<tr>
 								<td class="etichetta">Utente che sta archiviando</td>
 								<td><%=JDOC_USER%></td>
 							</tr>
@@ -1251,18 +1563,271 @@
 								<td><%=JDOC_COMPANY%></td>
 							</tr>
 							<tr>
-								<td class="etichetta">Protocollo parametro C01</td>
+								<td class="etichetta">Protocollo, Tipo documento (DOCTYPE) (utilizzato solo per la protocollazione in ingresso)</td>
+								<td><%=JDOC_DOCTYPE_ENTRATA%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Protocollo, Parametro C01 per il Tipo documento "CORR_SOC"</td>
 								<td><%=JDOC_PROTOCOLLO_C01%></td>
 							</tr>
 							<tr>
-								<td class="etichetta">Protocollo parametro C11</td>
+								<td class="etichetta">Protocollo, Parametro C11 per il Tipo documento "CORR_SOC"</td>
 								<td><%=JDOC_PROTOCOLLO_C11%></td>
 							</tr>
 							<tr>
-								<td class="etichetta">Fascicolo parametro C01</td>
+								<td class="etichetta">Protocollo, Parametro C01 (Area) per il Tipo documento "CONTRATTO"</td>
+								<td><%=JDOC_CONTRATTO_C01%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Protocollo, Parametro C11 (Codice fornitore) per il Tipo documento "CONTRATTO"</td>
+								<td><%=JDOC_CONTRATTO_C11%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Protocollo, Parametro C16 (Ragione sociale del fornitore) per il Tipo documento "CONTRATTO"</td>
+								<td><%=JDOC_CONTRATTO_C16%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Fascicolo, Tipo documento (DOCTYPE)</td>
+								<td><%=JDOC_DOCTYPE_FASCICOLO%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Fascicolo, Parametro C01</td>
 								<td><%=JDOC_FASCICOLO_C01%></td>
 							</tr>
+							<tr>
+								<td class="etichetta">Fascicolo, Testo dell'allegato di creazione fascicolo</td>
+								<td><%=JDOC_FASCICOLO_TESTO_ALLEGATO%></td>
+							</tr>							
+						</c:when>
+						<c:when test="${remotewsdm eq 'FOLIUMAGORA'}">
+							<tr>
+								<td class="etichetta">Indirizzo servizio fascicolo</td>
+								<td><%=FOLIUMAGORA_WS_FASCICOLO%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo servizio protocollo</td>
+								<td><%=FOLIUMAGORA_WS_PROTOCOLLO%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">AOO</td>
+								<td><%=FOLIUMAGORA_AOO%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Applicazione</td>
+								<td><%=FOLIUMAGORA_APPLICAZIONE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Ente</td>
+								<td><%=FOLIUMAGORA_ENTE%></td>
+							</tr>
+						</c:when>
+						
+						<c:when test="${remotewsdm eq 'DOCER'}">
+							<tr>
+								<td class="etichetta">Indirizzo del servizio 'AuthenticationService'</td>
+								<td><%=DOCER_AUTHENTICATION%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo del servizio 'DocerService'</td>
+								<td><%=DOCER_WS_DOCER%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo del servizio 'Protocollazione'</td>
+								<td><%=DOCER_WS_PROTOCOLLAZIONE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo del servizio 'Fascicolazione'</td>
+								<td><%=DOCER_WS_FASCICOLAZIONE%></td>
+							</tr>
 							
+							<tr>
+								<td class="etichetta">Codice amministrazione/ente</td>
+								<td><%=DOCER_AMMINISTRAZIONE_CODICE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Denominazione dell'amministrazione/ente</td>
+								<td><%=DOCER_AMMINISTRAZIONE_DENOMINAZIONE%></td>
+							</tr>
+								<tr>
+								<td class="etichetta">Indirizzo telematico dell'amministrazione/ente</td>
+								<td><%=DOCER_AMMINISTRAZIONE_INDIRIZZO_TELEMATICO%></td>
+							</tr>							
+							<tr>
+								<td class="etichetta">Codice AOO</td>
+								<td><%=DOCER_AOO_CODICE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Denominazione AOO</td>
+								<td><%=DOCER_AOO_DENOMINAZIONE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo telematico AOO</td>
+								<td><%=DOCER_AOO_INDIRIZZO_TELEMATICO%></td>
+							</tr>							
+							<tr>
+								<td class="etichetta">Codice AOO mittente</td>
+								<td><%=DOCER_AOO_MITTENTE_CODICE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Denominazione AOO mittente</td>
+								<td><%=DOCER_AOO_MITTENTE_DENOMINAZIONE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo telematico AOO mittente</td>
+								<td><%=DOCER_AOO_MITTENTE_INDIRIZZO_TELEMATICO%></td>
+							</tr>							
+							<tr>
+								<td class="etichetta">Codice applicazione</td>
+								<td><%=DOCER_APPLICATION%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Lista dei codici GROUP_ID o USER_ID cui assegnare i diritti sui documenti. I codici devono essere separati da virgola (,)</td>
+								<td><%=DOCER_ACL%></td>
+							</tr>							
+						</c:when>
+						<c:when test="${remotewsdm eq 'NUMIX'}">
+							<tr>
+								<td class="etichetta">Indirizzo del servizio REST</td>
+								<td><%=NUMIX_WS%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Codice organizzazione ORGCODE</td>
+								<td><%=NUMIX_ORGCODE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Registry type protocol</td>
+								<td><%=NUMIX_REGISTRY_TYPE_PROTOCOL%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Registry type document</td>
+								<td><%=NUMIX_REGISTRY_TYPE_DOCUMENT%></td>
+							</tr>
+							<tr>
+								<td class="etichetta"> Sender Id protocollo in ingresso</td>
+								<td><%=NUMIX_IN_SENDER_ID%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Sender Id protocollo in uscita</td>
+								<td><%=NUMIX_OUT_SENDER_ID%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Sender Id protocollo interno</td>
+								<td><%=NUMIX_INT_SENDER_ID%></td>
+							</tr>								
+						</c:when>
+						<c:when test="${remotewsdm eq 'GENERIC01'}">
+							<tr>
+								<td class="etichetta">Indirizzo del servizio LOGIN</td>
+								<td><%=GENERIC01_LOGIN_WS%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Parametro GRANT_TYPE</td>
+								<td><%=GENERIC01_LOGIN_GRANT_TYPE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Parametro SCOPE</td>
+								<td><%=GENERIC01_LOGIN_SCOPE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo del servizio PROTOCOLLO</td>
+								<td><%=GENERIC01_PROTOCOLLO_WS%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo del servizio DOCUMENTALE</td>
+								<td><%=GENERIC01_DOCUMENTALE_WS%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Parametro SERVICE_PROVIDER_CODE</td>
+								<td><%=GENERIC01_PROTOCOLLO_SERVICE_PROVIDER_CODE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Parametro PROTOCOLLO_CLIENT_ID</td>
+								<td><%=GENERIC01_PROTOCOLLO_PROTOCOLLO_CLIENT_ID%></td>
+							</tr>	
+							<tr>
+								<td class="etichetta">Parametro PROTOCOLLO_USER_ID</td>
+								<td><%=GENERIC01_PROTOCOLLO_PROTOCOLLO_USER_ID%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Parametro SYSLOGIN</td>
+								<td><%=GENERIC01_SYSLOGIN%></td>
+							</tr>									
+						</c:when>
+						<c:when test="${remotewsdm eq 'DATAGRAPH' or remotewsdm eq 'DATAGRAPH.PRISMA'}">
+							<tr>
+								<td class="etichetta">Indirizzo servizio protocollo (DOCAreaProto)</td>
+								<td><%=DATAGRAPH_DOCAREAPROTO%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Denominazione amministrazione</td>
+								<td><%=DATAGRAPH_DENOMINAZIONE_AMMINISTRAZIONE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Codice amministrazione</td>
+								<td><%=DATAGRAPH_CODICE_AMMINISTRAZIONE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Codice AOO</td>
+								<td><%=DATAGRAPH_CODICE_AOO%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Nome applicativo protocollo</td>
+								<td><%=DATAGRAPH_NOME_APPLICATIVO%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Tipo smistamento (CONOSCENZA o COMPETENZA)</td>
+								<td><%=DATAGRAPH_TIPO_SMISTAMENTO%></td>
+							</tr>	
+						</c:when>
+						<c:when test="${remotewsdm eq 'FOLIUM2' or remotewsdm eq 'FOLIUM2.FOLIUM'}">
+							<tr>
+								<td class="etichetta">Indirizzo servizio protocollo</td>
+								<td><%=FOLIUM2_WS_PROTOCOLLO%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">AOO</td>
+								<td><%=FOLIUM2_AOO%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Applicazione</td>
+								<td><%=FOLIUM2_APPLICAZIONE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Ente</td>
+								<td><%=FOLIUM2_ENTE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Registro (se nullo si utilizza il registro ufficiale)</td>
+								<td><%=FOLIUM2_REGISTRO%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Esegui il salvataggio dei documenti allegati</td>
+								<td><%=FOLIUM2_ESEGUI_SALVA_DOCUMENTO%></td>
+							</tr>
+						</c:when>
+						<c:when test="${remotewsdm eq 'INFOR2' or remotewsdm eq 'INFOR2.INFOR'}">
+							<tr>
+								<td class="etichetta">Indirizzo servizio JPROTOCOLLO</td>
+								<td><%=INFOR2_JPROTOCOLLO_ENDPOINT%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo servizio JPROTOCOLLOGEN</td>
+								<td><%=INFOR2_JPROTOCOLLOGEN_ENDPOINT%></td>
+							</tr>
+						</c:when>
+						<c:when test="${remotewsdm eq 'LAPISOPERA'}">
+							<tr>
+								<td class="etichetta">Indirizzo servizio protocollo LAPIS</td>
+								<td><%=LAPIS_PROTOCOLLO_URL%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Codice applicativo protocollo LAPIS</td>
+								<td><%=LAPIS_CODICE_APPLICATIVO%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo servizio documentale OPERA</td>
+								<td><%=OPERA_DOCUMENTALE_URL%></td>
+							</tr>
 						</c:when>
 						<c:otherwise>
 							<td colspan="2" style="text-align: center;">

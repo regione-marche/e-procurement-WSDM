@@ -46,17 +46,6 @@ public class JDocUtilityControllo {
       StringBuffer messaggio) {
     ArrayList<String> alObb = new ArrayList<String>();
 
-    // Mittenti e destinatari
-    if (WSDMProtocolloInOut.IN.equals(wsdmprotocolloDocumentoIn.getInout())) {
-      if (wsdmprotocolloDocumentoIn.getMittenti() == null) alObb.add(CTR_MESSAGE_MITTENTE);
-    } else if (WSDMProtocolloInOut.OUT.equals(wsdmprotocolloDocumentoIn.getInout())) {
-      if (wsdmprotocolloDocumentoIn.getDestinatari() == null) alObb.add(CTR_MESSAGE_DESTINATARIO);
-    } else if (WSDMProtocolloInOut.INT.equals(wsdmprotocolloDocumentoIn.getInout())) {
-      alObb.add(CTR_MESSAGE_PROTOCOLLO_INT_NON_AMMESSA);
-    } else {
-      alObb.add(CTR_MESSAGE_IN_OUT);
-    }
-
     // Oggetto
     if (!isTestoValido(wsdmprotocolloDocumentoIn.getOggetto())) alObb.add(CTR_MESSAGE_OGGETTO);
 
@@ -67,6 +56,24 @@ public class JDocUtilityControllo {
       if (!isTestoValido(wsdmprotocolloDocumentoIn.getTipoDocumento())) alObb.add(CTR_MESSAGE_TIPO_DOCUMENTO);
     } else if (WSDMProtocolloInOut.INT.equals(wsdmprotocolloDocumentoIn.getInout())) {
       if (!isTestoValido(wsdmprotocolloDocumentoIn.getTipoDocumento())) alObb.add(CTR_MESSAGE_TIPO_DOCUMENTO);
+    }
+
+    // Mittenti e destinatari
+    // WSDM-93 Nuovo tipo documento "CONTRATTO".
+    // Se il tipo documento e' "CONTRATTO" non e' necessario controllare nulla.
+    // Mittenti e destinatari sono obbligatori solo per tipo documento diverso
+    // da "CONTRATTO".
+    String tipoDocumento = wsdmprotocolloDocumentoIn.getTipoDocumento();
+    if (!"CONTRATTO".equals(tipoDocumento)) {
+      if (WSDMProtocolloInOut.IN.equals(wsdmprotocolloDocumentoIn.getInout())) {
+        if (wsdmprotocolloDocumentoIn.getMittenti() == null) alObb.add(CTR_MESSAGE_MITTENTE);
+      } else if (WSDMProtocolloInOut.OUT.equals(wsdmprotocolloDocumentoIn.getInout())) {
+        if (wsdmprotocolloDocumentoIn.getDestinatari() == null) alObb.add(CTR_MESSAGE_DESTINATARIO);
+      } else if (WSDMProtocolloInOut.INT.equals(wsdmprotocolloDocumentoIn.getInout())) {
+        alObb.add(CTR_MESSAGE_PROTOCOLLO_INT_NON_AMMESSA);
+      } else {
+        alObb.add(CTR_MESSAGE_IN_OUT);
+      }
     }
 
     // Inserimento in un fascicolo
@@ -123,7 +130,7 @@ public class JDocUtilityControllo {
 
     // Oggetto
     if (!isTestoValido(wsdmprotocolloDocumentoIn.getOggetto())) alObb.add(CTR_MESSAGE_OGGETTO);
-    
+
     // Controllo del tipo documento.
     // WSDM-77: il tipo documento viene passato da Appalti per la
     // protocollazioni in uscita (OUT) ed interne (INT)
