@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="Nome" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="Ruolo" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="UO" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="UserId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -42,7 +43,8 @@ import javax.xml.bind.annotation.XmlType;
     "cognome",
     "nome",
     "ruolo",
-    "uo"
+    "uo",
+    "userId"
 })
 public class OperatorePaleo {
 
@@ -62,6 +64,8 @@ public class OperatorePaleo {
     protected String ruolo;
     @XmlElement(name = "UO", nillable = true)
     protected String uo;
+    @XmlElement(name = "UserId", nillable = true)
+    protected String userId;
 
     /**
      * Gets the value of the codiceFiscale property.
@@ -253,6 +257,30 @@ public class OperatorePaleo {
      */
     public void setUO(String value) {
         this.uo = value;
+    }
+
+    /**
+     * Gets the value of the userId property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * Sets the value of the userId property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUserId(String value) {
+        this.userId = value;
     }
 
 }

@@ -36,7 +36,7 @@ public class TipoDatiFascicolo {
 
     @XmlElement(name = "Descrizione", nillable = true)
     protected String descrizione;
-    @XmlElement(name = "IdTipoDatiFascicolo")
+    @XmlElement(name = "IdTipoDatiFascicolo", nillable = true)
     protected Integer idTipoDatiFascicolo;
 
     /**

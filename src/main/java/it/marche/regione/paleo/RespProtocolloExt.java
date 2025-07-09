@@ -44,8 +44,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "segnatura"
 })
 @XmlSeeAlso({
-    RespProtocolloArrivoExt.class,
-    RespProtocolloPartenzaExt.class
+    RespProtocolloPartenzaExt.class,
+    RespProtocolloArrivoExt.class
 })
 public class RespProtocolloExt
     extends RespDocumentoExt

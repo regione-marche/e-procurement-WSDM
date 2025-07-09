@@ -2,7 +2,7 @@
 <Context path="/EldasoftWSDM" docBase="./EldasoftWSDM" reloadable="true" copyXML="true">
 
 	<!-- Tipologia di sistema remoto -->
-	<!-- Sistemi disponibili (IRIDE, JIRIDE, PALEO, ENGINEERING, ENGINEERINGDOC, ARCHIFLOW, TITULUS, SMAT, FOLIUM, ARCHIFLOWFA, EASYDOC, SISPI, PRISMA, INFOR, URBI, PROTSERVICE, JPROTOCOL, ITALPROT, JDOC, FOLIUMAGORA, DOCER, NUMIX, GENERIC01, DATAGRAPH, DATAGRAPH.PRISMA restituito ai client come PRISMA, FOLIUM2, FOLIUM2.FOLIUM restituito ai client come FOLIUM, INFOR2, INFOR2.INFOR restituito ai client come INFOR, LAPISOPERA) -->
+	<!-- Sistemi disponibili (IRIDE, JIRIDE, PALEO, ENGINEERING, ENGINEERINGDOC, ARCHIFLOW, TITULUS, SMAT, FOLIUM, ARCHIFLOWFA, EASYDOC, SISPI, PRISMA, INFOR, URBI, PROTSERVICE, JPROTOCOL, ITALPROT, JDOC, FOLIUMAGORA, DOCER, NUMIX, GENERIC01, DATAGRAPH, DATAGRAPH.PRISMA restituito ai client come PRISMA, FOLIUM2, FOLIUM2.FOLIUM restituito ai client come FOLIUM, INFOR2, INFOR2.INFOR restituito ai client come INFOR, LAPISOPERA, H5EDOK, ARCHIFLOW10FA, ARCHIFLOW10.ARCHIFLOW restituito ai client come ARCHIFLOW, HALLEY) -->
 	<!-- Scrivere il sistema in maiuscolo -->
 	<Environment description="Sistema di protocollazione" name="REMOTEWSDM" value="JIRIDE" type="java.lang.String" override="false" />
 	
@@ -45,7 +45,15 @@
 	<Environment description="PALEO: trasmissione automatica, operatore, nome" name="PALEO_TA_OP_NOME" value="" type="java.lang.String" ovveride="false" />
 	<Environment description="PALEO: trasmissione automatica, operatore, cognome" name="PALEO_TA_OP_COGNOME" value="" type="java.lang.String" ovveride="false" />
 	<Environment description="PALEO: trasmissione automatica, operatore, codiceUO" name="PALEO_TA_OP_CODICEUO" value="" type="java.lang.String" ovveride="false" />
-	<Environment description="PALEO: trasmissione automatica, tipo trasmissione" name="PALEO_TA_TIPO" value="" type="java.lang.String" ovveride="false" />	
+	<Environment description="PALEO: trasmissione automatica, tipo trasmissione" name="PALEO_TA_TIPO" value="" type="java.lang.String" ovveride="false" />
+
+	<Environment description="PALEO: fascicolo, materia" name="PALEO_FASCICOLO_MATERIA" value="" type="java.lang.String" ovveride="false" />
+	<Environment description="PALEO: fascicolo, uricatalogo" name="PALEO_FASCICOLO_URICATALOGO" value="" type="java.lang.String" ovveride="false" />
+	<Environment description="PALEO: fascicolo, rup, ruolo" name="PALEO_FASCICOLO_OP_RUOLO" value="" type="java.lang.String" ovveride="false" />
+	<Environment description="PALEO: fascicolo, rup, nome" name="PALEO_FASCICOLO_OP_NOME" value="" type="java.lang.String" ovveride="false" />
+	<Environment description="PALEO: fascicolo, rup, cognome" name="PALEO_FASCICOLO_OP_COGNOME" value="" type="java.lang.String" ovveride="false" />
+	<Environment description="PALEO: fascicolo, rup, codiceUO" name="PALEO_FASCICOLO_OP_CODICEUO" value="" type="java.lang.String" ovveride="false" />
+	<Environment description="PALEO: fascicolo, fase procedimento, tipo" name="PALEO_FASEPROCEDIMENTO_TIPO" value="" type="java.lang.String" ovveride="false" />
 
 	<!-- Protocollo ENGINEERING -->
 	<Environment description="ENGINEERING: protocollo, indirizzo servizio inserimento fascicolo" name="ENGINEERING_WSINSERIMENTOFASC" value="" type="java.lang.String" override="false" />
@@ -273,7 +281,37 @@
     <Environment description="LAPISOPERA: indirizzo del servizio protocollo LAPIS" name="LAPIS_PROTOCOLLO_URL" value="" type="java.lang.String" override="false" />
     <Environment description="LAPISOPERA: indirizzo del servizio documentale OPERA" name="OPERA_DOCUMENTALE_URL" value="" type="java.lang.String" override="false" />
     <Environment description="LAPISOPERA: codice applicativo protocollo LAPIS" name="LAPIS_CODICE_APPLICATIVO" value="" type="java.lang.String" override="false" />
-        
+    
+    <!--  Protocollo H5 -->
+    <Environment description="H5EDOK: indirizzo del servizio protocollo" name="H5EDOK_PROTOCOLLO_URL" value="" type="java.lang.String" override="false" />
+    <Environment description="H5EDOK: indirizzo del servizio di autenticazione" name="H5EDOK_AUTENTICAZIONE_URL" value="" type="java.lang.String" override="false" />
+    <Environment description="H5EDOK: autenticazione client id" name="H5EDOK_AUTENTICAZIONE_CLIENT_ID" value="" type="java.lang.String" override="false" />
+    <Environment description="H5EDOK: autenticazione client secret" name="H5EDOK_AUTENTICAZIONE_CLIENT_SECRET" value="" type="java.lang.String" override="false" />
+    <Environment description="H5EDOK: Tipo responsabile" name="H5EDOK_RESPONSIBLETYPE" value="" type="java.lang.String" override="false" />
+    <Environment description="H5EDOK: Identificativo univoco del titolario" name="H5EDOK_PCUNIQUE" value="" type="java.lang.String" override="false" />
+	<Environment description="H5EDOK: Identificativo univoco dell'operatore di protocollo" name="H5EDOK_RESPONSIBLEID" value="" type="java.lang.String" override="false" />
+	<Environment description="H5EDOK: Identificativo unita' operativa" name="H5EDOK_UOID" value="" type="java.lang.String" override="false" />
+	<Environment description="H5EDOK: Nome unita' operativa" name="H5EDOK_UONAME" value="" type="java.lang.String" override="false" />
+	<Environment description="H5EDOK: Nome responsabile dell'unita' operativa" name="H5EDOK_RESPONSIBLENAME" value="" type="java.lang.String" override="false" />
+	<Environment description="H5EDOK: Livello di riservatezza" name="H5EDOK_DSLIVRISID" value="" type="java.lang.String" override="false" />
+	<Environment description="H5EDOK: Livello privacy" name="H5EDOK_PRIVACYLEVELID" value="" type="java.lang.String" override="false" />
+	<Environment description="H5EDOK: Nome della AOO" name="H5EDOK_AOONAME" value="" type="java.lang.String" override="false" />
+	<Environment description="H5EDOK: Identificativo della AOO" name="H5EDOK_AOOID" value="" type="java.lang.String" override="false" />
+	<Environment description="H5EDOK: Identificativo univoco dell'organigramma" name="H5EDOK_OCUNIQUE" value="" type="java.lang.String" override="false" />
+	<Environment description="H5EDOK: Nome ricevente" name="H5EDOK_RECEIVINGNAME" value="" type="java.lang.String" override="false" />
+	<Environment description="H5EDOK: Nome mittente" name="H5EDOK_SENDERNAME" value="" type="java.lang.String" override="false" />
+
+	<!-- Protocollo/documentale HALLEY -->
+	<Environment description="HALLEY: indirizzo servizio inserimento protocollo" name="HALLEY_WSINSERIMENTOPROTOCOLLO" value="" type="java.lang.String" override="false" />
+	<Environment description="HALLEY: indirizzo servizio consulta documenti" name="HALLEY_WSCONSULTADOC" value="" type="java.lang.String" override="false" />
+	<Environment description="HALLEY: indirizzo servizi aggiuntivi (fascicolo, classifica, uffici)" name="HALLEY_WSAGGIUNTIVI" value="" type="java.lang.String" override="false" />
+	<Environment description="HALLEY: indirizzo servizi estrai protocolli" name="HALLEY_WSESTRAIPROTOCOLLI" value="" type="java.lang.String" override="false" />
+
+	<Environment description="HALLEY: operatore virtuale utente" name="HALLEY_OPERATORE_VIRTUALE_UTENTE" value="" type="java.lang.String" override="false" />
+	<Environment description="HALLEY: operatore virtuale password" name="HALLEY_OPERATORE_VIRTUALE_PASSWORD" value="" type="java.lang.String" override="false" />
+	<Environment description="HALLEY: operatore fisico utente" name="HALLEY_OPERATORE_FISICO_UTENTE" value="" type="java.lang.String" override="false" />
+	<Environment description="HALLEY: operatore fisico password" name="HALLEY_OPERATORE_FISICO_PASSWORD" value="" type="java.lang.String" override="false" />
+
 	<!-- TABELLATI -->
 	<!-- IRIDE/JIRIDE - Codice della classifica -->
 	<Environment name="tab/JIRIDE/classifica/NDEF" value="Non definita" type="java.lang.String" override="false" />

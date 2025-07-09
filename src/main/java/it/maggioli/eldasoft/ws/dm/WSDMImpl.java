@@ -503,5 +503,24 @@ public class WSDMImpl implements WSDM {
     wsdmprotocolloDocumentoRes = wsdmManager._protocolloAsincronoEsito(username, password, loginAttr, id);
     return wsdmprotocolloDocumentoRes;
   }
+  
+  public WSDMDocumentoAggiungiInformazioniRes WSDMDocumentoAggiungiInformazioni(WSDMLoginAttr loginAttr, WSDMDocumentoAggiungiInformazioni documentoAggiungiInformazioni) throws RemoteException {
+    WSDMDocumentoAggiungiInformazioniRes wsdmDocumentoAggiungiInformazioniRes = new WSDMDocumentoAggiungiInformazioniRes();
+    UsernameToken ut = this.getUsernameToken();
+    String username = ut.getName();
+    String password = this.decodePassword(ut.getPassword());
+    wsdmDocumentoAggiungiInformazioniRes = wsdmManager._documentoAggiungiInformazioni(username, password, loginAttr, documentoAggiungiInformazioni);
+    return wsdmDocumentoAggiungiInformazioniRes;
+  }
+
+  @Override
+  public WSDMFascicoloChiudiRes WSDMFascicoloChiudi(WSDMLoginAttr loginAttr, WSDMFascicoloChiudiIn fascicoloChiudiIn) throws RemoteException {
+    WSDMFascicoloChiudiRes wsdmFascicoloChiudiRes = new WSDMFascicoloChiudiRes();
+    UsernameToken ut = this.getUsernameToken();
+    String username = ut.getName();
+    String password = this.decodePassword(ut.getPassword());
+    wsdmFascicoloChiudiRes = wsdmManager._fascicoloChiudi(username, password, loginAttr, fascicoloChiudiIn);
+    return wsdmFascicoloChiudiRes;
+  }
 
 }

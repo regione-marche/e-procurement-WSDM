@@ -2,37 +2,8 @@ package it.maggioli.eldasoft.bl;
 
 import java.util.Date;
 
+import it.maggioli.eldasoft.ws.dm.*;
 import org.apache.log4j.Logger;
-
-import it.maggioli.eldasoft.ws.dm.WSDMAggiungiAllegatiIn;
-import it.maggioli.eldasoft.ws.dm.WSDMAggiungiAllegatiRes;
-import it.maggioli.eldasoft.ws.dm.WSDMAnagraficaLeggiRes;
-import it.maggioli.eldasoft.ws.dm.WSDMAttoContrattoRes;
-import it.maggioli.eldasoft.ws.dm.WSDMDocumentoCollegaRes;
-import it.maggioli.eldasoft.ws.dm.WSDMFascicoloIn;
-import it.maggioli.eldasoft.ws.dm.WSDMFascicoloModificaIn;
-import it.maggioli.eldasoft.ws.dm.WSDMFascicoloModificaRes;
-import it.maggioli.eldasoft.ws.dm.WSDMFascicoloRes;
-import it.maggioli.eldasoft.ws.dm.WSDMInviaMail;
-import it.maggioli.eldasoft.ws.dm.WSDMInviaMailRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaAccountEmailRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaAmministrazioniAooRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaClassificheRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaOperatoriRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaProfiliRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaTipiTrasmissioneRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaUfficiRes;
-import it.maggioli.eldasoft.ws.dm.WSDMLoginAttr;
-import it.maggioli.eldasoft.ws.dm.WSDMProtocolloDocumentoIn;
-import it.maggioli.eldasoft.ws.dm.WSDMProtocolloDocumentoRes;
-import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaIn;
-import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaRes;
-import it.maggioli.eldasoft.ws.dm.WSDMRicercaAccountEmail;
-import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicolo;
-import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicoloRes;
-import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneIn;
-import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneRes;
-import it.maggioli.eldasoft.ws.dm.WSDMVerificaMailRes;
 
 /**
  * Manager per la gestione documentale.
@@ -297,8 +268,24 @@ public class WSDMManager implements IWSDMManager {
   public WSDMProtocolloDocumentoRes _protocolloAsincronoEsito(String username, String password, WSDMLoginAttr loginAttr, String id) {
     WSDMProtocolloDocumentoRes wsdmprotocolloDocumentoRes = new WSDMProtocolloDocumentoRes();
     wsdmprotocolloDocumentoRes.setEsito(false);
-    wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    wsdmprotocolloDocumentoRes.setMessaggio(NO_MANAGER);
     return wsdmprotocolloDocumentoRes;
+  }
+  
+  @Override
+  public WSDMDocumentoAggiungiInformazioniRes _documentoAggiungiInformazioni(String username, String password, WSDMLoginAttr loginAttr, WSDMDocumentoAggiungiInformazioni documentoAggiungiInformazioni) {
+    WSDMDocumentoAggiungiInformazioniRes wsdmDocumentoAggiungiInformazioniRes = new WSDMDocumentoAggiungiInformazioniRes();
+    wsdmDocumentoAggiungiInformazioniRes.setEsito(false);
+    wsdmDocumentoAggiungiInformazioniRes.setMessaggio(NO_MANAGER);
+    return wsdmDocumentoAggiungiInformazioniRes;
+  }
+
+  @Override
+  public WSDMFascicoloChiudiRes _fascicoloChiudi(String username, String password, WSDMLoginAttr loginAttr, WSDMFascicoloChiudiIn fascicoloChiudiIn) {
+    WSDMFascicoloChiudiRes wsdmFascicoloChiudiRes = new WSDMFascicoloChiudiRes();
+    wsdmFascicoloChiudiRes.setEsito(false);
+    wsdmFascicoloChiudiRes.setMessaggio(NO_MANAGER);
+    return wsdmFascicoloChiudiRes;
   }
 
 }

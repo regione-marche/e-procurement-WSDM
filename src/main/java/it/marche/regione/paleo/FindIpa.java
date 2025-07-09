@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import org.datacontract.schemas._2004._07.regionemarche_protocollo.TipoOggettoIPA;
+import org.datacontract.schemas._2004._07.regionemarche_protocollo_providers_common.TipoOggettoIPA;
 
 
 /**
@@ -21,7 +21,7 @@ import org.datacontract.schemas._2004._07.regionemarche_protocollo.TipoOggettoIP
  *       &lt;sequence>
  *         &lt;element name="opp" type="{http://paleo.regione.marche.it/services/}OperatorePaleo" minOccurs="0"/>
  *         &lt;element name="descrizione" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="tipoOggetto" type="{http://schemas.datacontract.org/2004/07/RegioneMarche.Protocollo.Providers}TipoOggettoIPA" minOccurs="0"/>
+ *         &lt;element name="tipoOggetto" type="{http://schemas.datacontract.org/2004/07/RegioneMarche.Protocollo.Providers.Common.Services}TipoOggettoIPA" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

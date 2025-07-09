@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "WSDMProtocolloAnagraficaType", propOrder = { "cognomeointestazione", "nome", "codiceFiscale", "indirizzoResidenza",
     "localitaResidenza", "comuneResidenza", "codiceComuneResidenza", "dataNascita", "comuneNascita", "codiceComuneNascita", "nazionalita",
     "email", "istatComune", "tipoVoceRubrica", "mezzo", "partitaIVA", "emailAggiuntiva", "provinciaResidenza", "capResidenza", "telefono",
-    "fax", "nazionalitaISO3166", "numeroCivicoResidenza" })
+    "fax", "nazionalitaISO3166", "numeroCivicoResidenza", "id" })
 public class WSDMProtocolloAnagrafica {
 
   private String              cognomeointestazione;
@@ -33,8 +33,16 @@ public class WSDMProtocolloAnagrafica {
   private String              telefono;
   private String              fax;
   private String              nazionalitaISO3166;
-
   private String              numeroCivicoResidenza;
+  private Long                id;
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
 
   @XmlElement(required = true)
   public String getCognomeointestazione() {

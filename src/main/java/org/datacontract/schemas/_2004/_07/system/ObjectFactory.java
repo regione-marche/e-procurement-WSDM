@@ -24,7 +24,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _Color_QNAME = new QName("http://schemas.datacontract.org/2004/07/System.Drawing", "Color");
+    private final static QName _TupleOfintint_QNAME = new QName("http://schemas.datacontract.org/2004/07/System", "TupleOfintint");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.datacontract.schemas._2004._07.system
@@ -34,20 +34,20 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Color }
+     * Create an instance of {@link TupleOfintint }
      * 
      */
-    public Color createColor() {
-        return new Color();
+    public TupleOfintint createTupleOfintint() {
+        return new TupleOfintint();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Color }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link TupleOfintint }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/System.Drawing", name = "Color")
-    public JAXBElement<Color> createColor(Color value) {
-        return new JAXBElement<Color>(_Color_QNAME, Color.class, null, value);
+    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/System", name = "TupleOfintint")
+    public JAXBElement<TupleOfintint> createTupleOfintint(TupleOfintint value) {
+        return new JAXBElement<TupleOfintint>(_TupleOfintint_QNAME, TupleOfintint.class, null, value);
     }
 
 }

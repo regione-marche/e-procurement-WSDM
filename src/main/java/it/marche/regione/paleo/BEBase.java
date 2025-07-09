@@ -34,9 +34,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlSeeAlso({
     RespAddAllegati.class,
     RespSpedisciProtocollo.class,
-    DataGenerica.class,
-    Registro.class,
     DatiCorrispondente.class,
+    Registro.class,
+    DataGenerica.class,
     RespDocumento.class
 })
 public class BEBase {

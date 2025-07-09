@@ -1,50 +1,7 @@
 package it.maggioli.eldasoft.bl.paleo;
 
 import it.maggioli.eldasoft.bl.IWSDMManager;
-import it.maggioli.eldasoft.ws.dm.WSDMAggiungiAllegatiIn;
-import it.maggioli.eldasoft.ws.dm.WSDMAggiungiAllegatiRes;
-import it.maggioli.eldasoft.ws.dm.WSDMAnagraficaLeggiRes;
-import it.maggioli.eldasoft.ws.dm.WSDMAttoContrattoRes;
-import it.maggioli.eldasoft.ws.dm.WSDMDocumentoCollegaRes;
-import it.maggioli.eldasoft.ws.dm.WSDMFascicolo;
-import it.maggioli.eldasoft.ws.dm.WSDMFascicoloDocumento;
-import it.maggioli.eldasoft.ws.dm.WSDMFascicoloIn;
-import it.maggioli.eldasoft.ws.dm.WSDMFascicoloModificaIn;
-import it.maggioli.eldasoft.ws.dm.WSDMFascicoloModificaRes;
-import it.maggioli.eldasoft.ws.dm.WSDMFascicoloRes;
-import it.maggioli.eldasoft.ws.dm.WSDMInserimentoInFascicolo;
-import it.maggioli.eldasoft.ws.dm.WSDMInviaMail;
-import it.maggioli.eldasoft.ws.dm.WSDMInviaMailRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaAccountEmailRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaAmministrazioniAooRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaClassificheRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaOperatoriRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaProfiliRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaTipiTrasmissioneRes;
-import it.maggioli.eldasoft.ws.dm.WSDMListaUfficiRes;
-import it.maggioli.eldasoft.ws.dm.WSDMLoginAttr;
-import it.maggioli.eldasoft.ws.dm.WSDMMailInfo;
-import it.maggioli.eldasoft.ws.dm.WSDMMailInfo2;
-import it.maggioli.eldasoft.ws.dm.WSDMOperatore;
-import it.maggioli.eldasoft.ws.dm.WSDMProtocolloAllegato;
-import it.maggioli.eldasoft.ws.dm.WSDMProtocolloAnagrafica;
-import it.maggioli.eldasoft.ws.dm.WSDMProtocolloDocumento;
-import it.maggioli.eldasoft.ws.dm.WSDMProtocolloDocumentoIn;
-import it.maggioli.eldasoft.ws.dm.WSDMProtocolloDocumentoRes;
-import it.maggioli.eldasoft.ws.dm.WSDMProtocolloInOut;
-import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaIn;
-import it.maggioli.eldasoft.ws.dm.WSDMProtocolloModificaRes;
-import it.maggioli.eldasoft.ws.dm.WSDMRicercaAccountEmail;
-import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicolo;
-import it.maggioli.eldasoft.ws.dm.WSDMRicercaFascicoloRes;
-import it.maggioli.eldasoft.ws.dm.WSDMTipoDocumentoPrincipaleOriginale;
-import it.maggioli.eldasoft.ws.dm.WSDMTipoTrasmissione;
-import it.maggioli.eldasoft.ws.dm.WSDMTipoVoceRubrica;
-import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneDocumento;
-import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneIn;
-import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneRes;
-import it.maggioli.eldasoft.ws.dm.WSDMTrasmissioneUtente;
-import it.maggioli.eldasoft.ws.dm.WSDMVerificaMailRes;
+import it.maggioli.eldasoft.ws.dm.*;
 import it.marche.regione.paleo.Allegato;
 import it.marche.regione.paleo.ArrayOfAllegato;
 import it.marche.regione.paleo.ArrayOfClassificazione;
@@ -1926,10 +1883,10 @@ public class PaleoManager implements IWSDMManager {
                 RagioneTrasmissione ragioneTrasmissionePaleo = listaRagioniTrasmissionePaleo.get(r);
                 listaTipiTrasmissione[r] = new WSDMTipoTrasmissione();
 
-                listaTipiTrasmissione[r].setNome(ragioneTrasmissionePaleo.getNome());
+                listaTipiTrasmissione[r].setNome(ragioneTrasmissionePaleo.getDescrizione());
                 listaTipiTrasmissione[r].setDescrizione(ragioneTrasmissionePaleo.getDescrizione());
                 listaTipiTrasmissione[r].setCodice(ragioneTrasmissionePaleo.getCodice());
-                listaTipiTrasmissione[r].setTipoDestinatario(ragioneTrasmissionePaleo.getTipoDestinatario());
+                listaTipiTrasmissione[r].setTipoDestinatario(ragioneTrasmissionePaleo.getTipoDestinatario().value());
 
               }
 
@@ -2013,7 +1970,7 @@ public class PaleoManager implements IWSDMManager {
 
         }
 
-        BEBase beBase = iPaleoService.effettuaTrasmissioni(operatorePaleo, arrayOfTrasmissioneDoc);
+        BEBase beBase = iPaleoService.effettuaTrasmissioni(operatorePaleo, arrayOfTrasmissioneDoc, true);
 
         if (TipoRisultato.ERROR.equals(beBase.getMessaggioRisultato().getTipoRisultato())) {
           wsdmTrasmissioneRes.setEsito(false);
@@ -2095,4 +2052,21 @@ public class PaleoManager implements IWSDMManager {
     wsdmprotocolloDocumentoRes.setMessaggio(OPERATION_NOT_SUPPORTED);
     return wsdmprotocolloDocumentoRes;
   }
+  
+  @Override
+  public WSDMDocumentoAggiungiInformazioniRes _documentoAggiungiInformazioni(String username, String password, WSDMLoginAttr loginAttr, WSDMDocumentoAggiungiInformazioni documentoAggiungiInformazioni) {
+    WSDMDocumentoAggiungiInformazioniRes wsdmDocumentoAggiungiInformazioniRes = new WSDMDocumentoAggiungiInformazioniRes();
+    wsdmDocumentoAggiungiInformazioniRes.setEsito(false);
+    wsdmDocumentoAggiungiInformazioniRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmDocumentoAggiungiInformazioniRes;
+  }
+
+  @Override
+  public WSDMFascicoloChiudiRes _fascicoloChiudi(String username, String password, WSDMLoginAttr loginAttr, WSDMFascicoloChiudiIn fascicoloChiudiIn) {
+    WSDMFascicoloChiudiRes wsdmFascicoloChiudiRes = new WSDMFascicoloChiudiRes();
+    wsdmFascicoloChiudiRes.setEsito(false);
+    wsdmFascicoloChiudiRes.setMessaggio(OPERATION_NOT_SUPPORTED);
+    return wsdmFascicoloChiudiRes;
+  }
+  
 }

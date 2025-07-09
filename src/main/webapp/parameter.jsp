@@ -257,8 +257,8 @@
 	Object ARCHIFLOW_WS_FOLDER = "";
 	Object ARCHIFLOW_WS_POSTING = "";
 	Object ARCHIFLOW_WS_LOGIN_DOMAIN = "Archiflow";
-	
-	if (REMOTEWSDM.equals("ARCHIFLOW")) {
+
+	if (REMOTEWSDM.equals("ARCHIFLOW") || REMOTEWSDM.equals("ARCHIFLOW10") || REMOTEWSDM.equals("ARCHIFLOW10.ARCHIFLOW")) {
 		try {
 			ARCHIFLOW_WS_LOGIN = ctx.lookup("ARCHIFLOW_WS_LOGIN");
 			ARCHIFLOW_WS_CARD = ctx.lookup("ARCHIFLOW_WS_CARD");
@@ -267,11 +267,13 @@
 		} catch (Throwable ex) {
 			ERRORERILEVATO = ERRORERILEVATO + "<br>" + ex.toString();
 		}
+
 		try {
 		  ARCHIFLOW_WS_LOGIN_DOMAIN = ctx.lookup("ARCHIFLOW_WS_LOGIN_DOMAIN");
 		} catch (Throwable ex) {
 
 		}
+
 	}
 	
 
@@ -778,6 +780,60 @@
 		}
 	}
 	
+	Object H5EDOK_PROTOCOLLO_URL = "";
+	Object H5EDOK_AUTENTICAZIONE_URL = "";
+	Object H5EDOK_RESPONSIBLETYPE  = ""; 
+	Object H5EDOK_PCUNIQUE         = ""; 
+	Object H5EDOK_RESPONSIBLEID    = ""; 
+	Object H5EDOK_UOID             = ""; 
+	Object H5EDOK_UONAME           = ""; 
+	Object H5EDOK_RESPONSIBLENAME  = ""; 
+	Object H5EDOK_DSLIVRISID       = ""; 
+	Object H5EDOK_PRIVACYLEVELID   = ""; 
+	Object H5EDOK_AOONAME          = ""; 
+	Object H5EDOK_AOOID            = ""; 
+	Object H5EDOK_OCUNIQUE         = ""; 
+	Object H5EDOK_RECEIVINGNAME    = ""; 
+	Object H5EDOK_SENDERNAME       = ""; 
+	
+	
+	if (REMOTEWSDM.equals("H5EDOK")) {
+		try {
+		  H5EDOK_PROTOCOLLO_URL = ctx.lookup("H5EDOK_PROTOCOLLO_URL");
+		  H5EDOK_AUTENTICAZIONE_URL = ctx.lookup("H5EDOK_AUTENTICAZIONE_URL");
+		  H5EDOK_RESPONSIBLETYPE = ctx.lookup("H5EDOK_RESPONSIBLETYPE"); 
+		  H5EDOK_PCUNIQUE = ctx.lookup("H5EDOK_PCUNIQUE");       
+		  H5EDOK_RESPONSIBLEID = ctx.lookup("H5EDOK_RESPONSIBLEID");   
+		  H5EDOK_UOID = ctx.lookup("H5EDOK_UOID");         
+		  H5EDOK_UONAME = ctx.lookup("H5EDOK_UONAME");          
+		  H5EDOK_RESPONSIBLENAME = ctx.lookup("H5EDOK_RESPONSIBLENAME"); 
+		  H5EDOK_DSLIVRISID = ctx.lookup("H5EDOK_DSLIVRISID");      
+		  H5EDOK_PRIVACYLEVELID = ctx.lookup("H5EDOK_PRIVACYLEVELID");  
+		  H5EDOK_AOONAME = ctx.lookup("H5EDOK_AOONAME");         
+		  H5EDOK_AOOID = ctx.lookup("H5EDOK_AOOID");           
+		  H5EDOK_OCUNIQUE = ctx.lookup("H5EDOK_OCUNIQUE");        
+		  H5EDOK_RECEIVINGNAME = ctx.lookup("H5EDOK_RECEIVINGNAME");   
+		  H5EDOK_SENDERNAME = ctx.lookup("H5EDOK_SENDERNAME"); 
+		} catch (Throwable ex) {
+			ERRORERILEVATO = ERRORERILEVATO + "<br>" + ex.toString();
+		}
+	}
+
+	Object HALLEY_WSINSERIMENTOPROTOCOLLO = "";
+	Object HALLEY_WSCONSULTADOC = "";
+	Object HALLEY_WSAGGIUNTIVI = "";
+	Object HALLEY_WSESTRAIPROTOCOLLI = "";
+
+	if (REMOTEWSDM.equals("HALLEY")) {
+		try {
+			HALLEY_WSINSERIMENTOPROTOCOLLO = ctx.lookup("HALLEY_WSINSERIMENTOPROTOCOLLO");
+			HALLEY_WSCONSULTADOC = ctx.lookup("HALLEY_WSCONSULTADOC");
+			HALLEY_WSAGGIUNTIVI = ctx.lookup("HALLEY_WSAGGIUNTIVI");
+			HALLEY_WSESTRAIPROTOCOLLI = ctx.lookup("HALLEY_WSESTRAIPROTOCOLLI");
+		} catch (Throwable ex) {
+			ERRORERILEVATO = ERRORERILEVATO + "<br>" + ex.toString();
+		}
+	}
 	
 	Object ELDASOFTWSDM_VER = "";
 	try {
@@ -873,9 +929,9 @@
 								<tr>
 									<td>INFOR2<br>INFOR2.INFOR restituito ai client come INFOR</td>
 									<td>LAPISOPERA</td>
-									<td></td>
-									<td></td>
-									<td></td>
+									<td>H5EDOK</td>
+									<td>ARCHIFLOW10<br>ARCHIFLOW10.ARCHIFLOW restituito ai client come ARCHIFLOW</td>
+									<td>HALLEY</td>
 								</tr>
 							</table>
 						</td>
@@ -1110,7 +1166,7 @@
 								<td><%=ENGINEERINGDOC_ISTANZAAPPLICAZIONE%></td>
 							</tr>
 						</c:when>
-						<c:when test="${remotewsdm eq 'ARCHIFLOW'}">
+						<c:when test="${remotewsdm eq 'ARCHIFLOW' or remotewsdm eq 'ARCHIFLOW10.ARCHIFLOW' or remotewsdm eq 'ARCHIFLOW10'}">
 							<tr>
 								<td class="etichetta">Indirizzo servizio login</td>
 								<td><%=ARCHIFLOW_WS_LOGIN%></td>
@@ -1827,6 +1883,89 @@
 							<tr>
 								<td class="etichetta">Indirizzo servizio documentale OPERA</td>
 								<td><%=OPERA_DOCUMENTALE_URL%></td>
+							</tr>
+						</c:when>
+						<c:when test="${remotewsdm eq 'H5EDOK'}">
+							<tr>
+								<td class="etichetta">Indirizzo servizio di autenticazione</td>
+								<td><%=H5EDOK_AUTENTICAZIONE_URL%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo protocollo</td>
+								<td><%=H5EDOK_PROTOCOLLO_URL%></td>
+							</tr>
+							
+							<tr>
+								<td class="etichetta">Tipo responsabile</td>
+								<td><%=H5EDOK_RESPONSIBLETYPE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Identificativo univoco del titolario</td>
+								<td><%=H5EDOK_PCUNIQUE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Identificativo univoco dell'operatore di protocollo</td>
+								<td><%=H5EDOK_RESPONSIBLEID%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Identificativo unita' operativa</td>
+								<td><%=H5EDOK_UOID%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Nome unita' operativa</td>
+								<td><%=H5EDOK_UONAME%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Nome responsabile dell'unita' operativa</td>
+								<td><%=H5EDOK_RESPONSIBLENAME%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Livello di riservatezza</td>
+								<td><%=H5EDOK_DSLIVRISID%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Livello privacy</td>
+								<td><%=H5EDOK_PRIVACYLEVELID%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Nome della AOO</td>
+								<td><%=H5EDOK_AOONAME%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Identificativo della AOO</td>
+								<td><%=H5EDOK_AOOID%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Identificativo univoco dell'organigramma"</td>
+								<td><%=H5EDOK_OCUNIQUE%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Nome ricevente</td>
+								<td><%=H5EDOK_RECEIVINGNAME%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Nome mittente</td>
+								<td><%=H5EDOK_SENDERNAME%></td>
+							</tr>
+							
+						</c:when>
+						<c:when test="${remotewsdm eq 'HALLEY'}">
+							<tr>
+								<td class="etichetta">Indirizzo servizio inserimento protocollo</td>
+								<td><%=HALLEY_WSINSERIMENTOPROTOCOLLO%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo servizio consulta documenti</td>
+								<td><%=HALLEY_WSCONSULTADOC%></td>
+							</tr>
+
+							<tr>
+								<td class="etichetta">Indirizzo servizi aggiuntivi (fascicolo, classifica, uffici)</td>
+								<td><%=HALLEY_WSAGGIUNTIVI%></td>
+							</tr>
+							<tr>
+								<td class="etichetta">Indirizzo servizi estrai protocolli</td>
+								<td><%=HALLEY_WSESTRAIPROTOCOLLI%></td>
 							</tr>
 						</c:when>
 						<c:otherwise>

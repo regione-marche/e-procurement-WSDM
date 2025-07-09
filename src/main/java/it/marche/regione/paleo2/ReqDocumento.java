@@ -1,0 +1,543 @@
+
+package it.marche.regione.paleo2;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlType;
+import org.datacontract.schemas._2004._07.regionemarche_protocollo_common_tipi_digip.SoggettiXml;
+
+
+/**
+ * <p>Java class for reqDocumento complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType name="reqDocumento">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element name="Classificazioni" type="{http://paleo.regione.marche.it/services2/}ArrayOfClassificazione" minOccurs="0"/>
+ *         &lt;element name="CodiceModelloTrasmissioni" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="DocumentiAllegati" type="{http://paleo.regione.marche.it/services2/}ArrayOfAllegato" minOccurs="0"/>
+ *         &lt;element name="DocumentoPrincipale" type="{http://paleo.regione.marche.it/services2/}File" minOccurs="0"/>
+ *         &lt;element name="DocumentoPrincipaleAcquisitoIntegralmente" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="DocumentoPrincipaleConformitaCopieImmagineSuSupportoInformatico" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="DocumentoPrincipaleFirmatoDigitalmente" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="DocumentoPrincipaleMarcaturaTemporale" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="DocumentoPrincipaleModalitaFormazione" type="{http://paleo.regione.marche.it/services/}TipoOriginale" minOccurs="0"/>
+ *         &lt;element name="DocumentoPrincipaleSigillatoElettronicamente" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="Note" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="Oggetto" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="Operatore" type="{http://paleo.regione.marche.it/services2/}OperatorePaleo" minOccurs="0"/>
+ *         &lt;element name="Privato" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="SoggettiAgid" type="{http://schemas.datacontract.org/2004/07/RegioneMarche.Protocollo.Common.Tipi.Digip.Protocollo}SoggettiXml" minOccurs="0"/>
+ *         &lt;element name="TempoDiConservazione" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="TipoDocumento" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="Trasmissione" type="{http://paleo.regione.marche.it/services2/}Trasmissione" minOccurs="0"/>
+ *       &lt;/sequence>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "reqDocumento", propOrder = {
+    "classificazioni",
+    "codiceModelloTrasmissioni",
+    "documentiAllegati",
+    "documentoPrincipale",
+    "documentoPrincipaleAcquisitoIntegralmente",
+    "documentoPrincipaleConformitaCopieImmagineSuSupportoInformatico",
+    "documentoPrincipaleFirmatoDigitalmente",
+    "documentoPrincipaleMarcaturaTemporale",
+    "documentoPrincipaleModalitaFormazione",
+    "documentoPrincipaleSigillatoElettronicamente",
+    "note",
+    "oggetto",
+    "operatore",
+    "privato",
+    "soggettiAgid",
+    "tempoDiConservazione",
+    "tipoDocumento",
+    "trasmissione"
+})
+@XmlSeeAlso({
+    ReqProtocollo.class
+})
+public class ReqDocumento {
+
+    @XmlElement(name = "Classificazioni", nillable = true)
+    protected ArrayOfClassificazione classificazioni;
+    @XmlElement(name = "CodiceModelloTrasmissioni", nillable = true)
+    protected String codiceModelloTrasmissioni;
+    @XmlElement(name = "DocumentiAllegati", nillable = true)
+    protected ArrayOfAllegato documentiAllegati;
+    @XmlElement(name = "DocumentoPrincipale", nillable = true)
+    protected File documentoPrincipale;
+    @XmlElement(name = "DocumentoPrincipaleAcquisitoIntegralmente")
+    protected Boolean documentoPrincipaleAcquisitoIntegralmente;
+    @XmlElement(name = "DocumentoPrincipaleConformitaCopieImmagineSuSupportoInformatico", nillable = true)
+    protected Boolean documentoPrincipaleConformitaCopieImmagineSuSupportoInformatico;
+    @XmlElement(name = "DocumentoPrincipaleFirmatoDigitalmente", nillable = true)
+    protected Boolean documentoPrincipaleFirmatoDigitalmente;
+    @XmlElement(name = "DocumentoPrincipaleMarcaturaTemporale", nillable = true)
+    protected Boolean documentoPrincipaleMarcaturaTemporale;
+    @XmlElement(name = "DocumentoPrincipaleModalitaFormazione")
+    protected TipoOriginale documentoPrincipaleModalitaFormazione;
+    @XmlElement(name = "DocumentoPrincipaleSigillatoElettronicamente", nillable = true)
+    protected Boolean documentoPrincipaleSigillatoElettronicamente;
+    @XmlElement(name = "Note", nillable = true)
+    protected String note;
+    @XmlElement(name = "Oggetto", nillable = true)
+    protected String oggetto;
+    @XmlElement(name = "Operatore", nillable = true)
+    protected OperatorePaleo operatore;
+    @XmlElement(name = "Privato")
+    protected Boolean privato;
+    @XmlElement(name = "SoggettiAgid", nillable = true)
+    protected SoggettiXml soggettiAgid;
+    @XmlElement(name = "TempoDiConservazione", nillable = true)
+    protected Integer tempoDiConservazione;
+    @XmlElement(name = "TipoDocumento", nillable = true)
+    protected String tipoDocumento;
+    @XmlElement(name = "Trasmissione", nillable = true)
+    protected Trasmissione trasmissione;
+
+    /**
+     * Gets the value of the classificazioni property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ArrayOfClassificazione }
+     *     
+     */
+    public ArrayOfClassificazione getClassificazioni() {
+        return classificazioni;
+    }
+
+    /**
+     * Sets the value of the classificazioni property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ArrayOfClassificazione }
+     *     
+     */
+    public void setClassificazioni(ArrayOfClassificazione value) {
+        this.classificazioni = value;
+    }
+
+    /**
+     * Gets the value of the codiceModelloTrasmissioni property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCodiceModelloTrasmissioni() {
+        return codiceModelloTrasmissioni;
+    }
+
+    /**
+     * Sets the value of the codiceModelloTrasmissioni property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCodiceModelloTrasmissioni(String value) {
+        this.codiceModelloTrasmissioni = value;
+    }
+
+    /**
+     * Gets the value of the documentiAllegati property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ArrayOfAllegato }
+     *     
+     */
+    public ArrayOfAllegato getDocumentiAllegati() {
+        return documentiAllegati;
+    }
+
+    /**
+     * Sets the value of the documentiAllegati property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ArrayOfAllegato }
+     *     
+     */
+    public void setDocumentiAllegati(ArrayOfAllegato value) {
+        this.documentiAllegati = value;
+    }
+
+    /**
+     * Gets the value of the documentoPrincipale property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link File }
+     *     
+     */
+    public File getDocumentoPrincipale() {
+        return documentoPrincipale;
+    }
+
+    /**
+     * Sets the value of the documentoPrincipale property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link File }
+     *     
+     */
+    public void setDocumentoPrincipale(File value) {
+        this.documentoPrincipale = value;
+    }
+
+    /**
+     * Gets the value of the documentoPrincipaleAcquisitoIntegralmente property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDocumentoPrincipaleAcquisitoIntegralmente() {
+        return documentoPrincipaleAcquisitoIntegralmente;
+    }
+
+    /**
+     * Sets the value of the documentoPrincipaleAcquisitoIntegralmente property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDocumentoPrincipaleAcquisitoIntegralmente(Boolean value) {
+        this.documentoPrincipaleAcquisitoIntegralmente = value;
+    }
+
+    /**
+     * Gets the value of the documentoPrincipaleConformitaCopieImmagineSuSupportoInformatico property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDocumentoPrincipaleConformitaCopieImmagineSuSupportoInformatico() {
+        return documentoPrincipaleConformitaCopieImmagineSuSupportoInformatico;
+    }
+
+    /**
+     * Sets the value of the documentoPrincipaleConformitaCopieImmagineSuSupportoInformatico property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDocumentoPrincipaleConformitaCopieImmagineSuSupportoInformatico(Boolean value) {
+        this.documentoPrincipaleConformitaCopieImmagineSuSupportoInformatico = value;
+    }
+
+    /**
+     * Gets the value of the documentoPrincipaleFirmatoDigitalmente property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDocumentoPrincipaleFirmatoDigitalmente() {
+        return documentoPrincipaleFirmatoDigitalmente;
+    }
+
+    /**
+     * Sets the value of the documentoPrincipaleFirmatoDigitalmente property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDocumentoPrincipaleFirmatoDigitalmente(Boolean value) {
+        this.documentoPrincipaleFirmatoDigitalmente = value;
+    }
+
+    /**
+     * Gets the value of the documentoPrincipaleMarcaturaTemporale property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDocumentoPrincipaleMarcaturaTemporale() {
+        return documentoPrincipaleMarcaturaTemporale;
+    }
+
+    /**
+     * Sets the value of the documentoPrincipaleMarcaturaTemporale property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDocumentoPrincipaleMarcaturaTemporale(Boolean value) {
+        this.documentoPrincipaleMarcaturaTemporale = value;
+    }
+
+    /**
+     * Gets the value of the documentoPrincipaleModalitaFormazione property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TipoOriginale }
+     *     
+     */
+    public TipoOriginale getDocumentoPrincipaleModalitaFormazione() {
+        return documentoPrincipaleModalitaFormazione;
+    }
+
+    /**
+     * Sets the value of the documentoPrincipaleModalitaFormazione property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TipoOriginale }
+     *     
+     */
+    public void setDocumentoPrincipaleModalitaFormazione(TipoOriginale value) {
+        this.documentoPrincipaleModalitaFormazione = value;
+    }
+
+    /**
+     * Gets the value of the documentoPrincipaleSigillatoElettronicamente property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDocumentoPrincipaleSigillatoElettronicamente() {
+        return documentoPrincipaleSigillatoElettronicamente;
+    }
+
+    /**
+     * Sets the value of the documentoPrincipaleSigillatoElettronicamente property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDocumentoPrincipaleSigillatoElettronicamente(Boolean value) {
+        this.documentoPrincipaleSigillatoElettronicamente = value;
+    }
+
+    /**
+     * Gets the value of the note property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNote() {
+        return note;
+    }
+
+    /**
+     * Sets the value of the note property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNote(String value) {
+        this.note = value;
+    }
+
+    /**
+     * Gets the value of the oggetto property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getOggetto() {
+        return oggetto;
+    }
+
+    /**
+     * Sets the value of the oggetto property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setOggetto(String value) {
+        this.oggetto = value;
+    }
+
+    /**
+     * Gets the value of the operatore property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link OperatorePaleo }
+     *     
+     */
+    public OperatorePaleo getOperatore() {
+        return operatore;
+    }
+
+    /**
+     * Sets the value of the operatore property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link OperatorePaleo }
+     *     
+     */
+    public void setOperatore(OperatorePaleo value) {
+        this.operatore = value;
+    }
+
+    /**
+     * Gets the value of the privato property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isPrivato() {
+        return privato;
+    }
+
+    /**
+     * Sets the value of the privato property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setPrivato(Boolean value) {
+        this.privato = value;
+    }
+
+    /**
+     * Gets the value of the soggettiAgid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link SoggettiXml }
+     *     
+     */
+    public SoggettiXml getSoggettiAgid() {
+        return soggettiAgid;
+    }
+
+    /**
+     * Sets the value of the soggettiAgid property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link SoggettiXml }
+     *     
+     */
+    public void setSoggettiAgid(SoggettiXml value) {
+        this.soggettiAgid = value;
+    }
+
+    /**
+     * Gets the value of the tempoDiConservazione property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getTempoDiConservazione() {
+        return tempoDiConservazione;
+    }
+
+    /**
+     * Sets the value of the tempoDiConservazione property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setTempoDiConservazione(Integer value) {
+        this.tempoDiConservazione = value;
+    }
+
+    /**
+     * Gets the value of the tipoDocumento property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    /**
+     * Sets the value of the tipoDocumento property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTipoDocumento(String value) {
+        this.tipoDocumento = value;
+    }
+
+    /**
+     * Gets the value of the trasmissione property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Trasmissione }
+     *     
+     */
+    public Trasmissione getTrasmissione() {
+        return trasmissione;
+    }
+
+    /**
+     * Sets the value of the trasmissione property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Trasmissione }
+     *     
+     */
+    public void setTrasmissione(Trasmissione value) {
+        this.trasmissione = value;
+    }
+
+}

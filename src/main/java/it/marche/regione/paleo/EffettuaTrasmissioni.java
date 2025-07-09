@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="opp" type="{http://paleo.regione.marche.it/services/}OperatorePaleo" minOccurs="0"/>
  *         &lt;element name="trasmissioni" type="{http://paleo.regione.marche.it/services/}ArrayOfTrasmissioneDoc" minOccurs="0"/>
+ *         &lt;element name="inviaMail" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +32,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "opp",
-    "trasmissioni"
+    "trasmissioni",
+    "inviaMail"
 })
 @XmlRootElement(name = "EffettuaTrasmissioni")
 public class EffettuaTrasmissioni {
@@ -40,6 +42,8 @@ public class EffettuaTrasmissioni {
     protected OperatorePaleo opp;
     @XmlElement(nillable = true)
     protected ArrayOfTrasmissioneDoc trasmissioni;
+    @XmlElement(nillable = true)
+    protected Boolean inviaMail;
 
     /**
      * Gets the value of the opp property.
@@ -87,6 +91,30 @@ public class EffettuaTrasmissioni {
      */
     public void setTrasmissioni(ArrayOfTrasmissioneDoc value) {
         this.trasmissioni = value;
+    }
+
+    /**
+     * Gets the value of the inviaMail property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isInviaMail() {
+        return inviaMail;
+    }
+
+    /**
+     * Sets the value of the inviaMail property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setInviaMail(Boolean value) {
+        this.inviaMail = value;
     }
 
 }

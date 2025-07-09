@@ -50,6 +50,9 @@
 				  if (liv1.equals("INFOR2.INFOR")) {
 				    liv1 = "INFOR2";				    
 				  }
+				  if (liv1.equals("ARCHIFLOW10") || liv1.equals("ARCHIFLOW10.ARCHIFLOW")) {
+					  liv1 = "ARCHIFLOW";
+				  }
 				  NamingEnumeration<NameClassPair> listLiv2 = ic.list("java:comp/env/tab/" + liv1);
 				  while (listLiv2.hasMore()) {
 				  Object liv2 = listLiv2.next().getName();

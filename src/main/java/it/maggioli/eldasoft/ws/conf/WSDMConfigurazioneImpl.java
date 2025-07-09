@@ -53,8 +53,13 @@ public class WSDMConfigurazioneImpl implements WSDMConfigurazione {
       } 
       if ("INFOR2.INFOR".equals(remotewsdm)) {
         remotewsdm = "INFOR";
-      } 
-      
+      }
+
+      // Archiflow in versione 10, modalità fascicolo standard. Viene restituito ai client con ARCHIFLOW
+      if ("ARCHIFLOW10.ARCHIFLOW".equals(remotewsdm)) {
+        remotewsdm = "ARCHIFLOW";
+      }
+
       configurazione.setRemotewsdm(remotewsdm);
 
       // Configurazione e gestione dei tabellati
@@ -73,6 +78,11 @@ public class WSDMConfigurazioneImpl implements WSDMConfigurazione {
         }
         if ("INFOR2.INFOR".equals(remotewsdmTabellati)) {
           remotewsdmTabellati = "INFOR2";
+        }
+
+        // Archiflow versione 10, in modalità fascicolo standard. I tabellati e le configurazione sono quelli della configurazione ARCHIFLOWFA
+        if ("ARCHIFLOW10.ARCHIFLOW".equals(remotewsdmTabellati)) {
+          remotewsdmTabellati = "ARCHIFLOW";
         }
 
         String _searchtab = "java:comp/env/tab/" + remotewsdmTabellati;

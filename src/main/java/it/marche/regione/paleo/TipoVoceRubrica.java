@@ -15,12 +15,17 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;simpleType name="TipoVoceRubrica">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="Indefinito"/>
+ *     &lt;enumeration value="PAI"/>
+ *     &lt;enumeration value="PAE"/>
+ *     &lt;enumeration value="PF"/>
+ *     &lt;enumeration value="PG"/>
  *     &lt;enumeration value="Amministrazione"/>
  *     &lt;enumeration value="AOO"/>
  *     &lt;enumeration value="UO"/>
  *     &lt;enumeration value="Persona"/>
  *     &lt;enumeration value="Altro"/>
  *     &lt;enumeration value="Impresa"/>
+ *     &lt;enumeration value="Gruppo"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -32,6 +37,10 @@ public enum TipoVoceRubrica {
 
     @XmlEnumValue("Indefinito")
     INDEFINITO("Indefinito"),
+    PAI("PAI"),
+    PAE("PAE"),
+    PF("PF"),
+    PG("PG"),
     @XmlEnumValue("Amministrazione")
     AMMINISTRAZIONE("Amministrazione"),
     AOO("AOO"),
@@ -41,7 +50,9 @@ public enum TipoVoceRubrica {
     @XmlEnumValue("Altro")
     ALTRO("Altro"),
     @XmlEnumValue("Impresa")
-    IMPRESA("Impresa");
+    IMPRESA("Impresa"),
+    @XmlEnumValue("Gruppo")
+    GRUPPO("Gruppo");
     private final String value;
 
     TipoVoceRubrica(String v) {

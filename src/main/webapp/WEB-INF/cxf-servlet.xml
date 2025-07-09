@@ -12,39 +12,9 @@
 
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 
-	<bean id="IRIDE" class="it.maggioli.eldasoft.bl.iride.IrideManager" />
-	<bean id="JIRIDE" class="it.maggioli.eldasoft.bl.jiride.JirideManager" />
-	<bean id="PALEO" class="it.maggioli.eldasoft.bl.paleo.PaleoManager" />
-	<!--  bean id="PALEO" class="it.maggioli.eldasoft.bl.paleo.PaleoManagerLegacy" /-->
-	<bean id="ENGINEERING" class="it.maggioli.eldasoft.bl.engineering.EngineeringManager" />
-	<bean id="ENGINEERINGDOC" class="it.maggioli.eldasoft.bl.engineeringdoc.EngineeringDocManager" />
-	<bean id="ARCHIFLOW" class="it.maggioli.eldasoft.bl.archiflow.ArchiflowManager" />
-	<bean id="ARCHIFLOWFA" class="it.maggioli.eldasoft.bl.archiflowfa93.ArchiflowFaManager" />
-	<!-- bean id="ARCHIFLOWFA" class="it.maggioli.eldasoft.bl.archiflowfa96.ArchiflowFaManager" /-->
-	<bean id="TITULUS" class="it.maggioli.eldasoft.bl.titulus.TitulusManager" />
-	<bean id="SMAT" class="it.maggioli.eldasoft.bl.smat.SmatManager" />
-	<bean id="FOLIUM" class="it.maggioli.eldasoft.bl.folium.FoliumManager" />
-	<bean id="FOLIUMAGORA" class="it.maggioli.eldasoft.bl.foliumagora.FoliumAgoraManager" />
-	<bean id="SISPI" class="it.maggioli.eldasoft.bl.sispi.SispiManager" />
-	<bean id="PROTOCOLLO" class="it.maggioli.eldasoft.bl.WSDMManager" />
-	<bean id="EASYDOC" class="it.maggioli.eldasoft.bl.easydoc.EasyDocManager" />
-	<bean id="PRISMA" class="it.maggioli.eldasoft.bl.prisma.PrismaManager" />
-    <bean id="INFOR" class="it.maggioli.eldasoft.bl.infor.InforManager" />
-    <bean id="URBI" class="it.maggioli.eldasoft.bl.urbi.UrbiManager" />
-    <bean id="PROTSERVICE" class="it.maggioli.eldasoft.bl.protservice.ProtServiceManager" />
-    <bean id="JPROTOCOL" class="it.maggioli.eldasoft.bl.jprotocol.JProtocolManager" />
-    <bean id="ITALPROT" class="it.maggioli.eldasoft.bl.italprot.ItalprotManager" />
-    <bean id="JDOC" class="it.maggioli.eldasoft.bl.jdoc.JDocManager" />
-	<bean id="DOCER" class="it.maggioli.eldasoft.bl.docer.DOCERManager" />
-	<bean id="NUMIX" class="it.maggioli.eldasoft.bl.numix.NumixManager" />
-	<bean id="GENERIC01" class="it.maggioli.eldasoft.bl.generic.Generic01Manager" />
-	<bean id="DATAGRAPH" class="it.maggioli.eldasoft.bl.datagraph.DatagraphManager" />
-	<bean id="DATAGRAPH.PRISMA" class="it.maggioli.eldasoft.bl.datagraph.DatagraphManager" />
-	<bean id="FOLIUM2" class="it.maggioli.eldasoft.bl.folium2.Folium2Manager" />
-	<bean id="FOLIUM2.FOLIUM" class="it.maggioli.eldasoft.bl.folium2.Folium2Manager" />
-	<bean id="INFOR2" class="it.maggioli.eldasoft.bl.infor.Infor2Manager" />
-	<bean id="INFOR2.INFOR" class="it.maggioli.eldasoft.bl.infor.Infor2Manager" />
-	<bean id="LAPISOPERA" class="it.maggioli.eldasoft.bl.lapisopera.LapisOperaManager" />
+	<!--bean id="PALEO" class="it.maggioli.eldasoft.bl.paleo.PaleoManager" /-->
+	<bean id="PALEO" class="it.maggioli.eldasoft.bl.paleo.Paleo2Manager" />
+	<!-- bean id="PALEO" class="it.maggioli.eldasoft.bl.paleo.PaleoManagerLegacy" /-->
 
 	<bean id="WSDMConfigurazione" class="it.maggioli.eldasoft.ws.conf.WSDMConfigurazioneImpl" />
 	<jaxws:endpoint id="endpointWSDMConfigurazione" implementor="#WSDMConfigurazione" address="/WSDMConfigurazione">

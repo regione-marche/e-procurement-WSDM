@@ -140,4 +140,13 @@ public interface WSDM {
   WSDMProtocolloDocumentoRes WSDMProtocolloAsincronoEsito(@WebParam(name = "loginAttr") WSDMLoginAttr login,
       @WebParam(name = "id") String id) throws RemoteException;
 
+  @WSDLDocumentation("Invia informazioni aggiuntive al documento inserito nel documentale")
+  WSDMDocumentoAggiungiInformazioniRes WSDMDocumentoAggiungiInformazioni(@WebParam(name = "loginAttr") WSDMLoginAttr login,
+      @WebParam(name = "documentoAggiungiInformazioni") WSDMDocumentoAggiungiInformazioni documentoAggiungiInformazioni)
+      throws RemoteException;
+
+  @WSDLDocumentation("Effettua la chiusura di un fascicolo esistente")
+  WSDMFascicoloChiudiRes WSDMFascicoloChiudi(@WebParam(name = "loginAttr") WSDMLoginAttr login,
+      @WebParam(name = "fascicoloChiudiIn") WSDMFascicoloChiudiIn fascicoloChiudiIn) throws RemoteException;
+
 }

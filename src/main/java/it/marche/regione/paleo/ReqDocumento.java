@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
+import org.datacontract.schemas._2004._07.regionemarche_protocollo_common.SoggettiXml;
 
 
 /**
@@ -22,12 +23,18 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="DocumentiAllegati" type="{http://paleo.regione.marche.it/services/}ArrayOfAllegato" minOccurs="0"/>
  *         &lt;element name="DocumentoPrincipale" type="{http://paleo.regione.marche.it/services/}File" minOccurs="0"/>
  *         &lt;element name="DocumentoPrincipaleAcquisitoIntegralmente" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="DocumentoPrincipaleConformitaCopieImmagineSuSupportoInformatico" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="DocumentoPrincipaleFirmatoDigitalmente" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="DocumentoPrincipaleMarcaturaTemporale" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="DocumentoPrincipaleOriginale" type="{http://paleo.regione.marche.it/services/}TipoOriginale" minOccurs="0"/>
+ *         &lt;element name="DocumentoPrincipaleSigillatoElettronicamente" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="Note" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="Oggetto" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="Operatore" type="{http://paleo.regione.marche.it/services/}OperatorePaleo"/>
  *         &lt;element name="Privato" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="Procedimento" type="{http://paleo.regione.marche.it/services/}DatiProcedimento" minOccurs="0"/>
+ *         &lt;element name="Soggetti" type="{http://schemas.datacontract.org/2004/07/RegioneMarche.Protocollo.Common.Tipi}SoggettiXml" minOccurs="0"/>
+ *         &lt;element name="TempoDiConservazione" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="TipoDocumento" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="Trasmissione" type="{http://paleo.regione.marche.it/services/}Trasmissione" minOccurs="0"/>
  *       &lt;/sequence>
@@ -44,12 +51,18 @@ import javax.xml.bind.annotation.XmlType;
     "documentiAllegati",
     "documentoPrincipale",
     "documentoPrincipaleAcquisitoIntegralmente",
+    "documentoPrincipaleConformitaCopieImmagineSuSupportoInformatico",
+    "documentoPrincipaleFirmatoDigitalmente",
+    "documentoPrincipaleMarcaturaTemporale",
     "documentoPrincipaleOriginale",
+    "documentoPrincipaleSigillatoElettronicamente",
     "note",
     "oggetto",
     "operatore",
     "privato",
     "procedimento",
+    "soggetti",
+    "tempoDiConservazione",
     "tipoDocumento",
     "trasmissione"
 })
@@ -66,8 +79,16 @@ public class ReqDocumento {
     protected File documentoPrincipale;
     @XmlElement(name = "DocumentoPrincipaleAcquisitoIntegralmente")
     protected boolean documentoPrincipaleAcquisitoIntegralmente;
+    @XmlElement(name = "DocumentoPrincipaleConformitaCopieImmagineSuSupportoInformatico", nillable = true)
+    protected Boolean documentoPrincipaleConformitaCopieImmagineSuSupportoInformatico;
+    @XmlElement(name = "DocumentoPrincipaleFirmatoDigitalmente", nillable = true)
+    protected Boolean documentoPrincipaleFirmatoDigitalmente;
+    @XmlElement(name = "DocumentoPrincipaleMarcaturaTemporale", nillable = true)
+    protected Boolean documentoPrincipaleMarcaturaTemporale;
     @XmlElement(name = "DocumentoPrincipaleOriginale")
     protected TipoOriginale documentoPrincipaleOriginale;
+    @XmlElement(name = "DocumentoPrincipaleSigillatoElettronicamente", nillable = true)
+    protected Boolean documentoPrincipaleSigillatoElettronicamente;
     @XmlElement(name = "Note", nillable = true)
     protected String note;
     @XmlElement(name = "Oggetto", required = true, nillable = true)
@@ -78,6 +99,10 @@ public class ReqDocumento {
     protected boolean privato;
     @XmlElement(name = "Procedimento", nillable = true)
     protected DatiProcedimento procedimento;
+    @XmlElement(name = "Soggetti", nillable = true)
+    protected SoggettiXml soggetti;
+    @XmlElement(name = "TempoDiConservazione", nillable = true)
+    protected Integer tempoDiConservazione;
     @XmlElement(name = "TipoDocumento", nillable = true)
     protected String tipoDocumento;
     @XmlElement(name = "Trasmissione", nillable = true)
@@ -172,6 +197,78 @@ public class ReqDocumento {
     }
 
     /**
+     * Gets the value of the documentoPrincipaleConformitaCopieImmagineSuSupportoInformatico property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDocumentoPrincipaleConformitaCopieImmagineSuSupportoInformatico() {
+        return documentoPrincipaleConformitaCopieImmagineSuSupportoInformatico;
+    }
+
+    /**
+     * Sets the value of the documentoPrincipaleConformitaCopieImmagineSuSupportoInformatico property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDocumentoPrincipaleConformitaCopieImmagineSuSupportoInformatico(Boolean value) {
+        this.documentoPrincipaleConformitaCopieImmagineSuSupportoInformatico = value;
+    }
+
+    /**
+     * Gets the value of the documentoPrincipaleFirmatoDigitalmente property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDocumentoPrincipaleFirmatoDigitalmente() {
+        return documentoPrincipaleFirmatoDigitalmente;
+    }
+
+    /**
+     * Sets the value of the documentoPrincipaleFirmatoDigitalmente property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDocumentoPrincipaleFirmatoDigitalmente(Boolean value) {
+        this.documentoPrincipaleFirmatoDigitalmente = value;
+    }
+
+    /**
+     * Gets the value of the documentoPrincipaleMarcaturaTemporale property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDocumentoPrincipaleMarcaturaTemporale() {
+        return documentoPrincipaleMarcaturaTemporale;
+    }
+
+    /**
+     * Sets the value of the documentoPrincipaleMarcaturaTemporale property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDocumentoPrincipaleMarcaturaTemporale(Boolean value) {
+        this.documentoPrincipaleMarcaturaTemporale = value;
+    }
+
+    /**
      * Gets the value of the documentoPrincipaleOriginale property.
      * 
      * @return
@@ -193,6 +290,30 @@ public class ReqDocumento {
      */
     public void setDocumentoPrincipaleOriginale(TipoOriginale value) {
         this.documentoPrincipaleOriginale = value;
+    }
+
+    /**
+     * Gets the value of the documentoPrincipaleSigillatoElettronicamente property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDocumentoPrincipaleSigillatoElettronicamente() {
+        return documentoPrincipaleSigillatoElettronicamente;
+    }
+
+    /**
+     * Sets the value of the documentoPrincipaleSigillatoElettronicamente property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDocumentoPrincipaleSigillatoElettronicamente(Boolean value) {
+        this.documentoPrincipaleSigillatoElettronicamente = value;
     }
 
     /**
@@ -305,6 +426,54 @@ public class ReqDocumento {
      */
     public void setProcedimento(DatiProcedimento value) {
         this.procedimento = value;
+    }
+
+    /**
+     * Gets the value of the soggetti property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link SoggettiXml }
+     *     
+     */
+    public SoggettiXml getSoggetti() {
+        return soggetti;
+    }
+
+    /**
+     * Sets the value of the soggetti property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link SoggettiXml }
+     *     
+     */
+    public void setSoggetti(SoggettiXml value) {
+        this.soggetti = value;
+    }
+
+    /**
+     * Gets the value of the tempoDiConservazione property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getTempoDiConservazione() {
+        return tempoDiConservazione;
+    }
+
+    /**
+     * Sets the value of the tempoDiConservazione property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setTempoDiConservazione(Integer value) {
+        this.tempoDiConservazione = value;
     }
 
     /**

@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>it.maggioli.eldasoft.wsdm</groupId>
 	<artifactId>EldasoftWSDM</artifactId>
-	<version>1.34.0</version>
+	<version>1.44.0</version>
 	<packaging>war</packaging>
 	<name>Eldasoft WSDM</name>
 	<description>Eldasoft WSDM</description>

@@ -24,7 +24,6 @@ import org.datacontract.schemas._2004._07.regionemarche_protocollo_common.TipoDo
  *       &lt;sequence>
  *         &lt;element name="Classificazioni" type="{http://schemas.microsoft.com/2003/10/Serialization/Arrays}ArrayOfstring" minOccurs="0"/>
  *         &lt;element name="DataDocumento" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;element name="DatiProcedimento" type="{http://paleo.regione.marche.it/services/}ProcedimentoInfo" minOccurs="0"/>
  *         &lt;element name="DocNumber" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="Oggetto" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="Proprietario" type="{http://paleo.regione.marche.it/services/}OperatorePaleo" minOccurs="0"/>
@@ -42,7 +41,6 @@ import org.datacontract.schemas._2004._07.regionemarche_protocollo_common.TipoDo
 @XmlType(name = "respDocumento", propOrder = {
     "classificazioni",
     "dataDocumento",
-    "datiProcedimento",
     "docNumber",
     "oggetto",
     "proprietario",
@@ -62,8 +60,6 @@ public class RespDocumento
     @XmlElement(name = "DataDocumento", required = true)
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar dataDocumento;
-    @XmlElement(name = "DatiProcedimento", nillable = true)
-    protected ProcedimentoInfo datiProcedimento;
     @XmlElement(name = "DocNumber")
     protected int docNumber;
     @XmlElement(name = "Oggetto", nillable = true)
@@ -121,30 +117,6 @@ public class RespDocumento
      */
     public void setDataDocumento(XMLGregorianCalendar value) {
         this.dataDocumento = value;
-    }
-
-    /**
-     * Gets the value of the datiProcedimento property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ProcedimentoInfo }
-     *     
-     */
-    public ProcedimentoInfo getDatiProcedimento() {
-        return datiProcedimento;
-    }
-
-    /**
-     * Sets the value of the datiProcedimento property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ProcedimentoInfo }
-     *     
-     */
-    public void setDatiProcedimento(ProcedimentoInfo value) {
-        this.datiProcedimento = value;
     }
 
     /**

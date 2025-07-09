@@ -3,57 +3,94 @@ package it.maggioli.eldasoft.bl.paleo;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(name = "AllegatoHashType", propOrder = { "titolo", "tipo", "nome", "contenuto", "hash" })
+@XmlType(name = "AllegatoHashType", propOrder = {"titolo", "tipo", "nome", "contenuto", "hash", "isSigned", "isSealed", "isTimeMarked", "isCertifiedCopy"})
 public class AllegatoHash {
 
-  private String titolo;
-  private String tipo;
-  private String nome;
-  private byte[] contenuto;
-  private String hash;
+    private String titolo;
+    private String tipo;
+    private String nome;
+    private byte[] contenuto;
+    private String hash;
 
-  @XmlElement(required = true)
-  public String getTitolo() {
-    return titolo;
-  }
+    public boolean isSigned() {
+        return isSigned;
+    }
 
-  public void setTitolo(String titolo) {
-    this.titolo = titolo;
-  }
+    public void setSigned(boolean signed) {
+        isSigned = signed;
+    }
 
-  @XmlElement(required = true)
-  public String getTipo() {
-    return tipo;
-  }
+    public boolean isSealed() {
+        return isSealed;
+    }
 
-  public void setTipo(String tipo) {
-    this.tipo = tipo;
-  }
+    public void setSealed(boolean sealed) {
+        isSealed = sealed;
+    }
 
-  @XmlElement(required = true)
-  public String getNome() {
-    return nome;
-  }
+    public boolean isTimeMarked() {
+        return isTimeMarked;
+    }
 
-  public void setNome(String nome) {
-    this.nome = nome;
-  }
+    public void setTimeMarked(boolean timeMarked) {
+        isTimeMarked = timeMarked;
+    }
 
-  @XmlElement(required = true)
-  public byte[] getContenuto() {
-    return contenuto;
-  }
+    private boolean isSigned;
+    private boolean isSealed;
+    private boolean isTimeMarked;
+    private boolean isCertifiedCopy;
 
-  public void setContenuto(byte[] contenuto) {
-    this.contenuto = contenuto;
-  }
+    public boolean isCertifiedCopy() {
+        return isCertifiedCopy;
+    }
 
-  public String getHash() {
-    return hash;
-  }
+    public void setCertifiedCopy(boolean certifiedCopy) {
+        isCertifiedCopy = certifiedCopy;
+    }
 
-  public void setHash(String hash) {
-    this.hash = hash;
-  }
+    @XmlElement(required = true)
+    public String getTitolo() {
+        return titolo;
+    }
+
+    public void setTitolo(String titolo) {
+        this.titolo = titolo;
+    }
+
+    @XmlElement(required = true)
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    @XmlElement(required = true)
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    @XmlElement(required = true)
+    public byte[] getContenuto() {
+        return contenuto;
+    }
+
+    public void setContenuto(byte[] contenuto) {
+        this.contenuto = contenuto;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
 
 }

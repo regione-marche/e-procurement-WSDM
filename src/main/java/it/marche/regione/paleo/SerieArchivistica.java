@@ -36,7 +36,7 @@ public class SerieArchivistica {
 
     @XmlElement(name = "Descrizione", nillable = true)
     protected String descrizione;
-    @XmlElement(name = "IdSerieArchivistica")
+    @XmlElement(name = "IdSerieArchivistica", nillable = true)
     protected Integer idSerieArchivistica;
 
     /**

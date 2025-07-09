@@ -17,6 +17,9 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="NonDefinito"/>
  *     &lt;enumeration value="Digitale"/>
  *     &lt;enumeration value="Cartaceo"/>
+ *     &lt;enumeration value="a"/>
+ *     &lt;enumeration value="c"/>
+ *     &lt;enumeration value="d"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -31,7 +34,13 @@ public enum TipoOriginale {
     @XmlEnumValue("Digitale")
     DIGITALE("Digitale"),
     @XmlEnumValue("Cartaceo")
-    CARTACEO("Cartaceo");
+    CARTACEO("Cartaceo"),
+    @XmlEnumValue("a")
+    A("a"),
+    @XmlEnumValue("c")
+    C("c"),
+    @XmlEnumValue("d")
+    D("d");
     private final String value;
 
     TipoOriginale(String v) {
